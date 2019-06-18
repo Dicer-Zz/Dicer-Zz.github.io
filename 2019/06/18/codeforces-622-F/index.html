@@ -2,24 +2,25 @@
 <html lang="zh">
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-<title>Tag: Data structure - Dicer&#39;s blog</title>
+<title>Codeforces-622-F - Dicer&#39;s blog</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-    <meta name="description" content="Some posts about computer sciense and my life.">
-<meta name="keywords" content="CS">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Dicer&#39;s blog">
-<meta property="og:url" content="/tags/Data-structure/index.html">
+    <meta name="description" content="题目F. The Sum of the k-th Powers">
+<meta name="keywords" content="拉格朗日插值法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Codeforces-622-F">
+<meta property="og:url" content="/2019/06/18/codeforces-622-F/index.html">
 <meta property="og:site_name" content="Dicer&#39;s blog">
-<meta property="og:description" content="Some posts about computer sciense and my life.">
+<meta property="og:description" content="题目F. The Sum of the k-th Powers">
 <meta property="og:locale" content="zh_Hans">
-<meta property="og:image" content="/images/og_image.png">
+<meta property="og:image" content="/gallery/thumbnails/Lagrange_polynomial.svg">
+<meta property="og:updated_time" content="2019-06-18T03:35:44.756Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Dicer&#39;s blog">
-<meta name="twitter:description" content="Some posts about computer sciense and my life.">
-<meta name="twitter:image" content="/images/og_image.png">
+<meta name="twitter:title" content="Codeforces-622-F">
+<meta name="twitter:description" content="题目F. The Sum of the k-th Powers">
+<meta name="twitter:image" content="/gallery/thumbnails/Lagrange_polynomial.svg">
 
 
 
@@ -97,7 +98,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/favicon.png" alt="Dicer&#39;s blog" height="28">
+                <img src="/images/favicon.png" alt="Codeforces-622-F" height="28">
             
             </a>
         </div>
@@ -143,62 +144,84 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
-    <div class="card-content">
-        <nav class="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-            <li><a href="/tags">Tags</a></li>
-            <li class="is-active"><a href="#" aria-current="page">Data structure</a></li>
-        </ul>
-        </nav>
-    </div>
-</div>
-
-    <div class="card">
     
     <div class="card-image">
-        <a href="/2019/04/12/2017-Zhejiang-provincial-competition/" class="image is-7by1">
-            <img class="thumbnail" src="/gallery/thumbnails/0_Magmar, Anton Fadeev_02.jpg" alt="2017浙江省赛">
-        </a>
+        <span class="image is-7by1">
+            <img class="thumbnail" src="/gallery/thumbnails/Lagrange_polynomial.svg" alt="Codeforces-622-F">
+        </span>
     </div>
     
     <div class="card-content article ">
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-04-12T08:57:53.000Z">2019-04-12</time>
+                <time class="level-item has-text-grey" datetime="2019-06-18T02:43:58.000Z">2019-06-18</time>
                 
                 <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/Competition/">Competition</a>
+                <a class="has-link-grey -link" href="/categories/数论/">数论</a>
                 </div>
                 
                 
                 <span class="level-item has-text-grey">
                     
                     
-                    3 minutes read (About 516 words)
+                    4 minutes read (About 672 words)
                 </span>
                 
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span> visits
+                </span>
                 
             </div>
         </div>
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2019/04/12/2017-Zhejiang-provincial-competition/">2017浙江省赛</a>
+                Codeforces-622-F
             
         </h1>
         <div class="content">
-            <h2 id="碎碎念"><a href="#碎碎念" class="headerlink" title="碎碎念"></a>碎碎念</h2><p>明天就又去郑轻了（噫，我为什么要说又，哦，上次天梯就是在郑轻），希望这次能取得一个好成绩！不能再这么菜下去了。</p>
+            <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p><a href="https://codeforces.com/contest/622/problem/F" target="_blank" rel="noopener">F. The Sum of the k-th Powers</a></p>
+<a id="more"></a>
+<h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><p>设$F(n) =  \sum _{i=1}^n{i^k} $，当k很小的时候，可以找到一些通项公式，比如：当$k= 1 $时，$F(n) = \frac{(n \cdot (n+1))}{2} $，当$k=2 $时，$F(n)= \frac{n \cdot \ (2 \cdot n + 1) \cdot (n+1)}{6} $。</p>
+<p>可以发现，$F(n)$实际上是一个$k+1 $次多项式函数。</p>
+<p>因此，我们就可以使用拉格朗日插值法来推导了。</p>
+<p>确定一个k+1次多项式需要k+2个点，我们很容易通过打表得到$F(1)  \sim F(k+2)$的值。</p>
+<p>然后代入插值公式：</p>
+<p>$$F(n) = \sum_{i=1}^{k+2}F(i) \times P(i) $$</p>
+<p>$$P(i) = \prod_{j=1, j \neq i}^{k+2}\frac{n-j}{i-j}​$$</p>
+<p>所以</p>
+<p>$$F(n) = \sum_{i=1}^{k+2}F(i) \times \prod_{j=1, j \neq i}^{k+2}\frac{n-j}{i-j} \ = \sum_{i=1}^{k+2}F(i) \times \frac{\prod_{j=1, j \neq i}^{k+2}n-j}{\prod_{j=1, j \neq i}^{k+2}{i-j}}​$$</p>
+<p>但是这个公式的复杂度时$O(k^2)​$的，我们再优化一下。</p>
+<p>设$T = \prod_{j=1}^{k+2}{n-j}$，则</p>
+<p>$$\prod_{j=1, j \neq i}^{k+2}n-j = \frac{T}{n-i}​$$</p>
+<p>对于$\prod_{j=1, j \neq i}^{k+2}{i-j}​$，我们将它分成$i\lt j​$和$i\gt j​$两部分来考虑，</p>
+<p>$$\prod_{j=1, j \neq i}^{k+2}{i-j} = (i-1)!\times(k+2-i)!\times (-1)^{k+2-i}​$$</p>
+<p>带入原式，得：</p>
+<p>$$F(n) = \sum_{i=1}^{k+2}(F(i)\times\frac{T}{n-i}\times\frac{1}{(i-1)!\times(k+2-i)!\times (-1)^{k+2-i}})​$$</p>
+<p>至此，我们可以通过打表的方式，在$O(k)$时间内得到$F(n)$了。</p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>当$n \leq k+2$时，该公式时不适用的，因为$T$会为$0$。</p>
+<p>但是我们可以直接通过$F(n) =  \sum _{i=1}^n{i^k} $计算。</p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">/*---------------------------------</span></span><br><span class="line"><span class="hljs-comment"></span></span><br><span class="line"><span class="hljs-comment"> @Author:   Dicer</span></span><br><span class="line"><span class="hljs-comment"> @DateTime: 2019-06-18 10:16:23</span></span><br><span class="line"><span class="hljs-comment"></span></span><br><span class="line"><span class="hljs-comment">---------------------------------*/</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;</span><br><span class="line"><span class="hljs-keyword">typedef</span> pair&lt;<span class="hljs-keyword">int</span>, <span class="hljs-keyword">int</span>&gt; pii;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">qpow</span><span class="hljs-params">(ll a,ll b,ll mod)</span></span>&#123;ll res=<span class="hljs-number">1</span>;<span class="hljs-keyword">while</span>(b)&#123;<span class="hljs-keyword">if</span>(b&amp;<span class="hljs-number">1</span>)res = (res*a)%mod;a=(a*a)%mod;b&gt;&gt;=<span class="hljs-number">1</span>;&#125;<span class="hljs-keyword">return</span> res;&#125;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span> eps = <span class="hljs-number">1e-8</span>;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> INF = <span class="hljs-number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> mod = <span class="hljs-number">1e9</span>+<span class="hljs-number">7</span>;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MAXN = <span class="hljs-number">1e6</span> + <span class="hljs-number">7</span>;</span><br><span class="line"></span><br><span class="line">ll F[MAXN], fac[MAXN], T;</span><br><span class="line"><span class="hljs-keyword">int</span> n, k;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function">ll <span class="hljs-title">inv</span><span class="hljs-params">(ll x)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">return</span> qpow(x, mod<span class="hljs-number">-2</span>, mod);</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">	F[<span class="hljs-number">1</span>] = <span class="hljs-number">1</span>;</span><br><span class="line">	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt;= k+<span class="hljs-number">2</span>; ++i)&#123;</span><br><span class="line">		F[i] = F[i<span class="hljs-number">-1</span>] + qpow(i, k, mod);</span><br><span class="line">		F[i] %= mod;</span><br><span class="line">	&#125;</span><br><span class="line">	fac[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;</span><br><span class="line">	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= k+<span class="hljs-number">2</span>; ++i)&#123;</span><br><span class="line">		fac[i] = fac[i<span class="hljs-number">-1</span>] * i;</span><br><span class="line">		fac[i] %= mod;</span><br><span class="line">	&#125;</span><br><span class="line">	T = <span class="hljs-number">1</span>;</span><br><span class="line">	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= k+<span class="hljs-number">2</span>; ++i)&#123;</span><br><span class="line">		T *= n - i;</span><br><span class="line">		T %= mod;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">solve</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">if</span>(n &lt;= k+<span class="hljs-number">2</span>)&#123;</span><br><span class="line">		ll res = <span class="hljs-number">0</span>;</span><br><span class="line">		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; ++i)&#123;</span><br><span class="line">			res += qpow(i, k, mod);</span><br><span class="line">			res %= mod;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-built_in">cout</span> &lt;&lt; res &lt;&lt; <span class="hljs-built_in">endl</span>;</span><br><span class="line">		<span class="hljs-keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	ll res = <span class="hljs-number">0</span>;</span><br><span class="line">	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= k+<span class="hljs-number">2</span>; ++i)&#123;</span><br><span class="line">		res += F[i] * T % mod * inv(n-i) % mod * inv(fac[i<span class="hljs-number">-1</span>]) %mod * inv(fac[k+<span class="hljs-number">2</span>-i]) %mod * ((k-i)%<span class="hljs-number">2</span> == <span class="hljs-number">0</span>?<span class="hljs-number">1</span>:<span class="hljs-number">-1</span>) %mod;</span><br><span class="line">		res += mod;</span><br><span class="line">		res %= mod;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-built_in">cout</span> &lt;&lt; res &lt;&lt; <span class="hljs-built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> <span class="hljs-keyword">const</span> *argv[])</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">	<span class="hljs-built_in">cin</span> &gt;&gt; n &gt;&gt; k;</span><br><span class="line">	init();</span><br><span class="line">	solve();</span><br><span class="line">	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ol>
+<li>本文题图由User:Glosser.ca - Self-made, based on Image:Lagrangepolys.png，CC BY-SA 3.0，<a href="https://commons.wikimedia.org/w/index.php?curid=5538041" target="_blank" rel="noopener">https://commons.wikimedia.org/w/index.php?curid=5538041</a></li>
+<li><a href="http://blog.lightning34.cn/?p=115" target="_blank" rel="noopener">参考文章</a></li>
+<li><a href="http://www.mohu.org/info/symbols/symbols.htm" target="_blank" rel="noopener">LaTex</a></li>
+</ol>
+
         </div>
         
-        
-        <div class="level is-mobile">
+        <div class="level is-size-7 is-uppercase">
             <div class="level-start">
                 <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2019/04/12/2017-Zhejiang-provincial-competition/#more">Read More</a>
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/拉格朗日插值法/">拉格朗日插值法</a>
                 </div>
             </div>
         </div>
+        
         
         
     </div>
@@ -206,11 +229,73 @@
 
 
 
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>Alipay</span>
+    <div class="qrcode"><img src="https://s2.ax1x.com/2019/04/10/A7iBZD.jpg" alt="Alipay"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>Wechat</span>
+    <div class="qrcode"><img src="https://s2.ax1x.com/2019/04/10/A7irIH.jpg" alt="Wechat"></div>
+</a>
+
+                
+        </div>
+    </div>
+</div>
 
 
 
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/06/16/niukexiaobai15/">
+                <span class="level-item">牛客小白赛15</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
 
 
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">Commentaires</h3>
+        
+<div id="valine-thread" class="content"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#valine-thread' ,
+        notify: false,
+        verify: false,
+        app_id: 'kgvqY8uIP79Q5O4ohyKTBeoK-gzGzoHsz',
+        app_key: '2XufptgiB6zbgrafwryks3Bf',
+        placeholder: 'Say something...'
+    });
+</script>
+
+    </div>
+</div>
 </div>
                 
 
@@ -996,7 +1081,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/favicon.png" alt="Dicer&#39;s blog" height="28">
+                    <img src="/images/favicon.png" alt="Codeforces-622-F" height="28">
                 
                 </a>
                 <p class="is-size-7">
