@@ -2,24 +2,25 @@
 <html lang="zh">
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-<title>Category: 动态规划 - Dicer&#39;s blog</title>
+<title>Lagrange-Multiplier - Dicer&#39;s blog</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-    <meta name="description" content="Some posts about computer sciense and my life.">
-<meta name="keywords" content="CS">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Dicer&#39;s blog">
-<meta property="og:url" content="/categories/动态规划/index.html">
+    <meta name="description" content="简单来说，拉格朗日乘子法可以解决$f(\hat x)$在一些限制条件$g_k(\hat x) = c_k$下的极值。">
+<meta name="keywords" content="拉格朗日乘数法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lagrange-Multiplier">
+<meta property="og:url" content="/2019/07/19/Lagrange-Multiplier/index.html">
 <meta property="og:site_name" content="Dicer&#39;s blog">
-<meta property="og:description" content="Some posts about computer sciense and my life.">
+<meta property="og:description" content="简单来说，拉格朗日乘子法可以解决$f(\hat x)$在一些限制条件$g_k(\hat x) = c_k$下的极值。">
 <meta property="og:locale" content="zh_Hans">
-<meta property="og:image" content="/images/og_image.png">
+<meta property="og:image" content="/gallery/others/LagrangeMultipliers2D.svg">
+<meta property="og:updated_time" content="2019-07-19T08:56:47.506Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Dicer&#39;s blog">
-<meta name="twitter:description" content="Some posts about computer sciense and my life.">
-<meta name="twitter:image" content="/images/og_image.png">
+<meta name="twitter:title" content="Lagrange-Multiplier">
+<meta name="twitter:description" content="简单来说，拉格朗日乘子法可以解决$f(\hat x)$在一些限制条件$g_k(\hat x) = c_k$下的极值。">
+<meta name="twitter:image" content="/gallery/others/LagrangeMultipliers2D.svg">
 
 
 
@@ -97,7 +98,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/favicon.png" alt="Dicer&#39;s blog" height="28">
+                <img src="/images/favicon.png" alt="Lagrange-Multiplier" height="28">
             
             </a>
         </div>
@@ -143,64 +144,98 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
-    <div class="card-content">
-        <nav class="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-            <li><a href="/categories">Categories</a></li>
-            
-            <li class="is-active"><a href="#" aria-current="page">动态规划</a></li>
-        </ul>
-        </nav>
-    </div>
-</div>
-
-    <div class="card">
     
     <div class="card-image">
-        <a href="/2019/06/24/codeforces-568-G1/" class="image is-7by1">
-            <img class="thumbnail" src="/gallery/thumbnails/0_Kaero, Anton Fadeev_01.jpg" alt="Codeforces-568-G1">
-        </a>
+        <span class="image is-7by1">
+            <img class="thumbnail" src="/gallery/others/LagrangeMultipliers2D.svg" alt="Lagrange-Multiplier">
+        </span>
     </div>
     
     <div class="card-content article ">
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-06-23T16:16:41.000Z">2019-06-24</time>
+                <time class="level-item has-text-grey" datetime="2019-07-19T07:53:05.000Z">2019-07-19</time>
                 
                 <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/动态规划/">动态规划</a>
+                <a class="has-link-grey -link" href="/categories/数论/">数论</a>
                 </div>
                 
                 
                 <span class="level-item has-text-grey">
                     
                     
-                    5 minutes read (About 688 words)
+                    4 minutes read (About 619 words)
                 </span>
                 
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span> visits
+                </span>
                 
             </div>
         </div>
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2019/06/24/codeforces-568-G1/">Codeforces-568-G1</a>
+                Lagrange-Multiplier
             
         </h1>
         <div class="content">
-            <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p><a href="https://hpuoj.com/problem/74/" target="_blank" rel="noopener">hpuoj-74</a></p>
-<p><a href="https://codeforces.com/contest/1185/problem/G1" target="_blank" rel="noopener">codeforces-568-G1</a></p>
+            <p>简单来说，拉格朗日乘子法可以解决$f(\hat x)$在一些限制条件$g_k(\hat x) = c_k$下的极值。</p>
+<a id="more"></a>
+
+<h2 id="Mushroom-Scientists"><a href="#Mushroom-Scientists" class="headerlink" title="Mushroom Scientists"></a>Mushroom Scientists</h2><p><a href="https://codeforces.com/contest/186/problem/D" target="_blank" rel="noopener">Link</a></p>
+<h3 id="Prove"><a href="#Prove" class="headerlink" title="Prove"></a>Prove</h3><p>本题题意就是给了一个函数$f(x,y,z) = x^a + y^b + z^c$，求这个函数在约束条件$g(x,y,z) = x + y + z - S$下的最大值。</p>
+<p>首先，设拉格朗日函数：</p>
+<p>$$L(x,y,z,\lambda) = f - \lambda \cdot g$$</p>
+<p>然后对各个变量求偏导数：</p>
+<p>$$\frac{\partial L}{\partial x} = y^b\cdot z^c \cdot ax^{a-1} - \lambda​$$</p>
+<p>$$\frac{\partial L}{\partial y} = x^a\cdot z^c \cdot by^{b-1} - \lambda​$$</p>
+<p>$$\frac{\partial L}{\partial z} = x^a\cdot y^b \cdot cz^{c-1} - \lambda​$$</p>
+<p>$$\frac{\partial L}{\partial \lambda} = x + y + z - S​$$</p>
+<p>可以解出：</p>
+<p>$$\frac{x}{a} = \frac{y}{b} = \frac{z}{c}$$</p>
+<p>所以：</p>
+<p>$$x = \frac{S\cdot a}{a+b+c}, y = \frac{S\cdot b}{a+b+c}, z = \frac{S\cdot c}{a+b+c}​$$</p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iomanip&gt;</span></span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"> </span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MAXN = <span class="hljs-number">1e5</span> + <span class="hljs-number">7</span>;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> mod = <span class="hljs-number">1e9</span> + <span class="hljs-number">7</span>;</span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;</span><br><span class="line"> </span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">    <span class="hljs-built_in">cout</span> &lt;&lt; fixed;</span><br><span class="line">    <span class="hljs-keyword">int</span> s;</span><br><span class="line">    <span class="hljs-keyword">int</span> a, b, c;</span><br><span class="line">    <span class="hljs-built_in">cin</span> &gt;&gt; s &gt;&gt; a &gt;&gt; b &gt;&gt; c;</span><br><span class="line">    <span class="hljs-keyword">if</span>(a + b + c == <span class="hljs-number">0</span>)&#123;</span><br><span class="line">        <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-number">0</span> &lt;&lt; <span class="hljs-string">' '</span> &lt;&lt; <span class="hljs-number">0</span> &lt;&lt; <span class="hljs-string">' '</span> &lt;&lt; <span class="hljs-number">0</span> &lt;&lt; <span class="hljs-built_in">endl</span>;</span><br><span class="line">    &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">        <span class="hljs-built_in">cout</span> &lt;&lt; setprecision(<span class="hljs-number">12</span>) &lt;&lt; (<span class="hljs-number">1.0</span>*s*a/(a+b+c)) &lt;&lt; <span class="hljs-string">' '</span> &lt;&lt; (<span class="hljs-number">1.0</span>*s*b/(a+b+c)) &lt;&lt; <span class="hljs-string">' '</span> &lt;&lt; (<span class="hljs-number">1.0</span>*s*c/(a+b+c)) &lt;&lt; <span class="hljs-built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Samantha-and-Portfolio-Management"><a href="#Samantha-and-Portfolio-Management" class="headerlink" title="Samantha and Portfolio Management"></a>Samantha and Portfolio Management</h2><p><a href="https://www.hackerrank.com/contests/morgan-stanley-2016/challenges/samantha-and-portfolio-management" target="_blank" rel="noopener">Link</a></p>
+<h3 id="Prove-1"><a href="#Prove-1" class="headerlink" title="Prove"></a>Prove</h3><p>约束条件下的极值问题，可以用拉格朗日乘子法解决。</p>
+<p>约束条件：<br>$$g(\boldsymbol w) = \sum_{i=1}^{n}{w_i} - 1$$</p>
+<p>极值方程：</p>
+<p>$$f(\boldsymbol w) = \sum_{i=1}^{n}{(w_i^2 \cdot \sigma_i^2)} = \sum_{i=1}^{n}(w_i^2 \cdot \frac{1}{i})$$</p>
+<p>拉格朗日方程：</p>
+<p>$$L(\boldsymbol w, \lambda) = f(\boldsymbol w) - \lambda \cdot g(\boldsymbol w)​$$</p>
+<p>分别对 $\boldsymbol w , \lambda​$ 求导：</p>
+<p>$$\frac{\partial(L)}{\partial(w_i)} = 2 \frac{w_i}{i} - \lambda$$</p>
+<p>$$\frac{\partial(L)}{\partial(\lambda)} = g(\boldsymbol{w}) = 1 - \sum_{i=1}^{n}{w_i}​$$</p>
+<p>则有：</p>
+<p>$$w_i = \frac{\lambda \cdot i}{2}$$</p>
+<p>移项：</p>
+<p>$$\sum_{i=1}^{n}{w_i} = \frac{\lambda \cdot \sum_{i=1}^{n}(i)}{2} = \frac<br>{\lambda \cdot n(n+1)}{4} = 1$$</p>
+<p>则：<br>$$\lambda = \frac{4}{n(n+1)}​$$</p>
+<p>$$w_i = \frac{\lambda \cdot i}{2} = \frac{2\cdot i}{n(n+1)}$$</p>
+<p>所以：</p>
+<p>$$V = \sum_{i=1}^{n}{w_i^2\times \sigma_i^2 } = \sum_{i=1}^{n}{\frac{4\cdot i}(n^2(n+1)^2)} = \frac{1}{n(n+1)}$$</p>
+<p>$$E = \sum_{i=1}^{n}{w_i \times \bar r_i} = \sum_{i=1}^{n}\frac{(2\cdot i \cdot \bar r_i)}{n(n+1)}$$</p>
+<p>然后就可以愉快的$O(n)​$解决了。</p>
+<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MAXN = <span class="hljs-number">1e5</span> + <span class="hljs-number">7</span>;</span><br><span class="line"><span class="hljs-keyword">int</span> r[MAXN];</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">print</span><span class="hljs-params">(<span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> a, <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> g = __gcd(a, b);</span><br><span class="line">    a /= g; b /= g;</span><br><span class="line">    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d %d\n"</span>, a, b);</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">int</span> n;</span><br><span class="line">    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>, &amp;n);</span><br><span class="line">    <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> sum = <span class="hljs-number">0</span>;</span><br><span class="line">    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>, r+i);</span><br><span class="line">        sum += <span class="hljs-number">1L</span>L * i * r[i];</span><br><span class="line">    &#125;</span><br><span class="line">    print(<span class="hljs-number">2</span> * sum, <span class="hljs-number">1L</span>L * n * (n+<span class="hljs-number">1</span>));</span><br><span class="line">    print(<span class="hljs-number">2L</span>L, n * (n+<span class="hljs-number">1</span>));</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>1.<a href="https://en.wikipedia.org/wiki/Lagrange_multiplier" target="_blank" rel="noopener">Wikipedia-Lagrange-Multiplier</a><br>2.<a href="http://jermmy.xyz/2017/07/27/2017-7-27-understand-lagrange-multiplier/" target="_blank" rel="noopener">http://jermmy.xyz/2017/07/27/2017-7-27-understand-lagrange-multiplier/</a></p>
+
         </div>
         
-        
-        <div class="level is-mobile">
+        <div class="level is-size-7 is-uppercase">
             <div class="level-start">
                 <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2019/06/24/codeforces-568-G1/#more">Read More</a>
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/拉格朗日乘数法/">拉格朗日乘数法</a>
                 </div>
             </div>
         </div>
+        
         
         
     </div>
@@ -208,11 +243,73 @@
 
 
 
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>Alipay</span>
+    <div class="qrcode"><img src="https://s2.ax1x.com/2019/04/10/A7iBZD.jpg" alt="Alipay"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>Wechat</span>
+    <div class="qrcode"><img src="https://s2.ax1x.com/2019/04/10/A7irIH.jpg" alt="Wechat"></div>
+</a>
+
+                
+        </div>
+    </div>
+</div>
 
 
 
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/06/25/transfer-file-use-http/">
+                <span class="level-item">使用HTTP协议实现内网文件传输</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
 
 
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
+        
+<div id="valine-thread" class="content"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#valine-thread' ,
+        notify: false,
+        verify: false,
+        app_id: 'kgvqY8uIP79Q5O4ohyKTBeoK-gzGzoHsz',
+        app_key: '2XufptgiB6zbgrafwryks3Bf',
+        placeholder: 'Say something...'
+    });
+</script>
+
+    </div>
+</div>
 </div>
                 
 
@@ -1078,7 +1175,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/favicon.png" alt="Dicer&#39;s blog" height="28">
+                    <img src="/images/favicon.png" alt="Lagrange-Multiplier" height="28">
                 
                 </a>
                 <p class="is-size-7">
