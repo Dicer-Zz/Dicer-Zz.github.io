@@ -186,6 +186,7 @@
             <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p><a href="https://www.luogu.org/problemnew/show/P2607" target="_blank" rel="noopener">luoguP2607</a></p>
 <p><a href="https://www.lydsy.com/JudgeOnline/problem.php?id=1040" target="_blank" rel="noopener">bzoj1040</a></p>
 <a id="more"></a>
+
 <h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><p>基环树就是一颗多了一条边的树，多了这条边，就会产生一个环。</p>
 <p>考虑找到这个环上的任意一条边，断掉这条边，然后图形就又变回了树。（可以证明，断环上的哪条边对结果并没有影响）</p>
 <p>然后分别都被断掉的这条边的两个端点u、v，做树形动规。</p>
@@ -202,6 +203,7 @@
 <p>根据这个特点就可以进行特判了。</p>
 <p>另外，这份代码在最后一个测试点TLE了。</p>
 <h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// luogu-judger-enable-o2</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;</span><br><span class="line"><span class="hljs-keyword">typedef</span> pair&lt;<span class="hljs-keyword">int</span>, <span class="hljs-keyword">int</span> &gt; pii;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">inline</span> ll <span class="hljs-title">qpow</span><span class="hljs-params">(ll a,ll b,ll mod)</span></span>&#123;ll res=<span class="hljs-number">1</span>;<span class="hljs-keyword">while</span>(b)&#123;<span class="hljs-keyword">if</span>(b&amp;<span class="hljs-number">1</span>)res = (res*a)%mod;a=(a*a)%mod;b&gt;&gt;=<span class="hljs-number">1</span>;&#125;<span class="hljs-keyword">return</span> res;&#125;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> mod = <span class="hljs-number">1e9</span> + <span class="hljs-number">7</span>;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MAXN = <span class="hljs-number">1e6</span> + <span class="hljs-number">7</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">int</span> curx, cury;</span><br><span class="line"><span class="hljs-keyword">bool</span> vis[MAXN];</span><br><span class="line"><span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; G[MAXN];</span><br><span class="line">ll dp[MAXN][<span class="hljs-number">2</span>];</span><br><span class="line"><span class="hljs-keyword">int</span> val[MAXN];</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> fa)</span></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">if</span>(vis[x])&#123;</span><br><span class="line">        curx = x;</span><br><span class="line">        cury = fa;</span><br><span class="line">        <span class="hljs-keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    vis[x] = <span class="hljs-number">1</span>;</span><br><span class="line">    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; G[x].size(); ++i)&#123;</span><br><span class="line">        <span class="hljs-keyword">int</span> u = G[x][i];</span><br><span class="line">        <span class="hljs-keyword">if</span>(u == fa) <span class="hljs-keyword">continue</span>;</span><br><span class="line">        dfs(u, x);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">go</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> fa)</span></span>&#123;</span><br><span class="line">    dp[x][<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>; dp[x][<span class="hljs-number">1</span>] = val[x];</span><br><span class="line">    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; G[x].size(); ++i)&#123;</span><br><span class="line">        <span class="hljs-keyword">int</span> u = G[x][i];</span><br><span class="line">        <span class="hljs-keyword">if</span>(u == fa) <span class="hljs-keyword">continue</span>;</span><br><span class="line">        <span class="hljs-keyword">if</span>(x == curx &amp;&amp; u == cury)  <span class="hljs-keyword">continue</span>;</span><br><span class="line">        <span class="hljs-keyword">if</span>(u == curx &amp;&amp; x == cury)  <span class="hljs-keyword">continue</span>;</span><br><span class="line">        go(u, x);</span><br><span class="line">        dp[x][<span class="hljs-number">0</span>] += max(dp[u][<span class="hljs-number">0</span>], dp[u][<span class="hljs-number">1</span>]);</span><br><span class="line">        dp[x][<span class="hljs-number">1</span>] += dp[u][<span class="hljs-number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">    <span class="hljs-meta">#<span class="hljs-meta-keyword">ifndef</span> ONLINE_JUDGE         </span></span><br><span class="line">        freopen(<span class="hljs-string">"in.txt"</span>, <span class="hljs-string">"r"</span>, <span class="hljs-built_in">stdin</span>);</span><br><span class="line">        freopen(<span class="hljs-string">"out.txt"</span>, <span class="hljs-string">"w"</span>, <span class="hljs-built_in">stdout</span>);</span><br><span class="line">    <span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span> </span></span><br><span class="line">    </span><br><span class="line">    <span class="hljs-keyword">int</span> n, x;</span><br><span class="line">    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>, &amp;n);</span><br><span class="line">    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; ++i)&#123;</span><br><span class="line">        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d %d"</span>, &amp;val[i], &amp;x);</span><br><span class="line">        G[x].push_back(i);</span><br><span class="line">        G[i].push_back(x);</span><br><span class="line">    &#125;</span><br><span class="line">    ll res = <span class="hljs-number">0</span>, tmp;</span><br><span class="line">    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; ++i)&#123;</span><br><span class="line">        <span class="hljs-keyword">if</span>(vis[i])  <span class="hljs-keyword">continue</span>;</span><br><span class="line">        dfs(i, <span class="hljs-number">0</span>);</span><br><span class="line">        <span class="hljs-comment">// cout &lt;&lt; curx &lt;&lt; ' ' &lt;&lt; cury &lt;&lt; endl;</span></span><br><span class="line">        <span class="hljs-comment">// cout &lt;&lt; count(G[curx].begin(), G[curx].end(), cury) &lt;&lt; endl;</span></span><br><span class="line">        <span class="hljs-keyword">if</span>(count(G[curx].begin(), G[curx].end(), cury) == <span class="hljs-number">2</span>)&#123;</span><br><span class="line">            go(curx, <span class="hljs-number">0</span>);</span><br><span class="line">            go(cury, <span class="hljs-number">0</span>);</span><br><span class="line">            res += max(dp[curx][<span class="hljs-number">0</span>] + dp[cury][<span class="hljs-number">1</span>], dp[curx][<span class="hljs-number">1</span>] + dp[cury][<span class="hljs-number">0</span>]);</span><br><span class="line">            <span class="hljs-keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        go(curx, <span class="hljs-number">0</span>);</span><br><span class="line">        tmp = dp[curx][<span class="hljs-number">0</span>];</span><br><span class="line">        go(cury, <span class="hljs-number">0</span>);</span><br><span class="line">        tmp = max(tmp, dp[cury][<span class="hljs-number">0</span>]);</span><br><span class="line">        res += tmp;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%lld\n"</span>, res);</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
         </div>
         
@@ -277,7 +279,7 @@
 
 <div class="card">
     <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
+        <h3 class="title is-5 has-text-weight-normal">Comentarios</h3>
         
 <div id="valine-thread" class="content"></div>
 <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
@@ -337,7 +339,7 @@
             <div class="level-item has-text-centered is-marginless">
                 <div>
                     <p class="heading">
-                        Posts
+                        Entradas
                     </p>
                     <p class="title has-text-weight-normal">
                         12
@@ -347,7 +349,7 @@
             <div class="level-item has-text-centered is-marginless">
                 <div>
                     <p class="heading">
-                        Categories
+                        Categorias
                     </p>
                     <p class="title has-text-weight-normal">
                         9
@@ -357,7 +359,7 @@
             <div class="level-item has-text-centered is-marginless">
                 <div>
                     <p class="heading">
-                        Tags
+                        Etiquetas
                     </p>
                     <p class="title has-text-weight-normal">
                         15
@@ -367,7 +369,7 @@
         </nav>
         <div class="level">
             <a class="level-item button is-link is-rounded" href="https://github.com/Dicer-Zz" target="_blank">
-                Follow</a>
+                SEGUIR</a>
         </div>
         
         
@@ -480,7 +482,7 @@
     <div class="card-content">
         <div class="menu">
             <h3 class="menu-label">
-                Categories
+                Categorias
             </h3>
             <ul class="menu-list">
             <li>
@@ -565,7 +567,7 @@
 <div class="card widget">
     <div class="card-content">
         <h3 class="menu-label">
-            Tag Cloud
+            Nube de etiquetas
         </h3>
         <a href="/tags/Book/" style="font-size: 10px;">Book</a> <a href="/tags/Data-structure/" style="font-size: 10px;">Data structure</a> <a href="/tags/Dynamic-programming/" style="font-size: 10px;">Dynamic programming</a> <a href="/tags/IDA/" style="font-size: 10px;">IDA*</a> <a href="/tags/SSH/" style="font-size: 10px;">SSH</a> <a href="/tags/Server/" style="font-size: 10px;">Server</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/启发式搜索/" style="font-size: 10px;">启发式搜索</a> <a href="/tags/基环树/" style="font-size: 10px;">基环树</a> <a href="/tags/拉格朗日乘数法/" style="font-size: 10px;">拉格朗日乘数法</a> <a href="/tags/拉格朗日插值法/" style="font-size: 10px;">拉格朗日插值法</a> <a href="/tags/树形动规/" style="font-size: 10px;">树形动规</a> <a href="/tags/状压DP/" style="font-size: 10px;">状压DP</a> <a href="/tags/线段树/" style="font-size: 10px;">线段树</a>
     </div>
@@ -579,21 +581,21 @@
 <div class="card widget">
     <div class="card-content">
         <h3 class="menu-label">
-            Recent
+            Recientes
         </h3>
         
         <article class="media">
             
             <a href="/2019/07/19/Lagrange-Multiplier/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/others/LagrangeMultipliers2D.svg" alt="Lagrange-Multiplier">
+                    <img class="thumbnail" src="/gallery/others/LagrangeMultipliers2D.svg" alt="拉格朗日乘数法">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-19T07:53:05.000Z">2019-07-19</time></div>
-                    <a href="/2019/07/19/Lagrange-Multiplier/" class="has-link-black-ter is-size-6">Lagrange-Multiplier</a>
+                    <a href="/2019/07/19/Lagrange-Multiplier/" class="has-link-black-ter is-size-6">拉格朗日乘数法</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/数论/">数论</a>
                     </p>
@@ -685,7 +687,7 @@
     <div class="card-content">
         <div class="menu">
         <h3 class="menu-label">
-            Archives
+            Archivos
         </h3>
         <ul class="menu-list">
         
@@ -742,7 +744,7 @@
     <div class="card-content">
         <div class="menu">
             <h3 class="menu-label">
-                Tags
+                Etiquetas
             </h3>
             <div class="field is-grouped is-grouped-multiline">
                 
@@ -871,21 +873,21 @@
 <div class="card widget">
     <div class="card-content">
         <h3 class="menu-label">
-            Recent
+            Recientes
         </h3>
         
         <article class="media">
             
             <a href="/2019/07/19/Lagrange-Multiplier/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/others/LagrangeMultipliers2D.svg" alt="Lagrange-Multiplier">
+                    <img class="thumbnail" src="/gallery/others/LagrangeMultipliers2D.svg" alt="拉格朗日乘数法">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-19T07:53:05.000Z">2019-07-19</time></div>
-                    <a href="/2019/07/19/Lagrange-Multiplier/" class="has-link-black-ter is-size-6">Lagrange-Multiplier</a>
+                    <a href="/2019/07/19/Lagrange-Multiplier/" class="has-link-black-ter is-size-6">拉格朗日乘数法</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/数论/">数论</a>
                     </p>
@@ -977,7 +979,7 @@
     <div class="card-content">
         <div class="menu">
         <h3 class="menu-label">
-            Archives
+            Archivos
         </h3>
         <ul class="menu-list">
         
@@ -1034,7 +1036,7 @@
     <div class="card-content">
         <div class="menu">
             <h3 class="menu-label">
-                Tags
+                Etiquetas
             </h3>
             <div class="field is-grouped is-grouped-multiline">
                 
@@ -1325,10 +1327,10 @@ document.addEventListener('DOMContentLoaded', function () {
     (function (window) {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
-                POSTS: 'Posts',
+                POSTS: 'Entradas',
                 PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
+                CATEGORIES: 'Categorias',
+                TAGS: 'Etiquetas',
                 UNTITLED: '(Untitled)',
             },
             CONTENT_URL: '/content.json',
