@@ -2,24 +2,25 @@
 <html lang="zh">
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-<title>Category: 动态规划 - Dicer&#39;s blog</title>
+<title>BZOJ-2956-模积和 - Dicer&#39;s blog</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-    <meta name="description" content="Some posts about computer sciense and my life.">
-<meta name="keywords" content="CS">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Dicer&#39;s blog">
-<meta property="og:url" content="/categories/动态规划/index.html">
+    <meta name="description" content="题目BZOJ-2056 一道有点复杂的数论分块。">
+<meta name="keywords" content="数论分块">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BZOJ-2956-模积和">
+<meta property="og:url" content="/2019/08/06/bzoj-2956/index.html">
 <meta property="og:site_name" content="Dicer&#39;s blog">
-<meta property="og:description" content="Some posts about computer sciense and my life.">
+<meta property="og:description" content="题目BZOJ-2056 一道有点复杂的数论分块。">
 <meta property="og:locale" content="zh_Hans">
-<meta property="og:image" content="/images/og_image.png">
+<meta property="og:image" content="/gallery/thumbnails/0_The%20Frozen%20Floes%20of%20Northern%20Celandine,%20Anton%20Fadeev_01.jpg">
+<meta property="og:updated_time" content="2019-08-06T01:44:54.468Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Dicer&#39;s blog">
-<meta name="twitter:description" content="Some posts about computer sciense and my life.">
-<meta name="twitter:image" content="/images/og_image.png">
+<meta name="twitter:title" content="BZOJ-2956-模积和">
+<meta name="twitter:description" content="题目BZOJ-2056 一道有点复杂的数论分块。">
+<meta name="twitter:image" content="/gallery/thumbnails/0_The%20Frozen%20Floes%20of%20Northern%20Celandine,%20Anton%20Fadeev_01.jpg">
 
 
 
@@ -97,7 +98,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/favicon.png" alt="Dicer&#39;s blog" height="28">
+                <img src="/images/favicon.png" alt="BZOJ-2956-模积和" height="28">
             
             </a>
         </div>
@@ -143,64 +144,74 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
-    <div class="card-content">
-        <nav class="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-            <li><a href="/categories">Categories</a></li>
-            
-            <li class="is-active"><a href="#" aria-current="page">动态规划</a></li>
-        </ul>
-        </nav>
-    </div>
-</div>
-
-    <div class="card">
     
     <div class="card-image">
-        <a href="/2019/06/24/codeforces-568-G1/" class="image is-7by1">
-            <img class="thumbnail" src="/gallery/thumbnails/0_Kaero, Anton Fadeev_01.jpg" alt="Codeforces-568-G1">
-        </a>
+        <span class="image is-7by1">
+            <img class="thumbnail" src="/gallery/thumbnails/0_The Frozen Floes of Northern Celandine, Anton Fadeev_01.jpg" alt="BZOJ-2956-模积和">
+        </span>
     </div>
     
     <div class="card-content article ">
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-06-23T16:16:41.000Z">2019-06-24</time>
+                <time class="level-item has-text-grey" datetime="2019-08-06T01:27:40.000Z">2019-08-06</time>
                 
                 <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/动态规划/">动态规划</a>
+                <a class="has-link-grey -link" href="/categories/数论/">数论</a>
                 </div>
                 
                 
                 <span class="level-item has-text-grey">
                     
                     
-                    5 minutes read (About 688 words)
+                    4 minutes read (About 535 words)
                 </span>
                 
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span> visits
+                </span>
                 
             </div>
         </div>
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2019/06/24/codeforces-568-G1/">Codeforces-568-G1</a>
+                BZOJ-2956-模积和
             
         </h1>
         <div class="content">
-            <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p><a href="https://hpuoj.com/problem/74/" target="_blank" rel="noopener">hpuoj-74</a></p>
-<p><a href="https://codeforces.com/contest/1185/problem/G1" target="_blank" rel="noopener">codeforces-568-G1</a></p>
+            <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p><a href="https://www.lydsy.com/JudgeOnline/problem.php?id=2956" target="_blank" rel="noopener">BZOJ-2056</a></p>
+<p>一道有点复杂的数论分块。</p>
+<a id="more"></a>
+
+<h2 id="公式推导"><a href="#公式推导" class="headerlink" title="公式推导"></a>公式推导</h2><p>所求即为：</p>
+<p>$$\sum_{i=1}^{n}\sum_{j=1}^{m}{(n \bmod i )\cdot (m\bmod j)(i \neq j)}​$$</p>
+<p>先不管$i\neq j$的情况:<br>$$\sum_{i=1}^{n}(\sum_{j=1}^{m}{(n\bmod i) \cdot (m\bmod j)})$$</p>
+<p>$$\sum_{i=1}^{n}\sum_{j=1}^{m}{(n-i\lfloor \frac{n}{i} \rfloor)(m-j\lfloor \frac{m}{j} \rfloor)}​$$</p>
+<p>$$\sum_{i=1}^{n}\sum_{j=1}^{m}{(n m - n\cdot j\lfloor \frac{m}{j} \rfloor - m\cdot i\lfloor \frac{n}{i} \rfloor + ij\lfloor \frac{n}{i} \rfloor \lfloor \frac{m}{j} \rfloor)}​$$</p>
+<p>$$n^2m^2 - n^2\sum_{j=1}^{m}{j\lfloor \frac{m}{j} \rfloor} - m^2\sum_{i=1}^{n}i\lfloor \frac{n}{i} \rfloor + \sum_{i=1}^{n}i\lfloor \frac{n}{i} \rfloor\sum_{i=1}^{m}j\lfloor \frac{m}{j} \rfloor​$$</p>
+<p>然后在讨论$i = j​$的情况:</p>
+<p>$$\sum_{i=1}^{min(n, m)}{(n\bmod i)\cdot (m\bmod i)}$$</p>
+<p>$$\sum_{i=1}^{min(n, m)}{(n - i\lfloor \frac{n}{i} \rfloor)(m - i\lfloor \frac{m}{i} \rfloor)} ​$$</p>
+<p>$$\sum_{i=1}^{min(n, m)}{n m - m\cdot i\lfloor \frac{n}{i} \rfloor - n\cdot i\lfloor \frac{m}{i} \rfloor + i^2 \lfloor \frac{n}{i} \rfloor \lfloor \frac{m}{i} \rfloor} ​$$</p>
+<p>然后就可以愉快的分块了。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">/**************************************************************</span></span><br><span class="line"><span class="hljs-comment">    Problem: 2956</span></span><br><span class="line"><span class="hljs-comment">    User: Dicer</span></span><br><span class="line"><span class="hljs-comment">    Language: C++</span></span><br><span class="line"><span class="hljs-comment">    Result: Accepted</span></span><br><span class="line"><span class="hljs-comment">    Time:184 ms</span></span><br><span class="line"><span class="hljs-comment">    Memory:1292 kb</span></span><br><span class="line"><span class="hljs-comment">****************************************************************/</span></span><br><span class="line"> </span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> rep(i, a, b)    for(int i = (a); i &lt;= (int)(b); ++i)</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> per(i, a, b)    for(int i = (a); i &gt;= (int)(b); --i)</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> debug(x)    cout &lt;&lt; #x &lt;&lt; <span class="hljs-meta-string">' '</span> &lt;&lt; x &lt;&lt; endl;</span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"> </span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MAXN = <span class="hljs-number">1e5</span> + <span class="hljs-number">7</span>;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MOD = <span class="hljs-number">19940417</span>;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> INV = <span class="hljs-number">3323403</span>;</span><br><span class="line"> </span><br><span class="line"><span class="hljs-function">ll <span class="hljs-title">cal</span><span class="hljs-params">(ll n)</span></span>&#123;</span><br><span class="line">    ll ans = <span class="hljs-number">0</span>;</span><br><span class="line">    <span class="hljs-keyword">for</span>(ll i = <span class="hljs-number">1</span>, j; i &lt;= n; i = j + <span class="hljs-number">1</span>)&#123;</span><br><span class="line">        j = n / ( n / i);</span><br><span class="line">        ans += (i + j) * (j - i + <span class="hljs-number">1</span>) / <span class="hljs-number">2</span> * (n / i);</span><br><span class="line">        ans %= MOD;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function">ll <span class="hljs-title">cal</span><span class="hljs-params">(ll n, ll k)</span></span>&#123;</span><br><span class="line">    ll ans = <span class="hljs-number">0</span>;</span><br><span class="line">    <span class="hljs-keyword">for</span>(ll i = <span class="hljs-number">1</span>, j; i &lt;= k; i = j + <span class="hljs-number">1</span>)&#123;</span><br><span class="line">        j = min(k, n / ( n / i));</span><br><span class="line">        ans += (i + j) * (j - i + <span class="hljs-number">1</span>) / <span class="hljs-number">2</span> * (n / i);</span><br><span class="line">        ans %= MOD;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="hljs-function">ll <span class="hljs-title">sum</span><span class="hljs-params">(ll n)</span></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> n * (n + <span class="hljs-number">1</span>) % MOD * (<span class="hljs-number">2</span> * n + <span class="hljs-number">1</span>) % MOD * INV % MOD;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="hljs-function">ll <span class="hljs-title">cal</span><span class="hljs-params">(ll n, ll m, ll k)</span></span>&#123;</span><br><span class="line">    ll ans = <span class="hljs-number">0</span>;</span><br><span class="line">    <span class="hljs-keyword">for</span>(ll i = <span class="hljs-number">1</span>, j; i &lt;= k; i = j + <span class="hljs-number">1</span>)&#123;</span><br><span class="line">        j = min(k, min(n / (n / i), m / (m / i)));</span><br><span class="line">        ans += (sum(j) - sum(i<span class="hljs-number">-1</span>)) * (n/i) % MOD * (m/i) % MOD;</span><br><span class="line">        ans %= MOD;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="hljs-function">ll <span class="hljs-title">mul</span><span class="hljs-params">(ll a, ll b)</span></span>&#123;</span><br><span class="line">    a %= MOD; b %= MOD;</span><br><span class="line">    <span class="hljs-keyword">return</span> a * b % MOD;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">    ll n, m, k;</span><br><span class="line">    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%lld%lld"</span>, &amp;n, &amp;m);</span><br><span class="line">    k = min(n, m);</span><br><span class="line">    <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ans = <span class="hljs-number">0</span>;</span><br><span class="line">    ans += mul(n * n, m * m);</span><br><span class="line">    ans -= mul(n * n, cal(m));</span><br><span class="line">    ans -= mul(m * m, cal(n));</span><br><span class="line">    ans += mul(cal(n), cal(m));</span><br><span class="line">    ans = ((ans % MOD) + MOD) % MOD;</span><br><span class="line">    ans -= mul(k, n * m);</span><br><span class="line">    ans += mul(n, cal(m, k));</span><br><span class="line">    ans += mul(m, cal(n, k));</span><br><span class="line">    ans -= cal(n, m, k);</span><br><span class="line">    ans = ((ans % MOD) + MOD) % MOD;</span><br><span class="line">    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%lld\n"</span>, ans);</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
         </div>
         
-        
-        <div class="level is-mobile">
+        <div class="level is-size-7 is-uppercase">
             <div class="level-start">
                 <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2019/06/24/codeforces-568-G1/#more">Read More</a>
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/数论分块/">数论分块</a>
                 </div>
             </div>
         </div>
+        
         
         
     </div>
@@ -208,11 +219,73 @@
 
 
 
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>Alipay</span>
+    <div class="qrcode"><img src="https://s2.ax1x.com/2019/04/10/A7iBZD.jpg" alt="Alipay"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>Wechat</span>
+    <div class="qrcode"><img src="https://s2.ax1x.com/2019/04/10/A7irIH.jpg" alt="Wechat"></div>
+</a>
+
+                
+        </div>
+    </div>
+</div>
 
 
 
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/07/19/Lagrange-Multiplier/">
+                <span class="level-item">拉格朗日乘数法</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
 
 
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
+        
+<div id="valine-thread" class="content"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#valine-thread' ,
+        notify: false,
+        verify: false,
+        app_id: 'kgvqY8uIP79Q5O4ohyKTBeoK-gzGzoHsz',
+        app_key: '2XufptgiB6zbgrafwryks3Bf',
+        placeholder: 'Say something...'
+    });
+</script>
+
+    </div>
+</div>
 </div>
                 
 
@@ -1114,7 +1187,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/favicon.png" alt="Dicer&#39;s blog" height="28">
+                    <img src="/images/favicon.png" alt="BZOJ-2956-模积和" height="28">
                 
                 </a>
                 <p class="is-size-7">
