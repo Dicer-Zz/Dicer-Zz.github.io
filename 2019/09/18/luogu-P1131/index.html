@@ -2,24 +2,25 @@
 <html lang="zh">
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-<title>Tag: 启发式搜索 - Dicer&#39;s blog</title>
+<title>luogu-P1131 - Dicer&#39;s blog</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-    <meta name="description" content="Some posts about computer sciense and my life.">
-<meta name="keywords" content="CS">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Dicer&#39;s blog">
-<meta property="og:url" content="/tags/启发式搜索/index.html">
+    <meta name="description" content="题目时态同步 一道双 $dfs$ 的题目。">
+<meta name="keywords" content="dfs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="luogu-P1131">
+<meta property="og:url" content="/2019/09/18/luogu-P1131/index.html">
 <meta property="og:site_name" content="Dicer&#39;s blog">
-<meta property="og:description" content="Some posts about computer sciense and my life.">
+<meta property="og:description" content="题目时态同步 一道双 $dfs$ 的题目。">
 <meta property="og:locale" content="zh_Hans">
-<meta property="og:image" content="/images/og_image.png">
+<meta property="og:image" content="/gallery/thumbnails/hei3.png">
+<meta property="og:updated_time" content="2019-09-18T15:27:35.750Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Dicer&#39;s blog">
-<meta name="twitter:description" content="Some posts about computer sciense and my life.">
-<meta name="twitter:image" content="/images/og_image.png">
+<meta name="twitter:title" content="luogu-P1131">
+<meta name="twitter:description" content="题目时态同步 一道双 $dfs$ 的题目。">
+<meta name="twitter:image" content="/gallery/thumbnails/hei3.png">
 
 
 
@@ -97,7 +98,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/favicon.png" alt="Dicer&#39;s blog" height="28">
+                <img src="/images/favicon.png" alt="luogu-P1131" height="28">
             
             </a>
         </div>
@@ -143,29 +144,18 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
-    <div class="card-content">
-        <nav class="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-            <li><a href="/tags">Tags</a></li>
-            <li class="is-active"><a href="#" aria-current="page">启发式搜索</a></li>
-        </ul>
-        </nav>
-    </div>
-</div>
-
-    <div class="card">
     
     <div class="card-image">
-        <a href="/2019/06/11/SCOI2005/" class="image is-7by1">
-            <img class="thumbnail" src="/gallery/thumbnails/0_Malephar, Anton Fadeev_01.jpg" alt="SCOI2005-骑士精神">
-        </a>
+        <span class="image is-7by1">
+            <img class="thumbnail" src="/gallery/thumbnails/hei3.png" alt="luogu-P1131">
+        </span>
     </div>
     
     <div class="card-content article ">
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-06-11T15:20:26.000Z">2019-06-11</time>
+                <time class="level-item has-text-grey" datetime="2019-09-18T15:07:13.000Z">2019-09-18</time>
                 
                 <div class="level-item">
                 <a class="has-link-grey -link" href="/categories/搜索/">搜索</a>
@@ -175,30 +165,55 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    3 minutes read (About 388 words)
+                    4 minutes read (About 534 words)
                 </span>
                 
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span> visits
+                </span>
                 
             </div>
         </div>
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2019/06/11/SCOI2005/">SCOI2005-骑士精神</a>
+                luogu-P1131
             
         </h1>
         <div class="content">
-            <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p><a href="https://www.luogu.org/problemnew/show/P2324" target="_blank" rel="noopener">luoguP2324</a></p>
+            <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p><a href="https://www.luogu.org/problem/P1131" target="_blank" rel="noopener">时态同步</a></p>
+<p>一道双 $dfs$ 的题目。</p>
+<a id="more"></a>
+
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>题意就是给出一棵树，可以增加任意的边权，问最少增加多少可以让所有叶子节点到跟节点的距离相等。</p>
+<p>先跑一边 $dfs$ 求出所有节点到根节点的距离，再统计出以每个节点为根的子树上的所有点到根节点的距离的最大值。</p>
+<p>然后再做一次 $dfs$ ，当一棵子树中离根节点最远的那个节点到根节点的距离都小于所有树中的距离最大的那个的话就可以考虑增加当前子树的根节点与它父亲节点之间的距离了，因为子树中所有节点的距离都需要增大，增大这条边一定是消耗最少的。然后递归下去。</p>
+<p>说起来有点复杂，举个例子吧：</p>
+<p>比如对于：</p>
+<blockquote>
+<p>5 1</p>
+<p>1 2 1</p>
+<p>1 3 5</p>
+<p>2 4 2</p>
+<p>2 5 3</p>
+</blockquote>
+<p>先把图画出来，有三个叶子节点，3 4 5，你会发现 1 到 3 的距离是最远的，因此 4 5 到根节点需要增加，而它们到根节点的路径再 1 2 这条边上重合了，因此我们可以优先在这条边上加，加到子树上有些叶子节点已经达到的最大值。然后向下递归。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> rep(i, a, b) for(int i = (a); i &lt;= (b); ++i)</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> per(i, a, b) for(int i = (a); i &gt;= (b); --i)</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> debug(x) cerr &lt;&lt; #x &lt;&lt; <span class="hljs-meta-string">' '</span> &lt;&lt; x &lt;&lt; endl;</span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> mod = <span class="hljs-number">1e9</span>+<span class="hljs-number">7</span>;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MAXN = <span class="hljs-number">5e5</span> + <span class="hljs-number">7</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-built_in">vector</span>&lt;pair&lt;<span class="hljs-keyword">int</span>, <span class="hljs-keyword">int</span>&gt; &gt; G[MAXN];</span><br><span class="line">ll dis[MAXN], msd[MAXN], maxdis, ans;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> fa)</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span> p: G[x]) &#123;</span><br><span class="line">        <span class="hljs-keyword">int</span> v = p.first, w = p.second;</span><br><span class="line">        <span class="hljs-keyword">if</span>(v == fa) <span class="hljs-keyword">continue</span>;</span><br><span class="line">        dis[v] = dis[x] + w;</span><br><span class="line">        dfs(v, x);</span><br><span class="line">        msd[x] = max(msd[x], msd[v] + w);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">dfs2</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> fa)</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> p: G[x]) &#123;</span><br><span class="line">        <span class="hljs-keyword">int</span> v = p.first, w = p.second;</span><br><span class="line">        <span class="hljs-keyword">if</span>(v == fa) <span class="hljs-keyword">continue</span>;</span><br><span class="line">        ans += msd[x] - msd[v] - w;</span><br><span class="line">        dfs2(v, x);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> <span class="hljs-keyword">const</span> *argv[])</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">int</span> n, rt;</span><br><span class="line">    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d %d"</span>, &amp;n, &amp;rt);</span><br><span class="line">    <span class="hljs-keyword">int</span> u, v, w;</span><br><span class="line">    rep(i, <span class="hljs-number">1</span>, n<span class="hljs-number">-1</span>)&#123;</span><br><span class="line">        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d %d %d"</span>, &amp;u, &amp;v, &amp;w);</span><br><span class="line">        G[u].push_back(&#123;v, w&#125;);</span><br><span class="line">        G[v].push_back(&#123;u, w&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    dfs(rt, <span class="hljs-number">0</span>);</span><br><span class="line"></span><br><span class="line">    dfs2(rt, <span class="hljs-number">0</span>);</span><br><span class="line">    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%lld\n"</span>, ans);</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
         </div>
         
-        
-        <div class="level is-mobile">
+        <div class="level is-size-7 is-uppercase">
             <div class="level-start">
                 <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2019/06/11/SCOI2005/#more">Read More</a>
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/dfs/">dfs</a>
                 </div>
             </div>
         </div>
+        
         
         
     </div>
@@ -206,11 +221,73 @@
 
 
 
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>Alipay</span>
+    <div class="qrcode"><img src="https://s2.ax1x.com/2019/04/10/A7iBZD.jpg" alt="Alipay"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>Wechat</span>
+    <div class="qrcode"><img src="https://s2.ax1x.com/2019/04/10/A7irIH.jpg" alt="Wechat"></div>
+</a>
+
+                
+        </div>
+    </div>
+</div>
 
 
 
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/09/18/luogu-P1879-P2051/">
+                <span class="level-item">洛谷P1879 &amp; P2051</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
 
 
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
+        
+<div id="valine-thread" class="content"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#valine-thread' ,
+        notify: false,
+        verify: false,
+        app_id: 'kgvqY8uIP79Q5O4ohyKTBeoK-gzGzoHsz',
+        app_key: '2XufptgiB6zbgrafwryks3Bf',
+        placeholder: 'Say something...'
+    });
+</script>
+
+    </div>
+</div>
 </div>
                 
 
@@ -1304,7 +1381,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/favicon.png" alt="Dicer&#39;s blog" height="28">
+                    <img src="/images/favicon.png" alt="luogu-P1131" height="28">
                 
                 </a>
                 <p class="is-size-7">

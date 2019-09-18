@@ -2,24 +2,25 @@
 <html lang="zh">
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-<title>Tag: 启发式搜索 - Dicer&#39;s blog</title>
+<title>洛谷P1879 &amp; P2051 - Dicer&#39;s blog</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-    <meta name="description" content="Some posts about computer sciense and my life.">
-<meta name="keywords" content="CS">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Dicer&#39;s blog">
-<meta property="og:url" content="/tags/启发式搜索/index.html">
+    <meta name="description" content="题目中国象棋 玉米田Corn Fields 两道DP。">
+<meta name="keywords" content="状压DP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="洛谷P1879 &amp; P2051">
+<meta property="og:url" content="/2019/09/18/luogu-P1879-P2051/index.html">
 <meta property="og:site_name" content="Dicer&#39;s blog">
-<meta property="og:description" content="Some posts about computer sciense and my life.">
+<meta property="og:description" content="题目中国象棋 玉米田Corn Fields 两道DP。">
 <meta property="og:locale" content="zh_Hans">
-<meta property="og:image" content="/images/og_image.png">
+<meta property="og:image" content="/gallery/thumbnails/hei2.JPG">
+<meta property="og:updated_time" content="2019-09-18T15:06:17.965Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Dicer&#39;s blog">
-<meta name="twitter:description" content="Some posts about computer sciense and my life.">
-<meta name="twitter:image" content="/images/og_image.png">
+<meta name="twitter:title" content="洛谷P1879 &amp; P2051">
+<meta name="twitter:description" content="题目中国象棋 玉米田Corn Fields 两道DP。">
+<meta name="twitter:image" content="/gallery/thumbnails/hei2.JPG">
 
 
 
@@ -97,7 +98,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/favicon.png" alt="Dicer&#39;s blog" height="28">
+                <img src="/images/favicon.png" alt="洛谷P1879 &amp; P2051" height="28">
             
             </a>
         </div>
@@ -143,62 +144,77 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
-    <div class="card-content">
-        <nav class="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-            <li><a href="/tags">Tags</a></li>
-            <li class="is-active"><a href="#" aria-current="page">启发式搜索</a></li>
-        </ul>
-        </nav>
-    </div>
-</div>
-
-    <div class="card">
     
     <div class="card-image">
-        <a href="/2019/06/11/SCOI2005/" class="image is-7by1">
-            <img class="thumbnail" src="/gallery/thumbnails/0_Malephar, Anton Fadeev_01.jpg" alt="SCOI2005-骑士精神">
-        </a>
+        <span class="image is-7by1">
+            <img class="thumbnail" src="/gallery/thumbnails/hei2.JPG" alt="洛谷P1879 &amp; P2051">
+        </span>
     </div>
     
     <div class="card-content article ">
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-06-11T15:20:26.000Z">2019-06-11</time>
+                <time class="level-item has-text-grey" datetime="2019-09-18T13:56:23.000Z">2019-09-18</time>
                 
                 <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/搜索/">搜索</a>
+                <a class="has-link-grey -link" href="/categories/动态规划/">动态规划</a>
                 </div>
                 
                 
                 <span class="level-item has-text-grey">
                     
                     
-                    3 minutes read (About 388 words)
+                    5 minutes read (About 778 words)
                 </span>
                 
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span> visits
+                </span>
                 
             </div>
         </div>
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2019/06/11/SCOI2005/">SCOI2005-骑士精神</a>
+                洛谷P1879 &amp; P2051
             
         </h1>
         <div class="content">
-            <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p><a href="https://www.luogu.org/problemnew/show/P2324" target="_blank" rel="noopener">luoguP2324</a></p>
+            <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p><a href="https://www.luogu.org/problem/P2051" target="_blank" rel="noopener">中国象棋</a></p>
+<p><a href="https://www.luogu.org/problem/P1879" target="_blank" rel="noopener">玉米田Corn Fields</a></p>
+<p>两道DP。</p>
+<a id="more"></a>
+
+<h2 id="中国象棋"><a href="#中国象棋" class="headerlink" title="中国象棋"></a>中国象棋</h2><p>以为是状压DP，但是不知道怎么做。</p>
+<p>换了另一种做法。</p>
+<p>显然，每列不可能有两个以上的炮，设 $f[i][j][k]$ 表示第 $i$ 行有 $j$ 列有一个炮车，有 $k$ 列有两个炮车。那么一个炮车也没有个列数就是 $m-j-k$。</p>
+<p>定义完状态，再来想怎么转移。考虑从 $i-1$ 行向 $i$ 行转移。第 $i$ 行最多只能有两个炮车分情况讨论：</p>
+<ol>
+<li>不放炮车，$f[i][j][k] = f[i-1][j][k]$</li>
+<li>放一个炮车，放在没有跑车的列或者有一个炮车列：$f[i][j+1][k] = f[j-1][j][k] * (m-j-k), f[i][j][k+1] = f[i-1][j][k]*j$</li>
+<li>放两个炮车的情况，讨论一下就好了，看代码吧。</li>
+</ol>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> rep(i, a, b) for(int i = (a); i &lt;= (b); ++i)</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> per(i, a, b) for(int i = (a); i &gt;= (b); --i)</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> debug(x) cerr &lt;&lt; #x &lt;&lt; <span class="hljs-meta-string">' '</span> &lt;&lt; x &lt;&lt; endl;</span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MOD = <span class="hljs-number">9999973</span>;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MAXN = <span class="hljs-number">2e5</span> + <span class="hljs-number">7</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">//第i行有j个单跑k个双炮</span></span><br><span class="line">ll f[<span class="hljs-number">105</span>][<span class="hljs-number">105</span>][<span class="hljs-number">105</span>];</span><br><span class="line">ll C[<span class="hljs-number">105</span>][<span class="hljs-number">105</span>];</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">    C[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;</span><br><span class="line">    rep(i, <span class="hljs-number">1</span>, <span class="hljs-number">100</span>)&#123;</span><br><span class="line">        rep(j, <span class="hljs-number">0</span>, i)&#123;</span><br><span class="line">            C[i][j] = C[i<span class="hljs-number">-1</span>][j] + C[i<span class="hljs-number">-1</span>][j<span class="hljs-number">-1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> <span class="hljs-keyword">const</span> *argv[])</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    init();</span><br><span class="line">    <span class="hljs-keyword">int</span> n, m;</span><br><span class="line">    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d %d"</span>, &amp;n, &amp;m);</span><br><span class="line">    f[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;</span><br><span class="line">    rep(i, <span class="hljs-number">1</span>, n)&#123;</span><br><span class="line">        rep(j, <span class="hljs-number">0</span>, m)&#123;</span><br><span class="line">            rep(k, <span class="hljs-number">0</span>, m)&#123;</span><br><span class="line">                <span class="hljs-keyword">if</span>(j + k &gt; m) <span class="hljs-keyword">continue</span>;</span><br><span class="line">                <span class="hljs-comment">//不选</span></span><br><span class="line">                f[i][j][k] += f[i<span class="hljs-number">-1</span>][j][k];</span><br><span class="line">                f[i][j][k] %= MOD;</span><br><span class="line">                </span><br><span class="line">                <span class="hljs-comment">//选一个 选在空列</span></span><br><span class="line">                f[i][j+<span class="hljs-number">1</span>][k] += f[i<span class="hljs-number">-1</span>][j][k] * (m - j - k);</span><br><span class="line">                f[i][j+<span class="hljs-number">1</span>][k] %= MOD;</span><br><span class="line">                <span class="hljs-comment">// 选一个 选在单炮列</span></span><br><span class="line">                f[i][j<span class="hljs-number">-1</span>][k+<span class="hljs-number">1</span>] += f[i<span class="hljs-number">-1</span>][j][k] * j;</span><br><span class="line">                f[i][j<span class="hljs-number">-1</span>][k+<span class="hljs-number">1</span>] %= MOD;</span><br><span class="line">                </span><br><span class="line">                <span class="hljs-comment">// 选两个 都选在空列</span></span><br><span class="line">                f[i][j+<span class="hljs-number">2</span>][k] += f[i<span class="hljs-number">-1</span>][j][k] * C[m - j - k][<span class="hljs-number">2</span>];</span><br><span class="line">                f[i][j+<span class="hljs-number">2</span>][k] %= MOD;</span><br><span class="line">                <span class="hljs-comment">// 选两个 都选在单炮列</span></span><br><span class="line">                f[i][j<span class="hljs-number">-2</span>][k+<span class="hljs-number">2</span>] += f[i<span class="hljs-number">-1</span>][j][k] * C[j][<span class="hljs-number">2</span>];</span><br><span class="line">                f[i][j<span class="hljs-number">-2</span>][k+<span class="hljs-number">2</span>] %= MOD;</span><br><span class="line">                <span class="hljs-comment">// 选两个 一个在空列一个在单炮列</span></span><br><span class="line">                f[i][j][k+<span class="hljs-number">1</span>] += f[i<span class="hljs-number">-1</span>][j][k] * (m - j - k) * j;</span><br><span class="line">                f[i][j][k+<span class="hljs-number">1</span>] %= MOD;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ll ans = <span class="hljs-number">0</span>;</span><br><span class="line">    rep(i, <span class="hljs-number">0</span>, m) rep(j, <span class="hljs-number">0</span>, m) &#123;</span><br><span class="line">        ans += f[n][i][j];</span><br><span class="line">        ans %= MOD;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%lld\n"</span>, ans);</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="玉米田"><a href="#玉米田" class="headerlink" title="玉米田"></a>玉米田</h2><p>状压DP，先保存每一行的状态，在求出有效的状态。</p>
+<p>枚举有效的状态，判断是否和土地状况冲突，不冲突再枚举上一行的状态，如果和当前行不冲突，那么就是有效的转移。</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> rep(i, a, b) for(int i = (a); i &lt;= (b); ++i)</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> per(i, a, b) for(int i = (a); i &gt;= (b); --i)</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> debug(x) cerr &lt;&lt; #x &lt;&lt; <span class="hljs-meta-string">' '</span> &lt;&lt; x &lt;&lt; endl;</span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MOD = <span class="hljs-number">1e9</span>;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MAXN = <span class="hljs-number">2e5</span> + <span class="hljs-number">7</span>;</span><br><span class="line"></span><br><span class="line">ll f[<span class="hljs-number">15</span>][<span class="hljs-number">5005</span>];</span><br><span class="line"><span class="hljs-keyword">bool</span> g[<span class="hljs-number">5005</span>];</span><br><span class="line"><span class="hljs-keyword">int</span> mp[<span class="hljs-number">15</span>][<span class="hljs-number">15</span>];</span><br><span class="line"><span class="hljs-keyword">int</span> field[<span class="hljs-number">15</span>];</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> <span class="hljs-keyword">const</span> *argv[])</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">int</span> n, m;</span><br><span class="line">    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d %d"</span>, &amp;n, &amp;m);</span><br><span class="line">    rep(i, <span class="hljs-number">1</span>, n)&#123;</span><br><span class="line">        rep(j, <span class="hljs-number">1</span>, m)&#123;</span><br><span class="line">            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>, &amp;mp[i][j]);</span><br><span class="line">            field[i] &lt;&lt;= <span class="hljs-number">1</span>;</span><br><span class="line">            field[i] |= mp[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-comment">//求出可行状态集</span></span><br><span class="line">    <span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; sta;</span><br><span class="line">    rep(i, <span class="hljs-number">0</span>, (<span class="hljs-number">1</span>&lt;&lt;m)<span class="hljs-number">-1</span>) <span class="hljs-keyword">if</span>(!((i &amp; i&gt;&gt;<span class="hljs-number">1</span>)||(i &amp; i&lt;&lt;<span class="hljs-number">1</span>)))   sta.push_back(i);</span><br><span class="line">    </span><br><span class="line">    f[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;</span><br><span class="line">    rep(i, <span class="hljs-number">1</span>, n) &#123;</span><br><span class="line">        <span class="hljs-comment">//枚举当前行的状态</span></span><br><span class="line">        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j: sta) &#123;</span><br><span class="line">            <span class="hljs-comment">//如果和土地状况不冲突</span></span><br><span class="line">            <span class="hljs-keyword">if</span>((j &amp; field[i]) == j) &#123;</span><br><span class="line">                <span class="hljs-comment">//枚举上一行的状态</span></span><br><span class="line">                <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> k: sta) &#123;</span><br><span class="line">                    <span class="hljs-comment">//如果也不冲突</span></span><br><span class="line">                    <span class="hljs-keyword">if</span>((j &amp; k) == <span class="hljs-number">0</span>) &#123;</span><br><span class="line">                        <span class="hljs-comment">//可行的转移</span></span><br><span class="line">                        f[i][j] += f[i<span class="hljs-number">-1</span>][k], f[i][j] %= MOD;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ll ans = <span class="hljs-number">0</span>;</span><br><span class="line">    rep(i, <span class="hljs-number">0</span>, (<span class="hljs-number">1</span>&lt;&lt;m)<span class="hljs-number">-1</span>) &#123;</span><br><span class="line">        ans += f[n][i];</span><br><span class="line">        ans %= MOD;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%lld\n"</span>, ans);</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
         </div>
         
-        
-        <div class="level is-mobile">
+        <div class="level is-size-7 is-uppercase">
             <div class="level-start">
                 <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2019/06/11/SCOI2005/#more">Read More</a>
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/状压DP/">状压DP</a>
                 </div>
             </div>
         </div>
+        
         
         
     </div>
@@ -206,11 +222,80 @@
 
 
 
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>Alipay</span>
+    <div class="qrcode"><img src="https://s2.ax1x.com/2019/04/10/A7iBZD.jpg" alt="Alipay"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>Wechat</span>
+    <div class="qrcode"><img src="https://s2.ax1x.com/2019/04/10/A7irIH.jpg" alt="Wechat"></div>
+</a>
+
+                
+        </div>
+    </div>
+</div>
 
 
 
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/09/18/luogu-P1131/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">luogu-P1131</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/09/09/2019-icpc-xuzhou-online-contest/">
+                <span class="level-item">2019-icpc-徐州网赛</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
 
 
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
+        
+<div id="valine-thread" class="content"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#valine-thread' ,
+        notify: false,
+        verify: false,
+        app_id: 'kgvqY8uIP79Q5O4ohyKTBeoK-gzGzoHsz',
+        app_key: '2XufptgiB6zbgrafwryks3Bf',
+        placeholder: 'Say something...'
+    });
+</script>
+
+    </div>
+</div>
 </div>
                 
 
@@ -1304,7 +1389,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/favicon.png" alt="Dicer&#39;s blog" height="28">
+                    <img src="/images/favicon.png" alt="洛谷P1879 &amp; P2051" height="28">
                 
                 </a>
                 <p class="is-size-7">
