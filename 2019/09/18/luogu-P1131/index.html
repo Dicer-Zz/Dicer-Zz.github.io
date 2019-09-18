@@ -15,12 +15,12 @@
 <meta property="og:site_name" content="Dicer&#39;s blog">
 <meta property="og:description" content="题目时态同步 一道双 $dfs$ 的题目。">
 <meta property="og:locale" content="zh_Hans">
-<meta property="og:image" content="/gallery/thumbnails/hei3.png">
-<meta property="og:updated_time" content="2019-09-18T15:27:35.750Z">
+<meta property="og:image" content="/gallery/thumbnails/hei3.jpg">
+<meta property="og:updated_time" content="2019-09-18T15:36:21.301Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="luogu-P1131">
 <meta name="twitter:description" content="题目时态同步 一道双 $dfs$ 的题目。">
-<meta name="twitter:image" content="/gallery/thumbnails/hei3.png">
+<meta name="twitter:image" content="/gallery/thumbnails/hei3.jpg">
 
 
 
@@ -147,7 +147,7 @@
     
     <div class="card-image">
         <span class="image is-7by1">
-            <img class="thumbnail" src="/gallery/thumbnails/hei3.png" alt="luogu-P1131">
+            <img class="thumbnail" src="/gallery/thumbnails/hei3.jpg" alt="luogu-P1131">
         </span>
     </div>
     
@@ -165,7 +165,7 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    4 minutes read (About 534 words)
+                    4 minutes read (About 555 words)
                 </span>
                 
                 
@@ -187,9 +187,9 @@
 <p>一道双 $dfs$ 的题目。</p>
 <a id="more"></a>
 
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>题意就是给出一棵树，可以增加任意的边权，问最少增加多少可以让所有叶子节点到跟节点的距离相等。</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>题意就是给出一棵树，可以增加任意一条边的权值，问最少增加多少可以让所有叶子节点到跟节点的距离相等。</p>
 <p>先跑一边 $dfs$ 求出所有节点到根节点的距离，再统计出以每个节点为根的子树上的所有点到根节点的距离的最大值。</p>
-<p>然后再做一次 $dfs$ ，当一棵子树中离根节点最远的那个节点到根节点的距离都小于所有树中的距离最大的那个的话就可以考虑增加当前子树的根节点与它父亲节点之间的距离了，因为子树中所有节点的距离都需要增大，增大这条边一定是消耗最少的。然后递归下去。</p>
+<p>然后再做一次 $dfs$ ，当一棵子树中离根节点最远的那个节点到根节点的距离都小于所有树中的距离最大的那个的话就可以考虑增加当前子树的根节点与它父亲节点之间的距离了，因为子树中所有节点的距离都需要增大，增大这条边一定是消耗最少的，因为这条边被所有子树上的节点复用了。然后递归下去。</p>
 <p>说起来有点复杂，举个例子吧：</p>
 <p>比如对于：</p>
 <blockquote>
@@ -199,7 +199,7 @@
 <p>2 4 2</p>
 <p>2 5 3</p>
 </blockquote>
-<p>先把图画出来，有三个叶子节点，3 4 5，你会发现 1 到 3 的距离是最远的，因此 4 5 到根节点需要增加，而它们到根节点的路径再 1 2 这条边上重合了，因此我们可以优先在这条边上加，加到子树上有些叶子节点已经达到的最大值。然后向下递归。</p>
+<p>先把图画出来，有三个叶子节点，3 4 5，你会发现 1 到 3 的距离是最远的，因此 4 5 到根节点需要增加，而它们到根节点的路径在 1 2 这条边上重合了，因此我们可以优先在这条边上加，加到子树上有些叶子节点已经达到的最大值。然后向下递归。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> rep(i, a, b) for(int i = (a); i &lt;= (b); ++i)</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> per(i, a, b) for(int i = (a); i &gt;= (b); --i)</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> debug(x) cerr &lt;&lt; #x &lt;&lt; <span class="hljs-meta-string">' '</span> &lt;&lt; x &lt;&lt; endl;</span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> mod = <span class="hljs-number">1e9</span>+<span class="hljs-number">7</span>;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MAXN = <span class="hljs-number">5e5</span> + <span class="hljs-number">7</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-built_in">vector</span>&lt;pair&lt;<span class="hljs-keyword">int</span>, <span class="hljs-keyword">int</span>&gt; &gt; G[MAXN];</span><br><span class="line">ll dis[MAXN], msd[MAXN], maxdis, ans;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> fa)</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span> p: G[x]) &#123;</span><br><span class="line">        <span class="hljs-keyword">int</span> v = p.first, w = p.second;</span><br><span class="line">        <span class="hljs-keyword">if</span>(v == fa) <span class="hljs-keyword">continue</span>;</span><br><span class="line">        dis[v] = dis[x] + w;</span><br><span class="line">        dfs(v, x);</span><br><span class="line">        msd[x] = max(msd[x], msd[v] + w);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">dfs2</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> fa)</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> p: G[x]) &#123;</span><br><span class="line">        <span class="hljs-keyword">int</span> v = p.first, w = p.second;</span><br><span class="line">        <span class="hljs-keyword">if</span>(v == fa) <span class="hljs-keyword">continue</span>;</span><br><span class="line">        ans += msd[x] - msd[v] - w;</span><br><span class="line">        dfs2(v, x);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> <span class="hljs-keyword">const</span> *argv[])</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">int</span> n, rt;</span><br><span class="line">    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d %d"</span>, &amp;n, &amp;rt);</span><br><span class="line">    <span class="hljs-keyword">int</span> u, v, w;</span><br><span class="line">    rep(i, <span class="hljs-number">1</span>, n<span class="hljs-number">-1</span>)&#123;</span><br><span class="line">        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d %d %d"</span>, &amp;u, &amp;v, &amp;w);</span><br><span class="line">        G[u].push_back(&#123;v, w&#125;);</span><br><span class="line">        G[v].push_back(&#123;u, w&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    dfs(rt, <span class="hljs-number">0</span>);</span><br><span class="line"></span><br><span class="line">    dfs2(rt, <span class="hljs-number">0</span>);</span><br><span class="line">    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%lld\n"</span>, ans);</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
@@ -270,7 +270,7 @@
 
 <div class="card">
     <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
+        <h3 class="title is-5 has-text-weight-normal">Comentarios</h3>
         
 <div id="valine-thread" class="content"></div>
 <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
@@ -330,7 +330,7 @@
             <div class="level-item has-text-centered is-marginless">
                 <div>
                     <p class="heading">
-                        Posts
+                        Entradas
                     </p>
                     <p class="title has-text-weight-normal">
                         20
@@ -340,7 +340,7 @@
             <div class="level-item has-text-centered is-marginless">
                 <div>
                     <p class="heading">
-                        Categories
+                        Categorias
                     </p>
                     <p class="title has-text-weight-normal">
                         11
@@ -350,7 +350,7 @@
             <div class="level-item has-text-centered is-marginless">
                 <div>
                     <p class="heading">
-                        Tags
+                        Etiquetas
                     </p>
                     <p class="title has-text-weight-normal">
                         27
@@ -360,7 +360,7 @@
         </nav>
         <div class="level">
             <a class="level-item button is-link is-rounded" href="https://github.com/Dicer-Zz" target="_blank">
-                Follow</a>
+                SEGUIR</a>
         </div>
         
         
@@ -473,7 +473,7 @@
     <div class="card-content">
         <div class="menu">
             <h3 class="menu-label">
-                Categories
+                Categorias
             </h3>
             <ul class="menu-list">
             <li>
@@ -574,7 +574,7 @@
 <div class="card widget">
     <div class="card-content">
         <h3 class="menu-label">
-            Tag Cloud
+            Nube de etiquetas
         </h3>
         <a href="/tags/Book/" style="font-size: 10px;">Book</a> <a href="/tags/Data-structure/" style="font-size: 10px;">Data structure</a> <a href="/tags/Dynamic-programming/" style="font-size: 10px;">Dynamic programming</a> <a href="/tags/IDA/" style="font-size: 10px;">IDA*</a> <a href="/tags/LCA/" style="font-size: 10px;">LCA</a> <a href="/tags/SSH/" style="font-size: 10px;">SSH</a> <a href="/tags/Server/" style="font-size: 10px;">Server</a> <a href="/tags/dfs/" style="font-size: 10px;">dfs</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/中国剩余定理/" style="font-size: 10px;">中国剩余定理</a> <a href="/tags/二维偏序/" style="font-size: 10px;">二维偏序</a> <a href="/tags/切比雪夫距离/" style="font-size: 10px;">切比雪夫距离</a> <a href="/tags/单调队列/" style="font-size: 10px;">单调队列</a> <a href="/tags/启发式搜索/" style="font-size: 10px;">启发式搜索</a> <a href="/tags/基环树/" style="font-size: 10px;">基环树</a> <a href="/tags/拉格朗日乘数法/" style="font-size: 10px;">拉格朗日乘数法</a> <a href="/tags/拉格朗日插值法/" style="font-size: 10px;">拉格朗日插值法</a> <a href="/tags/数论分块/" style="font-size: 10px;">数论分块</a> <a href="/tags/曼哈顿距离/" style="font-size: 10px;">曼哈顿距离</a> <a href="/tags/树形动规/" style="font-size: 20px;">树形动规</a> <a href="/tags/树状数组/" style="font-size: 10px;">树状数组</a> <a href="/tags/欧拉函数/" style="font-size: 10px;">欧拉函数</a> <a href="/tags/欧拉定理/" style="font-size: 10px;">欧拉定理</a> <a href="/tags/状压DP/" style="font-size: 20px;">状压DP</a> <a href="/tags/瞎搞/" style="font-size: 10px;">瞎搞</a> <a href="/tags/线段树/" style="font-size: 10px;">线段树</a>
     </div>
@@ -588,14 +588,14 @@
 <div class="card widget">
     <div class="card-content">
         <h3 class="menu-label">
-            Recent
+            Recientes
         </h3>
         
         <article class="media">
             
             <a href="/2019/09/18/luogu-P1131/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/hei3.png" alt="luogu-P1131">
+                    <img class="thumbnail" src="/gallery/thumbnails/hei3.jpg" alt="luogu-P1131">
                 </p>
             </a>
             
@@ -694,7 +694,7 @@
     <div class="card-content">
         <div class="menu">
         <h3 class="menu-label">
-            Archives
+            Archivos
         </h3>
         <ul class="menu-list">
         
@@ -773,7 +773,7 @@
     <div class="card-content">
         <div class="menu">
             <h3 class="menu-label">
-                Tags
+                Etiquetas
             </h3>
             <div class="field is-grouped is-grouped-multiline">
                 
@@ -986,14 +986,14 @@
 <div class="card widget">
     <div class="card-content">
         <h3 class="menu-label">
-            Recent
+            Recientes
         </h3>
         
         <article class="media">
             
             <a href="/2019/09/18/luogu-P1131/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/hei3.png" alt="luogu-P1131">
+                    <img class="thumbnail" src="/gallery/thumbnails/hei3.jpg" alt="luogu-P1131">
                 </p>
             </a>
             
@@ -1092,7 +1092,7 @@
     <div class="card-content">
         <div class="menu">
         <h3 class="menu-label">
-            Archives
+            Archivos
         </h3>
         <ul class="menu-list">
         
@@ -1171,7 +1171,7 @@
     <div class="card-content">
         <div class="menu">
             <h3 class="menu-label">
-                Tags
+                Etiquetas
             </h3>
             <div class="field is-grouped is-grouped-multiline">
                 
@@ -1546,10 +1546,10 @@ document.addEventListener('DOMContentLoaded', function () {
     (function (window) {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
-                POSTS: 'Posts',
+                POSTS: 'Entradas',
                 PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
+                CATEGORIES: 'Categorias',
+                TAGS: 'Etiquetas',
                 UNTITLED: '(Untitled)',
             },
             CONTENT_URL: '/content.json',
