@@ -7,19 +7,19 @@
 
 
 
-    <meta name="description" content="题目洛谷P3806 点分治模板题。 求边权树上距离为 $k$ 的点对。 分析第一眼没看到边带权，以为直接判断树的直径是否大于等于 $k$ 就行了。233333。 一道经典的点分治的题目，点分治是一种高效的求树上路径满足一定条件的路径个数，当然一条路径，对应两个端点，说成点对数也可以。 这道题目本来写成了在线，有一个点 $1.02s$ 过不去，本来想着卡卡就能过去了，可是去看了看别人的代码，发现总共">
+    <meta name="description" content="题目洛谷P3806 点分治模板题。 求边权树上距离为 $k$ 的点对。">
 <meta name="keywords" content="树形动规,点分治">
 <meta property="og:type" content="article">
 <meta property="og:title" content="洛谷-P3806">
 <meta property="og:url" content="/2019/09/28/luogu-P3806/index.html">
 <meta property="og:site_name" content="Dicer&#39;s blog">
-<meta property="og:description" content="题目洛谷P3806 点分治模板题。 求边权树上距离为 $k$ 的点对。 分析第一眼没看到边带权，以为直接判断树的直径是否大于等于 $k$ 就行了。233333。 一道经典的点分治的题目，点分治是一种高效的求树上路径满足一定条件的路径个数，当然一条路径，对应两个端点，说成点对数也可以。 这道题目本来写成了在线，有一个点 $1.02s$ 过不去，本来想着卡卡就能过去了，可是去看了看别人的代码，发现总共">
+<meta property="og:description" content="题目洛谷P3806 点分治模板题。 求边权树上距离为 $k$ 的点对。">
 <meta property="og:locale" content="zh_Hans">
 <meta property="og:image" content="/gallery/thumbnails/1_Construction%20of%20the%20Monolith,%20Anton%20Fadeev_02.jpg">
-<meta property="og:updated_time" content="2019-09-28T11:52:51.243Z">
+<meta property="og:updated_time" content="2019-09-28T11:55:21.513Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="洛谷-P3806">
-<meta name="twitter:description" content="题目洛谷P3806 点分治模板题。 求边权树上距离为 $k$ 的点对。 分析第一眼没看到边带权，以为直接判断树的直径是否大于等于 $k$ 就行了。233333。 一道经典的点分治的题目，点分治是一种高效的求树上路径满足一定条件的路径个数，当然一条路径，对应两个端点，说成点对数也可以。 这道题目本来写成了在线，有一个点 $1.02s$ 过不去，本来想着卡卡就能过去了，可是去看了看别人的代码，发现总共">
+<meta name="twitter:description" content="题目洛谷P3806 点分治模板题。 求边权树上距离为 $k$ 的点对。">
 <meta name="twitter:image" content="/gallery/thumbnails/1_Construction%20of%20the%20Monolith,%20Anton%20Fadeev_02.jpg">
 
 
@@ -165,7 +165,7 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    6 minutes read (About 843 words)
+                    6 minutes read (About 844 words)
                 </span>
                 
                 
@@ -186,6 +186,8 @@
             <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p><a href="https://www.luogu.org/problem/P3806" target="_blank" rel="noopener">洛谷P3806</a></p>
 <p>点分治模板题。</p>
 <p>求边权树上距离为 $k$ 的点对。</p>
+<a id="more"></a>
+
 <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>第一眼没看到边带权，以为直接判断树的直径是否大于等于 $k$ 就行了。233333。</p>
 <p>一道经典的点分治的题目，点分治是一种高效的求树上路径满足一定条件的路径个数，当然一条路径，对应两个端点，说成点对数也可以。</p>
 <p>这道题目本来写成了在线，有一个点 $1.02s$ 过不去，本来想着卡卡就能过去了，可是去看了看别人的代码，发现总共只需要 $200+ms$ 就够了。想着是自己写搓了，然后翻开了题解，发现可以同时对所有的询问进行查询，没有必要一个一个查。改了改，就过了。</p>
