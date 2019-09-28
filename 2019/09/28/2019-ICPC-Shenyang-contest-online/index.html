@@ -2,24 +2,25 @@
 <html lang="zh">
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-<title>Archives: 2019/8 - Dicer&#39;s blog</title>
+<title>2019-ICPC-Shenyang-contest-online - Dicer&#39;s blog</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-    <meta name="description" content="Some posts about computer sciense and my life.">
-<meta name="keywords" content="CS">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Dicer&#39;s blog">
-<meta property="og:url" content="/archives/2019/08/index.html">
+    <meta name="description" content="题目Fish eating fruit 点分治进阶题目，状态很多，统计起来有点复杂。">
+<meta name="keywords" content="点分治">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2019-ICPC-Shenyang-contest-online">
+<meta property="og:url" content="/2019/09/28/2019-ICPC-Shenyang-contest-online/index.html">
 <meta property="og:site_name" content="Dicer&#39;s blog">
-<meta property="og:description" content="Some posts about computer sciense and my life.">
+<meta property="og:description" content="题目Fish eating fruit 点分治进阶题目，状态很多，统计起来有点复杂。">
 <meta property="og:locale" content="zh_Hans">
-<meta property="og:image" content="/images/og_image.png">
+<meta property="og:image" content="/gallery/thumbnails/1_Rasha%202,%20Anton%20Fadeev_02.jpg">
+<meta property="og:updated_time" content="2019-09-28T15:18:33.967Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Dicer&#39;s blog">
-<meta name="twitter:description" content="Some posts about computer sciense and my life.">
-<meta name="twitter:image" content="/images/og_image.png">
+<meta name="twitter:title" content="2019-ICPC-Shenyang-contest-online">
+<meta name="twitter:description" content="题目Fish eating fruit 点分治进阶题目，状态很多，统计起来有点复杂。">
+<meta name="twitter:image" content="/gallery/thumbnails/1_Rasha%202,%20Anton%20Fadeev_02.jpg">
 
 
 
@@ -97,7 +98,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/favicon.png" alt="Dicer&#39;s blog" height="28">
+                <img src="/images/favicon.png" alt="2019-ICPC-Shenyang-contest-online" height="28">
             
             </a>
         </div>
@@ -142,95 +143,142 @@
     <section class="section">
         <div class="container">
             <div class="columns">
-                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    
+    <div class="card-image">
+        <span class="image is-7by1">
+            <img class="thumbnail" src="/gallery/thumbnails/1_Rasha 2, Anton Fadeev_02.jpg" alt="2019-ICPC-Shenyang-contest-online">
+        </span>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2019-09-28T15:12:17.000Z">2019-09-28</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/图论/">图论</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    4 minutes read (About 584 words)
+                </span>
+                
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span> visits
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                2019-ICPC-Shenyang-contest-online
+            
+        </h1>
+        <div class="content">
+            <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p><a href="https://nanti.jisuanke.com/t/41403" target="_blank" rel="noopener">Fish eating fruit</a></p>
+<p>点分治进阶题目，状态很多，统计起来有点复杂。</p>
+<a id="more"></a>
 
-<div class="card widget">
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>首先肯定是点分治没得跑了，然后就是怎么计算的问题了。</p>
+<p>我是先统计出来所有的 $mod $ 后的值，对于每一个节点的深度，可以计算出来这个点对 三个剩余 的贡献。</p>
+<p>转移一下就好了。</p>
+<p>因为去重的时候做了减法，所有答案可能是负值，要调整回来。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> rep(i, a, b) for(int i = (a); i &lt;= (b); ++i)</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> per(i, a, b) for(int i = (a); i &gt;= (b); --i)</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> debug(x) cerr &lt;&lt; #x &lt;&lt; <span class="hljs-meta-string">' '</span> &lt;&lt; x &lt;&lt; endl;</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> size sizeeeeeeee</span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MOD = <span class="hljs-number">1e9</span>+<span class="hljs-number">7</span>;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MAXN = <span class="hljs-number">1e4</span> + <span class="hljs-number">7</span>;</span><br><span class="line"></span><br><span class="line">ll ans1, ans2, ans3, cnt[<span class="hljs-number">4</span>];</span><br><span class="line"><span class="hljs-keyword">int</span> n, root, size, tot = <span class="hljs-number">0</span>;</span><br><span class="line"><span class="hljs-keyword">int</span> son[MAXN], f[MAXN], head[MAXN];</span><br><span class="line"><span class="hljs-keyword">int</span> dep[MAXN]; <span class="hljs-keyword">bool</span> vis[MAXN];</span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span>&#123;</span></span><br><span class="line">    <span class="hljs-keyword">int</span> u, w, nxt;</span><br><span class="line">&#125;; <span class="hljs-built_in">vector</span>&lt;node&gt; E;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-keyword">int</span> u, <span class="hljs-keyword">int</span> v, <span class="hljs-keyword">int</span> w)</span> </span>&#123;</span><br><span class="line">    E.push_back(node&#123;v, w, head[u]&#125;);</span><br><span class="line">    head[u] = tot++;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">get_rt</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> fa = <span class="hljs-number">0</span>)</span> </span>&#123;</span><br><span class="line">    son[x] = <span class="hljs-number">1</span>; f[x] = <span class="hljs-number">0</span>;</span><br><span class="line">    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j = head[x]; ~j; j = E[j].nxt) &#123;</span><br><span class="line">        <span class="hljs-keyword">int</span> u = E[j].u, w = E[j].w;</span><br><span class="line">        <span class="hljs-keyword">if</span>(vis[u] || u == fa)   <span class="hljs-keyword">continue</span>;</span><br><span class="line">        get_rt(u, x);</span><br><span class="line">        son[x] += son[u];</span><br><span class="line">        f[x] = max(f[x], son[u]);</span><br><span class="line">    &#125;</span><br><span class="line">    f[x] = max(f[x], size - son[x]);</span><br><span class="line">    <span class="hljs-keyword">if</span>(f[x] &lt; f[root]) root = x;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; v;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">get_dep</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> fa)</span> </span>&#123;</span><br><span class="line">    v.push_back(dep[x]); cnt[dep[x]%<span class="hljs-number">3</span>]++;</span><br><span class="line">    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j = head[x]; ~j; j = E[j].nxt) &#123;</span><br><span class="line">        <span class="hljs-keyword">int</span> u = E[j].u, w = E[j].w;</span><br><span class="line">        <span class="hljs-keyword">if</span>(vis[u] || u == fa)   <span class="hljs-keyword">continue</span>;</span><br><span class="line">        dep[u] = dep[x] + w;</span><br><span class="line">        get_dep(u, x);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">calc</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x, <span class="hljs-keyword">int</span> op)</span> </span>&#123;</span><br><span class="line">    <span class="hljs-built_in">memset</span>(cnt, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span> cnt); v.clear();</span><br><span class="line">    get_dep(x, <span class="hljs-number">0</span>);</span><br><span class="line">    ll res0, res1, res2;</span><br><span class="line">    res0 = res1 = res2 = <span class="hljs-number">0</span>;</span><br><span class="line">    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> p: v) &#123;</span><br><span class="line">        <span class="hljs-keyword">int</span> offset = p%<span class="hljs-number">3</span>;</span><br><span class="line">        <span class="hljs-keyword">if</span>(offset == <span class="hljs-number">0</span>) &#123;</span><br><span class="line">            res0 += op * (cnt[<span class="hljs-number">0</span>] - <span class="hljs-number">1</span>) * p;</span><br><span class="line">            res1 += op * cnt[<span class="hljs-number">1</span>] * p;</span><br><span class="line">            res2 += op * cnt[<span class="hljs-number">2</span>] * p;</span><br><span class="line">        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(offset == <span class="hljs-number">1</span>) &#123;</span><br><span class="line">            res0 += op * cnt[<span class="hljs-number">2</span>] * p;</span><br><span class="line">            res1 += op * cnt[<span class="hljs-number">0</span>] * p;</span><br><span class="line">            res2 += op * (cnt[<span class="hljs-number">1</span>] - <span class="hljs-number">1</span>) * p;</span><br><span class="line">        &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">            res0 += op * cnt[<span class="hljs-number">1</span>] * p;</span><br><span class="line">            res1 += op * (cnt[<span class="hljs-number">2</span>] - <span class="hljs-number">1</span>) * p;</span><br><span class="line">            res2 += op * cnt[<span class="hljs-number">0</span>] * p;</span><br><span class="line">        &#125;</span><br><span class="line">        res0 %= MOD; res1 %= MOD; res2 %= MOD;</span><br><span class="line">    &#125;</span><br><span class="line">    ans1 += res0; ans2 += res1; ans3 += res2;</span><br><span class="line">    ans1 %= MOD; ans2 %= MOD; ans3 %= MOD;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">solve</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    dep[x] = <span class="hljs-number">0</span>; calc(x, <span class="hljs-number">1</span>); vis[x] = <span class="hljs-number">1</span>;</span><br><span class="line">    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j = head[x]; ~j; j = E[j].nxt) &#123;</span><br><span class="line">        <span class="hljs-keyword">int</span> u = E[j].u, w = E[j].w;</span><br><span class="line">        <span class="hljs-keyword">if</span>(vis[u])  <span class="hljs-keyword">continue</span>;</span><br><span class="line">        dep[u] = w; calc(u, <span class="hljs-number">-1</span>);</span><br><span class="line">        root = <span class="hljs-number">0</span>; size = son[u];</span><br><span class="line">        get_rt(u);</span><br><span class="line">        solve(root);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> <span class="hljs-keyword">const</span> *argv[])</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">while</span>(~<span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>, &amp;n)) &#123;</span><br><span class="line">        <span class="hljs-built_in">memset</span>(head, <span class="hljs-number">-1</span>, <span class="hljs-keyword">sizeof</span> head);</span><br><span class="line">        <span class="hljs-built_in">memset</span>(vis, <span class="hljs-number">0</span>, <span class="hljs-keyword">sizeof</span> vis);</span><br><span class="line">        E.clear(); tot = <span class="hljs-number">0</span>;</span><br><span class="line">        <span class="hljs-keyword">int</span> u, v, w;</span><br><span class="line">        rep(i, <span class="hljs-number">1</span>, n<span class="hljs-number">-1</span>) &#123;</span><br><span class="line">            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d %d %d"</span>, &amp;u, &amp;v, &amp;w);</span><br><span class="line">            u++; v++;</span><br><span class="line">            add(u, v, w); add(v, u, w);</span><br><span class="line">        &#125;</span><br><span class="line">        root = <span class="hljs-number">0</span>; f[<span class="hljs-number">0</span>] = size = n;</span><br><span class="line">        get_rt(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>);</span><br><span class="line">        ans1 = ans2 = ans3 = <span class="hljs-number">0</span>;</span><br><span class="line">        solve(root);</span><br><span class="line">        ans1 = ans1 * <span class="hljs-number">2</span> % MOD;</span><br><span class="line">        ans2 = ans2 * <span class="hljs-number">2</span> % MOD;</span><br><span class="line">        ans3 = ans3 * <span class="hljs-number">2</span> % MOD;</span><br><span class="line">        ans1 = (ans1 + MOD) % MOD;</span><br><span class="line">        ans2 = (ans2 + MOD) % MOD;</span><br><span class="line">        ans3 = (ans3 + MOD) % MOD;</span><br><span class="line">        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%lld %lld %lld\n"</span>, ans1, ans2, ans3);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/点分治/">点分治</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
     <div class="card-content">
-        <h3 class="tag is-link">
-        August 2019
-        </h3>
-        <div class="timeline">
-        
-            <article class="media">
+        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
+        <div class="buttons is-centered">
+            
                 
-                <a href="/2019/08/29/Codeforces-1207-F/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="/gallery/thumbnails/girl-pick.jpg" alt="Codeforces-1207-F">
-                    </p>
-                </a>
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>Alipay</span>
+    <div class="qrcode"><img src="https://s2.ax1x.com/2019/04/10/A7iBZD.jpg" alt="Alipay"></div>
+</a>
+
                 
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2019-08-29T13:56:34.000Z">2019-08-29</time>
-                        <a href="/2019/08/29/Codeforces-1207-F/" class="has-link-black-ter is-size-6">Codeforces-1207-F</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/categories/数据结构/">数据结构</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
                 
-                <a href="/2019/08/06/CODEVS-2370-小机房的树/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="/gallery/thumbnails/0_Obsidian woods_2, Anton Fadeev_01.jpg" alt="CODEVS-2370-小机房的树">
-                    </p>
-                </a>
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>Wechat</span>
+    <div class="qrcode"><img src="https://s2.ax1x.com/2019/04/10/A7irIH.jpg" alt="Wechat"></div>
+</a>
+
                 
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2019-08-06T11:57:30.000Z">2019-08-06</time>
-                        <a href="/2019/08/06/CODEVS-2370-小机房的树/" class="has-link-black-ter is-size-6">CODEVS-2370-小机房的树</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/categories/图论/">图论</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
-                
-                <a href="/2019/08/06/bzoj-2956/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="/gallery/thumbnails/0_The Frozen Floes of Northern Celandine, Anton Fadeev_01.jpg" alt="BZOJ-2956-模积和">
-                    </p>
-                </a>
-                
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2019-08-06T01:27:40.000Z">2019-08-06</time>
-                        <a href="/2019/08/06/bzoj-2956/" class="has-link-black-ter is-size-6">BZOJ-2956-模积和</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/categories/数论/">数论</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
         </div>
     </div>
 </div>
 
 
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/09/28/luogu-P3806/">
+                <span class="level-item">洛谷-P3806</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
+        
+<div id="valine-thread" class="content"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#valine-thread' ,
+        notify: false,
+        verify: false,
+        app_id: 'kgvqY8uIP79Q5O4ohyKTBeoK-gzGzoHsz',
+        app_key: '2XufptgiB6zbgrafwryks3Bf',
+        placeholder: 'Say something...'
+    });
+</script>
+
+    </div>
+</div>
 </div>
                 
 
@@ -1338,7 +1386,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/favicon.png" alt="Dicer&#39;s blog" height="28">
+                    <img src="/images/favicon.png" alt="2019-ICPC-Shenyang-contest-online" height="28">
                 
                 </a>
                 <p class="is-size-7">
