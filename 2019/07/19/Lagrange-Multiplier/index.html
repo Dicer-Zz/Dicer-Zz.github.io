@@ -109,7 +109,7 @@
             <div class="navbar-end">
                 
                     
-                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                    <a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
                         
                         <i class="fab fa-github"></i>
                         
@@ -118,7 +118,7 @@
                 
                 
                 
-                <a class="navbar-item search" title="Search" href="javascript:;">
+                <a class="navbar-item search" title="Suche" href="javascript:;">
                     <i class="fas fa-search"></i>
                 </a>
                 
@@ -153,13 +153,13 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    4 minutes read (About 619 words)
+                    4 minutes lesen (Über 619 Worte)
                 </span>
                 
                 
                 <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
                     <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
+                    <span id="busuanzi_value_page_pv">0</span> Besuche
                 </span>
                 
             </div>
@@ -174,7 +174,7 @@
             <p>简单来说，拉格朗日乘子法可以解决$f(\hat x)$在一些限制条件$g_k(\hat x) = c_k$下的极值。</p>
 <a id="more"></a>
 
-<h2 id="Mushroom-Scientists"><a href="#Mushroom-Scientists" class="headerlink" title="Mushroom Scientists"></a>Mushroom Scientists</h2><p><a href="https://codeforces.com/contest/186/problem/D" target="_blank" rel="noopener">Link</a></p>
+<h2 id="Mushroom-Scientists"><a href="#Mushroom-Scientists" class="headerlink" title="Mushroom Scientists"></a>Mushroom Scientists</h2><p><a href="https://codeforces.com/contest/186/problem/D">Link</a></p>
 <h3 id="Prove"><a href="#Prove" class="headerlink" title="Prove"></a>Prove</h3><p>本题题意就是给了一个函数$f(x,y,z) = x^a + y^b + z^c$，求这个函数在约束条件$g(x,y,z) = x + y + z - S$下的最大值。</p>
 <p>首先，设拉格朗日函数：</p>
 <p>$$L(x,y,z,\lambda) = f - \lambda \cdot g$$</p>
@@ -187,9 +187,9 @@
 <p>$$\frac{x}{a} = \frac{y}{b} = \frac{z}{c}$$</p>
 <p>所以：</p>
 <p>$$x = \frac{S\cdot a}{a+b+c}, y = \frac{S\cdot b}{a+b+c}, z = \frac{S\cdot c}{a+b+c}​$$</p>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;iomanip&gt;</span></span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"> </span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MAXN = <span class="hljs-number">1e5</span> + <span class="hljs-number">7</span>;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> mod = <span class="hljs-number">1e9</span> + <span class="hljs-number">7</span>;</span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;</span><br><span class="line"> </span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">    <span class="hljs-built_in">cout</span> &lt;&lt; fixed;</span><br><span class="line">    <span class="hljs-keyword">int</span> s;</span><br><span class="line">    <span class="hljs-keyword">int</span> a, b, c;</span><br><span class="line">    <span class="hljs-built_in">cin</span> &gt;&gt; s &gt;&gt; a &gt;&gt; b &gt;&gt; c;</span><br><span class="line">    <span class="hljs-keyword">if</span>(a + b + c == <span class="hljs-number">0</span>)&#123;</span><br><span class="line">        <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-number">0</span> &lt;&lt; <span class="hljs-string">' '</span> &lt;&lt; <span class="hljs-number">0</span> &lt;&lt; <span class="hljs-string">' '</span> &lt;&lt; <span class="hljs-number">0</span> &lt;&lt; <span class="hljs-built_in">endl</span>;</span><br><span class="line">    &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">        <span class="hljs-built_in">cout</span> &lt;&lt; setprecision(<span class="hljs-number">12</span>) &lt;&lt; (<span class="hljs-number">1.0</span>*s*a/(a+b+c)) &lt;&lt; <span class="hljs-string">' '</span> &lt;&lt; (<span class="hljs-number">1.0</span>*s*b/(a+b+c)) &lt;&lt; <span class="hljs-string">' '</span> &lt;&lt; (<span class="hljs-number">1.0</span>*s*c/(a+b+c)) &lt;&lt; <span class="hljs-built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iomanip&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> MAXN = <span class="number">1e5</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> mod = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; fixed;</span><br><span class="line">    <span class="keyword">int</span> s;</span><br><span class="line">    <span class="keyword">int</span> a, b, c;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; s &gt;&gt; a &gt;&gt; b &gt;&gt; c;</span><br><span class="line">    <span class="keyword">if</span>(a + b + c == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="number">0</span> &lt;&lt; <span class="string">' '</span> &lt;&lt; <span class="number">0</span> &lt;&lt; <span class="string">' '</span> &lt;&lt; <span class="number">0</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; setprecision(<span class="number">12</span>) &lt;&lt; (<span class="number">1.0</span>*s*a/(a+b+c)) &lt;&lt; <span class="string">' '</span> &lt;&lt; (<span class="number">1.0</span>*s*b/(a+b+c)) &lt;&lt; <span class="string">' '</span> &lt;&lt; (<span class="number">1.0</span>*s*c/(a+b+c)) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="Samantha-and-Portfolio-Management"><a href="#Samantha-and-Portfolio-Management" class="headerlink" title="Samantha and Portfolio Management"></a>Samantha and Portfolio Management</h2><p><a href="https://www.hackerrank.com/contests/morgan-stanley-2016/challenges/samantha-and-portfolio-management" target="_blank" rel="noopener">Link</a></p>
+<h2 id="Samantha-and-Portfolio-Management"><a href="#Samantha-and-Portfolio-Management" class="headerlink" title="Samantha and Portfolio Management"></a>Samantha and Portfolio Management</h2><p><a href="https://www.hackerrank.com/contests/morgan-stanley-2016/challenges/samantha-and-portfolio-management">Link</a></p>
 <h3 id="Prove-1"><a href="#Prove-1" class="headerlink" title="Prove"></a>Prove</h3><p>约束条件下的极值问题，可以用拉格朗日乘子法解决。</p>
 <p>约束条件：<br>$$g(\boldsymbol w) = \sum_{i=1}^{n}{w_i} - 1$$</p>
 <p>极值方程：</p>
@@ -209,9 +209,9 @@
 <p>$$V = \sum_{i=1}^{n}{w_i^2\times \sigma_i^2 } = \sum_{i=1}^{n}{\frac{4\cdot i}(n^2(n+1)^2)} = \frac{1}{n(n+1)}$$</p>
 <p>$$E = \sum_{i=1}^{n}{w_i \times \bar r_i} = \sum_{i=1}^{n}\frac{(2\cdot i \cdot \bar r_i)}{n(n+1)}$$</p>
 <p>然后就可以愉快的$O(n)​$解决了。</p>
-<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MAXN = <span class="hljs-number">1e5</span> + <span class="hljs-number">7</span>;</span><br><span class="line"><span class="hljs-keyword">int</span> r[MAXN];</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">print</span><span class="hljs-params">(<span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> a, <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> g = __gcd(a, b);</span><br><span class="line">    a /= g; b /= g;</span><br><span class="line">    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d %d\n"</span>, a, b);</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">int</span> n;</span><br><span class="line">    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>, &amp;n);</span><br><span class="line">    <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> sum = <span class="hljs-number">0</span>;</span><br><span class="line">    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>, r+i);</span><br><span class="line">        sum += <span class="hljs-number">1L</span>L * i * r[i];</span><br><span class="line">    &#125;</span><br><span class="line">    print(<span class="hljs-number">2</span> * sum, <span class="hljs-number">1L</span>L * n * (n+<span class="hljs-number">1</span>));</span><br><span class="line">    print(<span class="hljs-number">2L</span>L, n * (n+<span class="hljs-number">1</span>));</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> MAXN = <span class="number">1e5</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">int</span> r[MAXN];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(<span class="keyword">long</span> <span class="keyword">long</span> a, <span class="keyword">long</span> <span class="keyword">long</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> g = __gcd(a, b);</span><br><span class="line">    a /= g; b /= g;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d %d\n"</span>, a, b);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n);</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%d"</span>, r+i);</span><br><span class="line">        sum += <span class="number">1L</span>L * i * r[i];</span><br><span class="line">    &#125;</span><br><span class="line">    print(<span class="number">2</span> * sum, <span class="number">1L</span>L * n * (n+<span class="number">1</span>));</span><br><span class="line">    print(<span class="number">2L</span>L, n * (n+<span class="number">1</span>));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>1.<a href="https://en.wikipedia.org/wiki/Lagrange_multiplier" target="_blank" rel="noopener">Wikipedia-Lagrange-Multiplier</a><br>2.<a href="http://jermmy.xyz/2017/07/27/2017-7-27-understand-lagrange-multiplier/" target="_blank" rel="noopener">http://jermmy.xyz/2017/07/27/2017-7-27-understand-lagrange-multiplier/</a></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>1.<a href="https://en.wikipedia.org/wiki/Lagrange_multiplier">Wikipedia-Lagrange-Multiplier</a><br>2.<a href="http://jermmy.xyz/2017/07/27/2017-7-27-understand-lagrange-multiplier/">http://jermmy.xyz/2017/07/27/2017-7-27-understand-lagrange-multiplier/</a></p>
 
         </div>
         
@@ -233,7 +233,7 @@
 
 <div class="card">
     <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
+        <h3 class="menu-label has-text-centered">Gefällt Ihnen der Artikel? Unterstützen Sie den Autor mit</h3>
         <div class="buttons is-centered">
             
                 
@@ -287,11 +287,11 @@
 
 <div class="card">
     <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
+        <h3 class="title is-5 has-text-weight-normal">Kommentare</h3>
         
 <div id="valine-thread" class="content"></div>
 <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/valine/1.3.10/Valine.min.js"></script>
 <script>
     new Valine({
         el: '#valine-thread' ,
@@ -358,7 +358,7 @@
             <div class="level-item has-text-centered is-marginless">
                 <div>
                     <p class="heading">
-                        Categories
+                        Kategorien
                     </p>
                     <a href="/categories">
                         <p class="title has-text-weight-normal">
@@ -382,22 +382,22 @@
         </nav>
         
         <div class="level">
-            <a class="level-item button is-link is-rounded" href="https://github.com/Dicer-Zz" target="_blank">
-                Follow</a>
+            <a class="level-item button is-link is-rounded" href="https://github.com/Dicer-Zz" target="_blank" rel="noopener">
+                Folgen</a>
         </div>
         
         
         
         <div class="level is-mobile">
             
-            <a class="level-item button is-white is-marginless" target="_blank"
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
                 title="Email" href="mailto:dicer0615@outlook.com">
                 
                 <i class="far fa-envelope"></i>
                 
             </a>
             
-            <a class="level-item button is-white is-marginless" target="_blank"
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
                 title="Github" href="https://github.com/Dicer-Zz">
                 
                 <i class="fab fa-github"></i>
@@ -420,7 +420,7 @@
         <ul class="menu-list">
         
             <li>
-                <a class="level is-mobile" href="http://47.101.66.37:8889/2048" target="_blank">
+                <a class="level is-mobile" href="http://47.101.66.37:8889/2048" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">Game2048</span>
                     </span>
@@ -431,7 +431,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="http://47.101.66.37:8888/map" target="_blank">
+                <a class="level is-mobile" href="http://47.101.66.37:8888/map" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">Map</span>
                     </span>
@@ -442,7 +442,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://blog.todest.cn/" target="_blank">
+                <a class="level is-mobile" href="https://blog.todest.cn/" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">Todest</span>
                     </span>
@@ -453,7 +453,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://hpumengzhao.github.io/" target="_blank">
+                <a class="level is-mobile" href="https://hpumengzhao.github.io/" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">Codancer</span>
                     </span>
@@ -464,7 +464,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://blog.wzy1999.wang/" target="_blank">
+                <a class="level is-mobile" href="https://blog.wzy1999.wang/" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">执念</span>
                     </span>
@@ -475,7 +475,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://blog.csdn.net/l18339702017" target="_blank">
+                <a class="level is-mobile" href="https://blog.csdn.net/l18339702017" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">辞树</span>
                     </span>
@@ -486,7 +486,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://hongjay233.github.io/" target="_blank">
+                <a class="level is-mobile" href="https://hongjay233.github.io/" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">HongJay</span>
                     </span>
@@ -497,7 +497,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://dreamatom.top/" target="_blank">
+                <a class="level is-mobile" href="https://dreamatom.top/" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">JQM</span>
                     </span>
@@ -518,7 +518,7 @@
     <div class="card-content">
         <div class="menu">
             <h3 class="menu-label">
-                Categories
+                Kategorien
             </h3>
             <ul class="menu-list">
             <li>
@@ -638,7 +638,7 @@
             <div class="card widget">
     <div class="card-content">
         <h3 class="menu-label">
-            Recent
+            Letzte Einträge
         </h3>
         
         <article class="media">
@@ -743,7 +743,7 @@
     <div class="card-content">
         <div class="menu">
         <h3 class="menu-label">
-            Archives
+            Archive
         </h3>
         <ul class="menu-list">
         
@@ -1091,7 +1091,7 @@
         <div class="card widget">
     <div class="card-content">
         <h3 class="menu-label">
-            Recent
+            Letzte Einträge
         </h3>
         
         <article class="media">
@@ -1196,7 +1196,7 @@
     <div class="card-content">
         <div class="menu">
         <h3 class="menu-label">
-            Archives
+            Archive
         </h3>
         <ul class="menu-list">
         
@@ -1546,13 +1546,13 @@
                 
                 </a>
                 <p class="is-size-7">
-                &copy; 2019 Dicer&nbsp;
-                Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & <a
-                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                &copy; 2020 Dicer&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a>
                 
                 <br>
                 <span id="busuanzi_container_site_uv">
-                Visited by <span id="busuanzi_value_site_uv">0</span> users
+                Von <span id="busuanzi_value_site_uv">0</span> Nutzern besucht
                 </span>
                 
                 </p>
@@ -1562,7 +1562,7 @@
                 <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
                 
                 <p class="control">
-                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/">
                         
                         <i class="fab fa-creative-commons"></i>
                         
@@ -1570,7 +1570,7 @@
                 </p>
                 
                 <p class="control">
-                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
                         
                         <i class="fab fa-creative-commons-by"></i>
                         
@@ -1578,7 +1578,7 @@
                 </p>
                 
                 <p class="control">
-                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
                         
                         <i class="fab fa-github"></i>
                         
@@ -1595,8 +1595,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 <script>moment.locale("zh_Hans");</script>
 
+
 <script>
 var IcarusThemeSettings = {
+    site: {
+        url: '',
+        external_link: {"enable":true,"exclude":[]}
+    },
     article: {
         highlight: {
             clipboard: true,
@@ -1607,22 +1612,22 @@ var IcarusThemeSettings = {
 </script>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script>
 
 
 
-    
-    
+
+
 <script src="/js/animation.js"></script>
 
-    
-    
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.7.0/js/jquery.justifiedGallery.min.js" defer></script>
 <script src="/js/gallery.js" defer></script>
 
-    
-    
+
+
 <div id="outdated">
     <h6>Your browser is out-of-date!</h6>
     <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
@@ -1640,8 +1645,8 @@ var IcarusThemeSettings = {
     });
 </script>
 
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     MathJax.Hub.Config({
@@ -1663,24 +1668,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
-    
-    
-<a id="back-to-top" title="Back to Top" href="javascript:;">
+
+
+<a id="back-to-top" title="Zurück nach oben" href="javascript:;">
     <i class="fas fa-chevron-up"></i>
 </a>
 <script src="/js/back-to-top.js" defer></script>
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
 
 
 <script src="/js/main.js" defer></script>
@@ -1689,7 +1694,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <div class="searchbox ins-search">
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Tippen Sie etwas..." />
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -1702,10 +1707,10 @@ document.addEventListener('DOMContentLoaded', function () {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
                 POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
+                PAGES: 'Seiten',
+                CATEGORIES: 'Kategorien',
                 TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
+                UNTITLED: '(Unbenannt)',
             },
             CONTENT_URL: '/content.json',
         };

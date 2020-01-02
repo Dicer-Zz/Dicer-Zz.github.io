@@ -109,7 +109,7 @@
             <div class="navbar-end">
                 
                     
-                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                    <a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
                         
                         <i class="fab fa-github"></i>
                         
@@ -118,7 +118,7 @@
                 
                 
                 
-                <a class="navbar-item search" title="Search" href="javascript:;">
+                <a class="navbar-item search" title="Suche" href="javascript:;">
                     <i class="fas fa-search"></i>
                 </a>
                 
@@ -153,13 +153,13 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    a minute read (About 212 words)
+                    a minute lesen (Über 212 Worte)
                 </span>
                 
                 
                 <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
                     <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
+                    <span id="busuanzi_value_page_pv">0</span> Besuche
                 </span>
                 
             </div>
@@ -171,7 +171,7 @@
             
         </h1>
         <div class="content">
-            <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><a href="https://ac.nowcoder.com/acm/contest/1114#question" target="_blank" rel="noopener">题目链接</a></p>
+            <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><a href="https://ac.nowcoder.com/acm/contest/1114#question">题目链接</a></p>
 <a id="more"></a>
 
 <h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p>求和式： $$\sum_{i=1}^{n}{\sum_{j=1}^{i}{i \lfloor {\frac{i}{j}} \rfloor ^j}}$$</p>
@@ -179,7 +179,7 @@
 <p>$$\sum_{j=1}^{n}\sum_{i=j}^{n}{i \lfloor \frac{i}{j} \rfloor ^ j}$$</p>
 <p>可以发现 $i$ 在 区间 $[k\cdot j, (k+1)\cdot j-1]$ 内 $\lfloor \frac{i}{j} \rfloor = k$ ，因此可以对每个 $j$ 做分段处理，另外 $\lfloor \frac{i}{j} \rfloor ^ j$ 可以从上一个状态转移过来。</p>
 <p>时间复杂度： $O(n \log n)$</p>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line">  </span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line">  </span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MAXN = <span class="hljs-number">3e6</span> + <span class="hljs-number">7</span>;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MOD = <span class="hljs-number">1e9</span> + <span class="hljs-number">7</span>;</span><br><span class="line">ll p[MAXN];</span><br><span class="line">  </span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span> <span class="hljs-params">()</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">3000000</span>; ++i) p[i] = <span class="hljs-number">1</span>;</span><br><span class="line">    ll n; <span class="hljs-built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    ll ans = <span class="hljs-number">0</span>;</span><br><span class="line">    <span class="hljs-keyword">for</span>(ll j = <span class="hljs-number">1</span>; j &lt;= n; ++j) &#123;</span><br><span class="line">        ll lim = n/j, l = j, r = min(<span class="hljs-number">2</span> * j - <span class="hljs-number">1</span>, n);</span><br><span class="line">        <span class="hljs-keyword">for</span> (ll i = <span class="hljs-number">1</span>; i &lt;= lim; ++i) &#123;</span><br><span class="line">            p[i] = p[i] * i % MOD;</span><br><span class="line">            ans += (l+r)*(r-l+<span class="hljs-number">1</span>)/<span class="hljs-number">2</span>%MOD*p[i]%MOD;</span><br><span class="line">            ans %= MOD;</span><br><span class="line">            l += j; r = min(r + j, n);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="hljs-built_in">endl</span>;</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line">  </span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line">  </span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> MAXN = <span class="number">3e6</span> + <span class="number">7</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> MOD = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line">ll p[MAXN];</span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">3000000</span>; ++i) p[i] = <span class="number">1</span>;</span><br><span class="line">    ll n; <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    ll ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(ll j = <span class="number">1</span>; j &lt;= n; ++j) &#123;</span><br><span class="line">        ll lim = n/j, l = j, r = min(<span class="number">2</span> * j - <span class="number">1</span>, n);</span><br><span class="line">        <span class="keyword">for</span> (ll i = <span class="number">1</span>; i &lt;= lim; ++i) &#123;</span><br><span class="line">            p[i] = p[i] * i % MOD;</span><br><span class="line">            ans += (l+r)*(r-l+<span class="number">1</span>)/<span class="number">2</span>%MOD*p[i]%MOD;</span><br><span class="line">            ans %= MOD;</span><br><span class="line">            l += j; r = min(r + j, n);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
         </div>
@@ -202,7 +202,7 @@
 
 <div class="card">
     <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
+        <h3 class="menu-label has-text-centered">Gefällt Ihnen der Artikel? Unterstützen Sie den Autor mit</h3>
         <div class="buttons is-centered">
             
                 
@@ -256,11 +256,11 @@
 
 <div class="card">
     <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
+        <h3 class="title is-5 has-text-weight-normal">Kommentare</h3>
         
 <div id="valine-thread" class="content"></div>
 <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/valine/1.3.10/Valine.min.js"></script>
 <script>
     new Valine({
         el: '#valine-thread' ,
@@ -327,7 +327,7 @@
             <div class="level-item has-text-centered is-marginless">
                 <div>
                     <p class="heading">
-                        Categories
+                        Kategorien
                     </p>
                     <a href="/categories">
                         <p class="title has-text-weight-normal">
@@ -351,22 +351,22 @@
         </nav>
         
         <div class="level">
-            <a class="level-item button is-link is-rounded" href="https://github.com/Dicer-Zz" target="_blank">
-                Follow</a>
+            <a class="level-item button is-link is-rounded" href="https://github.com/Dicer-Zz" target="_blank" rel="noopener">
+                Folgen</a>
         </div>
         
         
         
         <div class="level is-mobile">
             
-            <a class="level-item button is-white is-marginless" target="_blank"
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
                 title="Email" href="mailto:dicer0615@outlook.com">
                 
                 <i class="far fa-envelope"></i>
                 
             </a>
             
-            <a class="level-item button is-white is-marginless" target="_blank"
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
                 title="Github" href="https://github.com/Dicer-Zz">
                 
                 <i class="fab fa-github"></i>
@@ -389,7 +389,7 @@
         <ul class="menu-list">
         
             <li>
-                <a class="level is-mobile" href="http://47.101.66.37:8889/2048" target="_blank">
+                <a class="level is-mobile" href="http://47.101.66.37:8889/2048" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">Game2048</span>
                     </span>
@@ -400,7 +400,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="http://47.101.66.37:8888/map" target="_blank">
+                <a class="level is-mobile" href="http://47.101.66.37:8888/map" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">Map</span>
                     </span>
@@ -411,7 +411,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://blog.todest.cn/" target="_blank">
+                <a class="level is-mobile" href="https://blog.todest.cn/" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">Todest</span>
                     </span>
@@ -422,7 +422,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://hpumengzhao.github.io/" target="_blank">
+                <a class="level is-mobile" href="https://hpumengzhao.github.io/" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">Codancer</span>
                     </span>
@@ -433,7 +433,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://blog.wzy1999.wang/" target="_blank">
+                <a class="level is-mobile" href="https://blog.wzy1999.wang/" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">执念</span>
                     </span>
@@ -444,7 +444,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://blog.csdn.net/l18339702017" target="_blank">
+                <a class="level is-mobile" href="https://blog.csdn.net/l18339702017" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">辞树</span>
                     </span>
@@ -455,7 +455,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://hongjay233.github.io/" target="_blank">
+                <a class="level is-mobile" href="https://hongjay233.github.io/" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">HongJay</span>
                     </span>
@@ -466,7 +466,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://dreamatom.top/" target="_blank">
+                <a class="level is-mobile" href="https://dreamatom.top/" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">JQM</span>
                     </span>
@@ -487,7 +487,7 @@
     <div class="card-content">
         <div class="menu">
             <h3 class="menu-label">
-                Categories
+                Kategorien
             </h3>
             <ul class="menu-list">
             <li>
@@ -607,7 +607,7 @@
             <div class="card widget">
     <div class="card-content">
         <h3 class="menu-label">
-            Recent
+            Letzte Einträge
         </h3>
         
         <article class="media">
@@ -712,7 +712,7 @@
     <div class="card-content">
         <div class="menu">
         <h3 class="menu-label">
-            Archives
+            Archive
         </h3>
         <ul class="menu-list">
         
@@ -1060,7 +1060,7 @@
         <div class="card widget">
     <div class="card-content">
         <h3 class="menu-label">
-            Recent
+            Letzte Einträge
         </h3>
         
         <article class="media">
@@ -1165,7 +1165,7 @@
     <div class="card-content">
         <div class="menu">
         <h3 class="menu-label">
-            Archives
+            Archive
         </h3>
         <ul class="menu-list">
         
@@ -1515,13 +1515,13 @@
                 
                 </a>
                 <p class="is-size-7">
-                &copy; 2019 Dicer&nbsp;
-                Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & <a
-                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                &copy; 2020 Dicer&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a>
                 
                 <br>
                 <span id="busuanzi_container_site_uv">
-                Visited by <span id="busuanzi_value_site_uv">0</span> users
+                Von <span id="busuanzi_value_site_uv">0</span> Nutzern besucht
                 </span>
                 
                 </p>
@@ -1531,7 +1531,7 @@
                 <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
                 
                 <p class="control">
-                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/">
                         
                         <i class="fab fa-creative-commons"></i>
                         
@@ -1539,7 +1539,7 @@
                 </p>
                 
                 <p class="control">
-                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
                         
                         <i class="fab fa-creative-commons-by"></i>
                         
@@ -1547,7 +1547,7 @@
                 </p>
                 
                 <p class="control">
-                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
                         
                         <i class="fab fa-github"></i>
                         
@@ -1564,8 +1564,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 <script>moment.locale("zh_Hans");</script>
 
+
 <script>
 var IcarusThemeSettings = {
+    site: {
+        url: '',
+        external_link: {"enable":true,"exclude":[]}
+    },
     article: {
         highlight: {
             clipboard: true,
@@ -1576,22 +1581,22 @@ var IcarusThemeSettings = {
 </script>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script>
 
 
 
-    
-    
+
+
 <script src="/js/animation.js"></script>
 
-    
-    
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.7.0/js/jquery.justifiedGallery.min.js" defer></script>
 <script src="/js/gallery.js" defer></script>
 
-    
-    
+
+
 <div id="outdated">
     <h6>Your browser is out-of-date!</h6>
     <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
@@ -1609,8 +1614,8 @@ var IcarusThemeSettings = {
     });
 </script>
 
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     MathJax.Hub.Config({
@@ -1632,24 +1637,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
-    
-    
-<a id="back-to-top" title="Back to Top" href="javascript:;">
+
+
+<a id="back-to-top" title="Zurück nach oben" href="javascript:;">
     <i class="fas fa-chevron-up"></i>
 </a>
 <script src="/js/back-to-top.js" defer></script>
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
 
 
 <script src="/js/main.js" defer></script>
@@ -1658,7 +1663,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <div class="searchbox ins-search">
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Tippen Sie etwas..." />
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -1671,10 +1676,10 @@ document.addEventListener('DOMContentLoaded', function () {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
                 POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
+                PAGES: 'Seiten',
+                CATEGORIES: 'Kategorien',
                 TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
+                UNTITLED: '(Unbenannt)',
             },
             CONTENT_URL: '/content.json',
         };

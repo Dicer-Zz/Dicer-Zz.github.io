@@ -109,7 +109,7 @@
             <div class="navbar-end">
                 
                     
-                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                    <a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
                         
                         <i class="fab fa-github"></i>
                         
@@ -118,7 +118,7 @@
                 
                 
                 
-                <a class="navbar-item search" title="Search" href="javascript:;">
+                <a class="navbar-item search" title="Suche" href="javascript:;">
                     <i class="fas fa-search"></i>
                 </a>
                 
@@ -153,13 +153,13 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    5 minutes read (About 778 words)
+                    5 minutes lesen (Über 778 Worte)
                 </span>
                 
                 
                 <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
                     <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
+                    <span id="busuanzi_value_page_pv">0</span> Besuche
                 </span>
                 
             </div>
@@ -171,8 +171,8 @@
             
         </h1>
         <div class="content">
-            <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p><a href="https://www.luogu.org/problem/P2051" target="_blank" rel="noopener">中国象棋</a></p>
-<p><a href="https://www.luogu.org/problem/P1879" target="_blank" rel="noopener">玉米田Corn Fields</a></p>
+            <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p><a href="https://www.luogu.org/problem/P2051">中国象棋</a></p>
+<p><a href="https://www.luogu.org/problem/P1879">玉米田Corn Fields</a></p>
 <p>两道DP。</p>
 <a id="more"></a>
 
@@ -185,11 +185,11 @@
 <li>放一个炮车，放在没有跑车的列或者有一个炮车列：$f[i][j+1][k] = f[j-1][j][k] * (m-j-k), f[i][j][k+1] = f[i-1][j][k]*j$</li>
 <li>放两个炮车的情况，讨论一下就好了，看代码吧。</li>
 </ol>
-<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> rep(i, a, b) for(int i = (a); i &lt;= (b); ++i)</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> per(i, a, b) for(int i = (a); i &gt;= (b); --i)</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> debug(x) cerr &lt;&lt; #x &lt;&lt; <span class="hljs-meta-string">' '</span> &lt;&lt; x &lt;&lt; endl;</span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MOD = <span class="hljs-number">9999973</span>;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MAXN = <span class="hljs-number">2e5</span> + <span class="hljs-number">7</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">//第i行有j个单跑k个双炮</span></span><br><span class="line">ll f[<span class="hljs-number">105</span>][<span class="hljs-number">105</span>][<span class="hljs-number">105</span>];</span><br><span class="line">ll C[<span class="hljs-number">105</span>][<span class="hljs-number">105</span>];</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">    C[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;</span><br><span class="line">    rep(i, <span class="hljs-number">1</span>, <span class="hljs-number">100</span>)&#123;</span><br><span class="line">        rep(j, <span class="hljs-number">0</span>, i)&#123;</span><br><span class="line">            C[i][j] = C[i<span class="hljs-number">-1</span>][j] + C[i<span class="hljs-number">-1</span>][j<span class="hljs-number">-1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> <span class="hljs-keyword">const</span> *argv[])</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    init();</span><br><span class="line">    <span class="hljs-keyword">int</span> n, m;</span><br><span class="line">    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d %d"</span>, &amp;n, &amp;m);</span><br><span class="line">    f[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;</span><br><span class="line">    rep(i, <span class="hljs-number">1</span>, n)&#123;</span><br><span class="line">        rep(j, <span class="hljs-number">0</span>, m)&#123;</span><br><span class="line">            rep(k, <span class="hljs-number">0</span>, m)&#123;</span><br><span class="line">                <span class="hljs-keyword">if</span>(j + k &gt; m) <span class="hljs-keyword">continue</span>;</span><br><span class="line">                <span class="hljs-comment">//不选</span></span><br><span class="line">                f[i][j][k] += f[i<span class="hljs-number">-1</span>][j][k];</span><br><span class="line">                f[i][j][k] %= MOD;</span><br><span class="line">                </span><br><span class="line">                <span class="hljs-comment">//选一个 选在空列</span></span><br><span class="line">                f[i][j+<span class="hljs-number">1</span>][k] += f[i<span class="hljs-number">-1</span>][j][k] * (m - j - k);</span><br><span class="line">                f[i][j+<span class="hljs-number">1</span>][k] %= MOD;</span><br><span class="line">                <span class="hljs-comment">// 选一个 选在单炮列</span></span><br><span class="line">                f[i][j<span class="hljs-number">-1</span>][k+<span class="hljs-number">1</span>] += f[i<span class="hljs-number">-1</span>][j][k] * j;</span><br><span class="line">                f[i][j<span class="hljs-number">-1</span>][k+<span class="hljs-number">1</span>] %= MOD;</span><br><span class="line">                </span><br><span class="line">                <span class="hljs-comment">// 选两个 都选在空列</span></span><br><span class="line">                f[i][j+<span class="hljs-number">2</span>][k] += f[i<span class="hljs-number">-1</span>][j][k] * C[m - j - k][<span class="hljs-number">2</span>];</span><br><span class="line">                f[i][j+<span class="hljs-number">2</span>][k] %= MOD;</span><br><span class="line">                <span class="hljs-comment">// 选两个 都选在单炮列</span></span><br><span class="line">                f[i][j<span class="hljs-number">-2</span>][k+<span class="hljs-number">2</span>] += f[i<span class="hljs-number">-1</span>][j][k] * C[j][<span class="hljs-number">2</span>];</span><br><span class="line">                f[i][j<span class="hljs-number">-2</span>][k+<span class="hljs-number">2</span>] %= MOD;</span><br><span class="line">                <span class="hljs-comment">// 选两个 一个在空列一个在单炮列</span></span><br><span class="line">                f[i][j][k+<span class="hljs-number">1</span>] += f[i<span class="hljs-number">-1</span>][j][k] * (m - j - k) * j;</span><br><span class="line">                f[i][j][k+<span class="hljs-number">1</span>] %= MOD;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ll ans = <span class="hljs-number">0</span>;</span><br><span class="line">    rep(i, <span class="hljs-number">0</span>, m) rep(j, <span class="hljs-number">0</span>, m) &#123;</span><br><span class="line">        ans += f[n][i][j];</span><br><span class="line">        ans %= MOD;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%lld\n"</span>, ans);</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> rep(i, a, b) for(int i = (a); i &lt;= (b); ++i)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> per(i, a, b) for(int i = (a); i &gt;= (b); --i)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> debug(x) cerr &lt;&lt; #x &lt;&lt; <span class="meta-string">' '</span> &lt;&lt; x &lt;&lt; endl;</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> MOD = <span class="number">9999973</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> MAXN = <span class="number">2e5</span> + <span class="number">7</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//第i行有j个单跑k个双炮</span></span><br><span class="line">ll f[<span class="number">105</span>][<span class="number">105</span>][<span class="number">105</span>];</span><br><span class="line">ll C[<span class="number">105</span>][<span class="number">105</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">    C[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    rep(i, <span class="number">1</span>, <span class="number">100</span>)&#123;</span><br><span class="line">        rep(j, <span class="number">0</span>, i)&#123;</span><br><span class="line">            C[i][j] = C[i<span class="number">-1</span>][j] + C[i<span class="number">-1</span>][j<span class="number">-1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> <span class="keyword">const</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    init();</span><br><span class="line">    <span class="keyword">int</span> n, m;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d %d"</span>, &amp;n, &amp;m);</span><br><span class="line">    f[<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    rep(i, <span class="number">1</span>, n)&#123;</span><br><span class="line">        rep(j, <span class="number">0</span>, m)&#123;</span><br><span class="line">            rep(k, <span class="number">0</span>, m)&#123;</span><br><span class="line">                <span class="keyword">if</span>(j + k &gt; m) <span class="keyword">continue</span>;</span><br><span class="line">                <span class="comment">//不选</span></span><br><span class="line">                f[i][j][k] += f[i<span class="number">-1</span>][j][k];</span><br><span class="line">                f[i][j][k] %= MOD;</span><br><span class="line">                </span><br><span class="line">                <span class="comment">//选一个 选在空列</span></span><br><span class="line">                f[i][j+<span class="number">1</span>][k] += f[i<span class="number">-1</span>][j][k] * (m - j - k);</span><br><span class="line">                f[i][j+<span class="number">1</span>][k] %= MOD;</span><br><span class="line">                <span class="comment">// 选一个 选在单炮列</span></span><br><span class="line">                f[i][j<span class="number">-1</span>][k+<span class="number">1</span>] += f[i<span class="number">-1</span>][j][k] * j;</span><br><span class="line">                f[i][j<span class="number">-1</span>][k+<span class="number">1</span>] %= MOD;</span><br><span class="line">                </span><br><span class="line">                <span class="comment">// 选两个 都选在空列</span></span><br><span class="line">                f[i][j+<span class="number">2</span>][k] += f[i<span class="number">-1</span>][j][k] * C[m - j - k][<span class="number">2</span>];</span><br><span class="line">                f[i][j+<span class="number">2</span>][k] %= MOD;</span><br><span class="line">                <span class="comment">// 选两个 都选在单炮列</span></span><br><span class="line">                f[i][j<span class="number">-2</span>][k+<span class="number">2</span>] += f[i<span class="number">-1</span>][j][k] * C[j][<span class="number">2</span>];</span><br><span class="line">                f[i][j<span class="number">-2</span>][k+<span class="number">2</span>] %= MOD;</span><br><span class="line">                <span class="comment">// 选两个 一个在空列一个在单炮列</span></span><br><span class="line">                f[i][j][k+<span class="number">1</span>] += f[i<span class="number">-1</span>][j][k] * (m - j - k) * j;</span><br><span class="line">                f[i][j][k+<span class="number">1</span>] %= MOD;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ll ans = <span class="number">0</span>;</span><br><span class="line">    rep(i, <span class="number">0</span>, m) rep(j, <span class="number">0</span>, m) &#123;</span><br><span class="line">        ans += f[n][i][j];</span><br><span class="line">        ans %= MOD;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%lld\n"</span>, ans);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="玉米田"><a href="#玉米田" class="headerlink" title="玉米田"></a>玉米田</h2><p>状压DP，先保存每一行的状态，在求出有效的状态。</p>
 <p>枚举有效的状态，判断是否和土地状况冲突，不冲突再枚举上一行的状态，如果和当前行不冲突，那么就是有效的转移。</p>
-<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> rep(i, a, b) for(int i = (a); i &lt;= (b); ++i)</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> per(i, a, b) for(int i = (a); i &gt;= (b); --i)</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> debug(x) cerr &lt;&lt; #x &lt;&lt; <span class="hljs-meta-string">' '</span> &lt;&lt; x &lt;&lt; endl;</span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> ll;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MOD = <span class="hljs-number">1e9</span>;</span><br><span class="line"><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> MAXN = <span class="hljs-number">2e5</span> + <span class="hljs-number">7</span>;</span><br><span class="line"></span><br><span class="line">ll f[<span class="hljs-number">15</span>][<span class="hljs-number">5005</span>];</span><br><span class="line"><span class="hljs-keyword">bool</span> g[<span class="hljs-number">5005</span>];</span><br><span class="line"><span class="hljs-keyword">int</span> mp[<span class="hljs-number">15</span>][<span class="hljs-number">15</span>];</span><br><span class="line"><span class="hljs-keyword">int</span> field[<span class="hljs-number">15</span>];</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> <span class="hljs-keyword">const</span> *argv[])</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">int</span> n, m;</span><br><span class="line">    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d %d"</span>, &amp;n, &amp;m);</span><br><span class="line">    rep(i, <span class="hljs-number">1</span>, n)&#123;</span><br><span class="line">        rep(j, <span class="hljs-number">1</span>, m)&#123;</span><br><span class="line">            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>, &amp;mp[i][j]);</span><br><span class="line">            field[i] &lt;&lt;= <span class="hljs-number">1</span>;</span><br><span class="line">            field[i] |= mp[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-comment">//求出可行状态集</span></span><br><span class="line">    <span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">int</span>&gt; sta;</span><br><span class="line">    rep(i, <span class="hljs-number">0</span>, (<span class="hljs-number">1</span>&lt;&lt;m)<span class="hljs-number">-1</span>) <span class="hljs-keyword">if</span>(!((i &amp; i&gt;&gt;<span class="hljs-number">1</span>)||(i &amp; i&lt;&lt;<span class="hljs-number">1</span>)))   sta.push_back(i);</span><br><span class="line">    </span><br><span class="line">    f[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;</span><br><span class="line">    rep(i, <span class="hljs-number">1</span>, n) &#123;</span><br><span class="line">        <span class="hljs-comment">//枚举当前行的状态</span></span><br><span class="line">        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j: sta) &#123;</span><br><span class="line">            <span class="hljs-comment">//如果和土地状况不冲突</span></span><br><span class="line">            <span class="hljs-keyword">if</span>((j &amp; field[i]) == j) &#123;</span><br><span class="line">                <span class="hljs-comment">//枚举上一行的状态</span></span><br><span class="line">                <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> k: sta) &#123;</span><br><span class="line">                    <span class="hljs-comment">//如果也不冲突</span></span><br><span class="line">                    <span class="hljs-keyword">if</span>((j &amp; k) == <span class="hljs-number">0</span>) &#123;</span><br><span class="line">                        <span class="hljs-comment">//可行的转移</span></span><br><span class="line">                        f[i][j] += f[i<span class="hljs-number">-1</span>][k], f[i][j] %= MOD;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ll ans = <span class="hljs-number">0</span>;</span><br><span class="line">    rep(i, <span class="hljs-number">0</span>, (<span class="hljs-number">1</span>&lt;&lt;m)<span class="hljs-number">-1</span>) &#123;</span><br><span class="line">        ans += f[n][i];</span><br><span class="line">        ans %= MOD;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%lld\n"</span>, ans);</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> rep(i, a, b) for(int i = (a); i &lt;= (b); ++i)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> per(i, a, b) for(int i = (a); i &gt;= (b); --i)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> debug(x) cerr &lt;&lt; #x &lt;&lt; <span class="meta-string">' '</span> &lt;&lt; x &lt;&lt; endl;</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> MOD = <span class="number">1e9</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> MAXN = <span class="number">2e5</span> + <span class="number">7</span>;</span><br><span class="line"></span><br><span class="line">ll f[<span class="number">15</span>][<span class="number">5005</span>];</span><br><span class="line"><span class="keyword">bool</span> g[<span class="number">5005</span>];</span><br><span class="line"><span class="keyword">int</span> mp[<span class="number">15</span>][<span class="number">15</span>];</span><br><span class="line"><span class="keyword">int</span> field[<span class="number">15</span>];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> <span class="keyword">const</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n, m;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d %d"</span>, &amp;n, &amp;m);</span><br><span class="line">    rep(i, <span class="number">1</span>, n)&#123;</span><br><span class="line">        rep(j, <span class="number">1</span>, m)&#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;mp[i][j]);</span><br><span class="line">            field[i] &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">            field[i] |= mp[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//求出可行状态集</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; sta;</span><br><span class="line">    rep(i, <span class="number">0</span>, (<span class="number">1</span>&lt;&lt;m)<span class="number">-1</span>) <span class="keyword">if</span>(!((i &amp; i&gt;&gt;<span class="number">1</span>)||(i &amp; i&lt;&lt;<span class="number">1</span>)))   sta.push_back(i);</span><br><span class="line">    </span><br><span class="line">    f[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    rep(i, <span class="number">1</span>, n) &#123;</span><br><span class="line">        <span class="comment">//枚举当前行的状态</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j: sta) &#123;</span><br><span class="line">            <span class="comment">//如果和土地状况不冲突</span></span><br><span class="line">            <span class="keyword">if</span>((j &amp; field[i]) == j) &#123;</span><br><span class="line">                <span class="comment">//枚举上一行的状态</span></span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> k: sta) &#123;</span><br><span class="line">                    <span class="comment">//如果也不冲突</span></span><br><span class="line">                    <span class="keyword">if</span>((j &amp; k) == <span class="number">0</span>) &#123;</span><br><span class="line">                        <span class="comment">//可行的转移</span></span><br><span class="line">                        f[i][j] += f[i<span class="number">-1</span>][k], f[i][j] %= MOD;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ll ans = <span class="number">0</span>;</span><br><span class="line">    rep(i, <span class="number">0</span>, (<span class="number">1</span>&lt;&lt;m)<span class="number">-1</span>) &#123;</span><br><span class="line">        ans += f[n][i];</span><br><span class="line">        ans %= MOD;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%lld\n"</span>, ans);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
         </div>
@@ -212,7 +212,7 @@
 
 <div class="card">
     <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
+        <h3 class="menu-label has-text-centered">Gefällt Ihnen der Artikel? Unterstützen Sie den Autor mit</h3>
         <div class="buttons is-centered">
             
                 
@@ -266,11 +266,11 @@
 
 <div class="card">
     <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
+        <h3 class="title is-5 has-text-weight-normal">Kommentare</h3>
         
 <div id="valine-thread" class="content"></div>
 <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/valine/1.3.10/Valine.min.js"></script>
 <script>
     new Valine({
         el: '#valine-thread' ,
@@ -337,7 +337,7 @@
             <div class="level-item has-text-centered is-marginless">
                 <div>
                     <p class="heading">
-                        Categories
+                        Kategorien
                     </p>
                     <a href="/categories">
                         <p class="title has-text-weight-normal">
@@ -361,22 +361,22 @@
         </nav>
         
         <div class="level">
-            <a class="level-item button is-link is-rounded" href="https://github.com/Dicer-Zz" target="_blank">
-                Follow</a>
+            <a class="level-item button is-link is-rounded" href="https://github.com/Dicer-Zz" target="_blank" rel="noopener">
+                Folgen</a>
         </div>
         
         
         
         <div class="level is-mobile">
             
-            <a class="level-item button is-white is-marginless" target="_blank"
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
                 title="Email" href="mailto:dicer0615@outlook.com">
                 
                 <i class="far fa-envelope"></i>
                 
             </a>
             
-            <a class="level-item button is-white is-marginless" target="_blank"
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
                 title="Github" href="https://github.com/Dicer-Zz">
                 
                 <i class="fab fa-github"></i>
@@ -399,7 +399,7 @@
         <ul class="menu-list">
         
             <li>
-                <a class="level is-mobile" href="http://47.101.66.37:8889/2048" target="_blank">
+                <a class="level is-mobile" href="http://47.101.66.37:8889/2048" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">Game2048</span>
                     </span>
@@ -410,7 +410,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="http://47.101.66.37:8888/map" target="_blank">
+                <a class="level is-mobile" href="http://47.101.66.37:8888/map" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">Map</span>
                     </span>
@@ -421,7 +421,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://blog.todest.cn/" target="_blank">
+                <a class="level is-mobile" href="https://blog.todest.cn/" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">Todest</span>
                     </span>
@@ -432,7 +432,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://hpumengzhao.github.io/" target="_blank">
+                <a class="level is-mobile" href="https://hpumengzhao.github.io/" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">Codancer</span>
                     </span>
@@ -443,7 +443,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://blog.wzy1999.wang/" target="_blank">
+                <a class="level is-mobile" href="https://blog.wzy1999.wang/" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">执念</span>
                     </span>
@@ -454,7 +454,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://blog.csdn.net/l18339702017" target="_blank">
+                <a class="level is-mobile" href="https://blog.csdn.net/l18339702017" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">辞树</span>
                     </span>
@@ -465,7 +465,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://hongjay233.github.io/" target="_blank">
+                <a class="level is-mobile" href="https://hongjay233.github.io/" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">HongJay</span>
                     </span>
@@ -476,7 +476,7 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://dreamatom.top/" target="_blank">
+                <a class="level is-mobile" href="https://dreamatom.top/" target="_blank" rel="noopener">
                     <span class="level-left">
                         <span class="level-item">JQM</span>
                     </span>
@@ -497,7 +497,7 @@
     <div class="card-content">
         <div class="menu">
             <h3 class="menu-label">
-                Categories
+                Kategorien
             </h3>
             <ul class="menu-list">
             <li>
@@ -617,7 +617,7 @@
             <div class="card widget">
     <div class="card-content">
         <h3 class="menu-label">
-            Recent
+            Letzte Einträge
         </h3>
         
         <article class="media">
@@ -722,7 +722,7 @@
     <div class="card-content">
         <div class="menu">
         <h3 class="menu-label">
-            Archives
+            Archive
         </h3>
         <ul class="menu-list">
         
@@ -1070,7 +1070,7 @@
         <div class="card widget">
     <div class="card-content">
         <h3 class="menu-label">
-            Recent
+            Letzte Einträge
         </h3>
         
         <article class="media">
@@ -1175,7 +1175,7 @@
     <div class="card-content">
         <div class="menu">
         <h3 class="menu-label">
-            Archives
+            Archive
         </h3>
         <ul class="menu-list">
         
@@ -1525,13 +1525,13 @@
                 
                 </a>
                 <p class="is-size-7">
-                &copy; 2019 Dicer&nbsp;
-                Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & <a
-                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                &copy; 2020 Dicer&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a>
                 
                 <br>
                 <span id="busuanzi_container_site_uv">
-                Visited by <span id="busuanzi_value_site_uv">0</span> users
+                Von <span id="busuanzi_value_site_uv">0</span> Nutzern besucht
                 </span>
                 
                 </p>
@@ -1541,7 +1541,7 @@
                 <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
                 
                 <p class="control">
-                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/">
                         
                         <i class="fab fa-creative-commons"></i>
                         
@@ -1549,7 +1549,7 @@
                 </p>
                 
                 <p class="control">
-                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
                         
                         <i class="fab fa-creative-commons-by"></i>
                         
@@ -1557,7 +1557,7 @@
                 </p>
                 
                 <p class="control">
-                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
                         
                         <i class="fab fa-github"></i>
                         
@@ -1574,8 +1574,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 <script>moment.locale("zh_Hans");</script>
 
+
 <script>
 var IcarusThemeSettings = {
+    site: {
+        url: '',
+        external_link: {"enable":true,"exclude":[]}
+    },
     article: {
         highlight: {
             clipboard: true,
@@ -1586,22 +1591,22 @@ var IcarusThemeSettings = {
 </script>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script>
 
 
 
-    
-    
+
+
 <script src="/js/animation.js"></script>
 
-    
-    
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.7.0/js/jquery.justifiedGallery.min.js" defer></script>
 <script src="/js/gallery.js" defer></script>
 
-    
-    
+
+
 <div id="outdated">
     <h6>Your browser is out-of-date!</h6>
     <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
@@ -1619,8 +1624,8 @@ var IcarusThemeSettings = {
     });
 </script>
 
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     MathJax.Hub.Config({
@@ -1642,24 +1647,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
-    
-    
-<a id="back-to-top" title="Back to Top" href="javascript:;">
+
+
+<a id="back-to-top" title="Zurück nach oben" href="javascript:;">
     <i class="fas fa-chevron-up"></i>
 </a>
 <script src="/js/back-to-top.js" defer></script>
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
 
 
 <script src="/js/main.js" defer></script>
@@ -1668,7 +1673,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <div class="searchbox ins-search">
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Tippen Sie etwas..." />
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -1681,10 +1686,10 @@ document.addEventListener('DOMContentLoaded', function () {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
                 POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
+                PAGES: 'Seiten',
+                CATEGORIES: 'Kategorien',
                 TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
+                UNTITLED: '(Unbenannt)',
             },
             CONTENT_URL: '/content.json',
         };
