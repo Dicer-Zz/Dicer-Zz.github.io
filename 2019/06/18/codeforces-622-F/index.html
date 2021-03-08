@@ -11,7 +11,7 @@
 
 
     <meta name="description" content="题目F. The Sum of the k-th Powers">
-<meta name="keywords" content="拉格朗日插值法">
+<meta name="keywords" content="数论,拉格朗日插值法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Codeforces-622-F">
 <meta property="og:url" content="/2019/06/18/codeforces-622-F/index.html">
@@ -19,7 +19,7 @@
 <meta property="og:description" content="题目F. The Sum of the k-th Powers">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="/gallery/thumbnails/Lagrange_polynomial.svg">
-<meta property="og:updated_time" content="2019-06-18T03:35:44.756Z">
+<meta property="og:updated_time" content="2021-03-08T12:22:13.105Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Codeforces-622-F">
 <meta name="twitter:description" content="题目F. The Sum of the k-th Powers">
@@ -145,15 +145,11 @@
             <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2019-06-18T02:43:58.000Z">2019-06-18</time>
                 
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/数论/">数论</a>
-                </div>
-                
                 
                 <span class="level-item has-text-grey">
                     
                     
-                    4 分钟 读完 (大约 672 个字)
+                    4 分钟 读完 (大约 663 个字)
                 </span>
                 
                 
@@ -180,16 +176,16 @@
 <p>确定一个k+1次多项式需要k+2个点，我们很容易通过打表得到$F(1)  \sim F(k+2)$的值。</p>
 <p>然后代入插值公式：</p>
 <p>$$F(n) = \sum_{i=1}^{k+2}F(i) \times P(i) $$</p>
-<p>$$P(i) = \prod_{j=1, j \neq i}^{k+2}\frac{n-j}{i-j}​$$</p>
+<p>$$P(i) = \prod_{j=1, j \neq i}^{k+2}\frac{n-j}{i-j}$$</p>
 <p>所以</p>
-<p>$$F(n) = \sum_{i=1}^{k+2}F(i) \times \prod_{j=1, j \neq i}^{k+2}\frac{n-j}{i-j} \ = \sum_{i=1}^{k+2}F(i) \times \frac{\prod_{j=1, j \neq i}^{k+2}n-j}{\prod_{j=1, j \neq i}^{k+2}{i-j}}​$$</p>
-<p>但是这个公式的复杂度时$O(k^2)​$的，我们再优化一下。</p>
+<p>$$F(n) = \sum_{i=1}^{k+2}F(i) \times \prod_{j=1, j \neq i}^{k+2}\frac{n-j}{i-j} \ = \sum_{i=1}^{k+2}F(i) \times \frac{\prod_{j=1, j \neq i}^{k+2}n-j}{\prod_{j=1, j \neq i}^{k+2}{i-j}}$$</p>
+<p>但是这个公式的复杂度时$O(k^2)$的，我们再优化一下。</p>
 <p>设$T = \prod_{j=1}^{k+2}{n-j}$，则</p>
-<p>$$\prod_{j=1, j \neq i}^{k+2}n-j = \frac{T}{n-i}​$$</p>
-<p>对于$\prod_{j=1, j \neq i}^{k+2}{i-j}​$，我们将它分成$i\lt j​$和$i\gt j​$两部分来考虑，</p>
-<p>$$\prod_{j=1, j \neq i}^{k+2}{i-j} = (i-1)!\times(k+2-i)!\times (-1)^{k+2-i}​$$</p>
+<p>$$\prod_{j=1, j \neq i}^{k+2}n-j = \frac{T}{n-i}$$</p>
+<p>对于$\prod_{j=1, j \neq i}^{k+2}{i-j}$，我们将它分成$i\lt j$和$i\gt j$两部分来考虑，</p>
+<p>$$\prod_{j=1, j \neq i}^{k+2}{i-j} = (i-1)!\times(k+2-i)!\times (-1)^{k+2-i}$$</p>
 <p>带入原式，得：</p>
-<p>$$F(n) = \sum_{i=1}^{k+2}(F(i)\times\frac{T}{n-i}\times\frac{1}{(i-1)!\times(k+2-i)!\times (-1)^{k+2-i}})​$$</p>
+<p>$$F(n) = \sum_{i=1}^{k+2}(F(i)\times\frac{T}{n-i}\times\frac{1}{(i-1)!\times(k+2-i)!\times (-1)^{k+2-i}})$$</p>
 <p>至此，我们可以通过打表的方式，在$O(k)$时间内得到$F(n)$了。</p>
 <h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>当$n \leq k+2$时，该公式时不适用的，因为$T$会为$0$。</p>
 <p>但是我们可以直接通过$F(n) =  \sum _{i=1}^n{i^k} $计算。</p>
@@ -207,7 +203,7 @@
             <div class="level-start">
                 <div class="level-item">
                     <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/拉格朗日插值法/">拉格朗日插值法</a>
+                    <a class="has-link-grey -link" href="/tags/拉格朗日插值法/">拉格朗日插值法</a>, <a class="has-link-grey -link" href="/tags/数论/">数论</a>
                 </div>
             </div>
         </div>
@@ -350,7 +346,7 @@
                     </p>
                     <a href="/categories">
                         <p class="title has-text-weight-normal">
-                            16
+                            9
                         </p>
                     </a>
                 </div>
@@ -362,7 +358,7 @@
                     </p>
                     <a href="/tags">
                         <p class="title has-text-weight-normal">
-                            39
+                            36
                         </p>
                     </a>
                 </div>
@@ -510,12 +506,12 @@
             </h3>
             <ul class="menu-list">
             <li>
-        <a class="level is-marginless" href="/categories/Competition/">
+        <a class="level is-marginless" href="/categories/CCPC/">
             <span class="level-start">
-                <span class="level-item">Competition</span>
+                <span class="level-item">CCPC</span>
             </span>
             <span class="level-end">
-                <span class="level-item tag">4</span>
+                <span class="level-item tag">1</span>
             </span>
         </a></li><li>
         <a class="level is-marginless" href="/categories/ECNU/">
@@ -534,36 +530,12 @@
                 <span class="level-item tag">1</span>
             </span>
         </a></li><li>
-        <a class="level is-marginless" href="/categories/Reading/">
+        <a class="level is-marginless" href="/categories/ICPC/">
             <span class="level-start">
-                <span class="level-item">Reading</span>
+                <span class="level-item">ICPC</span>
             </span>
             <span class="level-end">
-                <span class="level-item tag">1</span>
-            </span>
-        </a></li><li>
-        <a class="level is-marginless" href="/categories/Summary/">
-            <span class="level-start">
-                <span class="level-item">Summary</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">1</span>
-            </span>
-        </a></li><li>
-        <a class="level is-marginless" href="/categories/Technology/">
-            <span class="level-start">
-                <span class="level-item">Technology</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">1</span>
-            </span>
-        </a></li><li>
-        <a class="level is-marginless" href="/categories/几何/">
-            <span class="level-start">
-                <span class="level-item">几何</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">1</span>
+                <span class="level-item tag">3</span>
             </span>
         </a></li><li>
         <a class="level is-marginless" href="/categories/前端/">
@@ -574,65 +546,33 @@
                 <span class="level-item tag">1</span>
             </span>
         </a></li><li>
-        <a class="level is-marginless" href="/categories/动态规划/">
+        <a class="level is-marginless" href="/categories/总结/">
             <span class="level-start">
-                <span class="level-item">动态规划</span>
+                <span class="level-item">总结</span>
             </span>
             <span class="level-end">
                 <span class="level-item tag">2</span>
             </span>
         </a></li><li>
-        <a class="level is-marginless" href="/categories/图论/">
+        <a class="level is-marginless" href="/categories/竞赛/">
             <span class="level-start">
-                <span class="level-item">图论</span>
+                <span class="level-item">竞赛</span>
             </span>
             <span class="level-end">
                 <span class="level-item tag">4</span>
             </span>
         </a></li><li>
-        <a class="level is-marginless" href="/categories/思考/">
+        <a class="level is-marginless" href="/categories/网络/">
             <span class="level-start">
-                <span class="level-item">思考</span>
+                <span class="level-item">网络</span>
             </span>
             <span class="level-end">
                 <span class="level-item tag">1</span>
             </span>
         </a></li><li>
-        <a class="level is-marginless" href="/categories/搜索/">
+        <a class="level is-marginless" href="/categories/阅读/">
             <span class="level-start">
-                <span class="level-item">搜索</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">2</span>
-            </span>
-        </a></li><li>
-        <a class="level is-marginless" href="/categories/数据结构/">
-            <span class="level-start">
-                <span class="level-item">数据结构</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">3</span>
-            </span>
-        </a><ul><li>
-        <a class="level is-marginless" href="/categories/数据结构/数论/">
-            <span class="level-start">
-                <span class="level-item">数论</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">1</span>
-            </span>
-        </a></li></ul></li><li>
-        <a class="level is-marginless" href="/categories/数论/">
-            <span class="level-start">
-                <span class="level-item">数论</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">4</span>
-            </span>
-        </a></li><li>
-        <a class="level is-marginless" href="/categories/网络协议/">
-            <span class="level-start">
-                <span class="level-item">网络协议</span>
+                <span class="level-item">阅读</span>
             </span>
             <span class="level-end">
                 <span class="level-item tag">1</span>
@@ -648,7 +588,7 @@
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/Book/" style="font-size: 10px;">Book</a> <a href="/tags/Concurrency/" style="font-size: 10px;">Concurrency</a> <a href="/tags/Data-structure/" style="font-size: 10px;">Data structure</a> <a href="/tags/Dynamic-programming/" style="font-size: 10px;">Dynamic programming</a> <a href="/tags/ECNU/" style="font-size: 10px;">ECNU</a> <a href="/tags/IDA/" style="font-size: 10px;">IDA*</a> <a href="/tags/LCA/" style="font-size: 10px;">LCA</a> <a href="/tags/SSH/" style="font-size: 10px;">SSH</a> <a href="/tags/Server/" style="font-size: 10px;">Server</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/dfs/" style="font-size: 10px;">dfs</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/html/" style="font-size: 10px;">html</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/term/" style="font-size: 10px;">term</a> <a href="/tags/中国剩余定理/" style="font-size: 10px;">中国剩余定理</a> <a href="/tags/二维偏序/" style="font-size: 10px;">二维偏序</a> <a href="/tags/分块/" style="font-size: 10px;">分块</a> <a href="/tags/切比雪夫距离/" style="font-size: 10px;">切比雪夫距离</a> <a href="/tags/单调队列/" style="font-size: 10px;">单调队列</a> <a href="/tags/启发式搜索/" style="font-size: 10px;">启发式搜索</a> <a href="/tags/基环树/" style="font-size: 10px;">基环树</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/拉格朗日乘数法/" style="font-size: 10px;">拉格朗日乘数法</a> <a href="/tags/拉格朗日插值法/" style="font-size: 10px;">拉格朗日插值法</a> <a href="/tags/数论分块/" style="font-size: 10px;">数论分块</a> <a href="/tags/曼哈顿距离/" style="font-size: 10px;">曼哈顿距离</a> <a href="/tags/树形动规/" style="font-size: 20px;">树形动规</a> <a href="/tags/树状数组/" style="font-size: 10px;">树状数组</a> <a href="/tags/模式设计/" style="font-size: 10px;">模式设计</a> <a href="/tags/欧拉函数/" style="font-size: 10px;">欧拉函数</a> <a href="/tags/欧拉定理/" style="font-size: 10px;">欧拉定理</a> <a href="/tags/水题/" style="font-size: 10px;">水题</a> <a href="/tags/点分治/" style="font-size: 15px;">点分治</a> <a href="/tags/状压DP/" style="font-size: 15px;">状压DP</a> <a href="/tags/瞎搞/" style="font-size: 10px;">瞎搞</a> <a href="/tags/线段树/" style="font-size: 10px;">线段树</a> <a href="/tags/考研/" style="font-size: 15px;">考研</a>
+        <a href="/tags/ECNU/" style="font-size: 10px;">ECNU</a> <a href="/tags/IDA/" style="font-size: 10px;">IDA*</a> <a href="/tags/LCA/" style="font-size: 10px;">LCA</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/dfs/" style="font-size: 10px;">dfs</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/html/" style="font-size: 10px;">html</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/js/" style="font-size: 10px;">js</a> <a href="/tags/中国剩余定理/" style="font-size: 10px;">中国剩余定理</a> <a href="/tags/二维偏序/" style="font-size: 10px;">二维偏序</a> <a href="/tags/几何/" style="font-size: 10px;">几何</a> <a href="/tags/分块/" style="font-size: 10px;">分块</a> <a href="/tags/动态规划/" style="font-size: 15px;">动态规划</a> <a href="/tags/单调队列/" style="font-size: 10px;">单调队列</a> <a href="/tags/启发式搜索/" style="font-size: 10px;">启发式搜索</a> <a href="/tags/图论/" style="font-size: 17.5px;">图论</a> <a href="/tags/基环树/" style="font-size: 10px;">基环树</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/拉格朗日乘数法/" style="font-size: 10px;">拉格朗日乘数法</a> <a href="/tags/拉格朗日插值法/" style="font-size: 10px;">拉格朗日插值法</a> <a href="/tags/搜索/" style="font-size: 12.5px;">搜索</a> <a href="/tags/数据结构/" style="font-size: 17.5px;">数据结构</a> <a href="/tags/数论/" style="font-size: 20px;">数论</a> <a href="/tags/旅游/" style="font-size: 17.5px;">旅游</a> <a href="/tags/树形动规/" style="font-size: 15px;">树形动规</a> <a href="/tags/树状数组/" style="font-size: 10px;">树状数组</a> <a href="/tags/模式设计/" style="font-size: 10px;">模式设计</a> <a href="/tags/欧拉函数/" style="font-size: 10px;">欧拉函数</a> <a href="/tags/欧拉定理/" style="font-size: 10px;">欧拉定理</a> <a href="/tags/水题/" style="font-size: 10px;">水题</a> <a href="/tags/点分治/" style="font-size: 12.5px;">点分治</a> <a href="/tags/状压DP/" style="font-size: 12.5px;">状压DP</a> <a href="/tags/红楼梦/" style="font-size: 10px;">红楼梦</a> <a href="/tags/线段树/" style="font-size: 10px;">线段树</a> <a href="/tags/考研/" style="font-size: 12.5px;">考研</a>
     </div>
 </div>
     
@@ -712,7 +652,7 @@
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2021-01-23T06:33:09.000Z">2021-01-23</time></div>
                     <a href="/2021/01/23/考研总结/" class="title has-link-black-ter is-size-6 has-text-weight-normal">考研总结</a>
                     <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/思考/">思考</a>
+                        <a class="has-link-grey -link" href="/categories/总结/">总结</a>
                     </p>
                 </div>
             </div>
@@ -731,7 +671,7 @@
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-11T04:22:56.000Z">2020-01-11</time></div>
                     <a href="/2020/01/11/winter-holiday-summary/" class="title has-link-black-ter is-size-6 has-text-weight-normal">学期总结</a>
                     <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/Summary/">Summary</a>
+                        <a class="has-link-grey -link" href="/categories/总结/">总结</a>
                     </p>
                 </div>
             </div>
@@ -913,34 +853,6 @@
             <div class="field is-grouped is-grouped-multiline">
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/Book/">
-                        <span class="tag">Book</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/Concurrency/">
-                        <span class="tag">Concurrency</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/Data-structure/">
-                        <span class="tag">Data structure</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/Dynamic-programming/">
-                        <span class="tag">Dynamic programming</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
                     <a class="tags has-addons" href="/tags/ECNU/">
                         <span class="tag">ECNU</span>
                         <span class="tag is-grey">1</span>
@@ -957,20 +869,6 @@
                 <div class="control">
                     <a class="tags has-addons" href="/tags/LCA/">
                         <span class="tag">LCA</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/SSH/">
-                        <span class="tag">SSH</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/Server/">
-                        <span class="tag">Server</span>
                         <span class="tag is-grey">1</span>
                     </a>
                 </div>
@@ -1011,15 +909,8 @@
                 </div>
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/javascript/">
-                        <span class="tag">javascript</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/term/">
-                        <span class="tag">term</span>
+                    <a class="tags has-addons" href="/tags/js/">
+                        <span class="tag">js</span>
                         <span class="tag is-grey">1</span>
                     </a>
                 </div>
@@ -1039,6 +930,13 @@
                 </div>
                 
                 <div class="control">
+                    <a class="tags has-addons" href="/tags/几何/">
+                        <span class="tag">几何</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
                     <a class="tags has-addons" href="/tags/分块/">
                         <span class="tag">分块</span>
                         <span class="tag is-grey">1</span>
@@ -1046,9 +944,9 @@
                 </div>
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/切比雪夫距离/">
-                        <span class="tag">切比雪夫距离</span>
-                        <span class="tag is-grey">1</span>
+                    <a class="tags has-addons" href="/tags/动态规划/">
+                        <span class="tag">动态规划</span>
+                        <span class="tag is-grey">3</span>
                     </a>
                 </div>
                 
@@ -1063,6 +961,13 @@
                     <a class="tags has-addons" href="/tags/启发式搜索/">
                         <span class="tag">启发式搜索</span>
                         <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/图论/">
+                        <span class="tag">图论</span>
+                        <span class="tag is-grey">4</span>
                     </a>
                 </div>
                 
@@ -1095,16 +1000,30 @@
                 </div>
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/数论分块/">
-                        <span class="tag">数论分块</span>
-                        <span class="tag is-grey">1</span>
+                    <a class="tags has-addons" href="/tags/搜索/">
+                        <span class="tag">搜索</span>
+                        <span class="tag is-grey">2</span>
                     </a>
                 </div>
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/曼哈顿距离/">
-                        <span class="tag">曼哈顿距离</span>
-                        <span class="tag is-grey">1</span>
+                    <a class="tags has-addons" href="/tags/数据结构/">
+                        <span class="tag">数据结构</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/数论/">
+                        <span class="tag">数论</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/旅游/">
+                        <span class="tag">旅游</span>
+                        <span class="tag is-grey">4</span>
                     </a>
                 </div>
                 
@@ -1165,8 +1084,8 @@
                 </div>
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/瞎搞/">
-                        <span class="tag">瞎搞</span>
+                    <a class="tags has-addons" href="/tags/红楼梦/">
+                        <span class="tag">红楼梦</span>
                         <span class="tag is-grey">1</span>
                     </a>
                 </div>
@@ -1258,7 +1177,7 @@
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2021-01-23T06:33:09.000Z">2021-01-23</time></div>
                     <a href="/2021/01/23/考研总结/" class="title has-link-black-ter is-size-6 has-text-weight-normal">考研总结</a>
                     <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/思考/">思考</a>
+                        <a class="has-link-grey -link" href="/categories/总结/">总结</a>
                     </p>
                 </div>
             </div>
@@ -1277,7 +1196,7 @@
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-11T04:22:56.000Z">2020-01-11</time></div>
                     <a href="/2020/01/11/winter-holiday-summary/" class="title has-link-black-ter is-size-6 has-text-weight-normal">学期总结</a>
                     <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/Summary/">Summary</a>
+                        <a class="has-link-grey -link" href="/categories/总结/">总结</a>
                     </p>
                 </div>
             </div>
@@ -1459,34 +1378,6 @@
             <div class="field is-grouped is-grouped-multiline">
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/Book/">
-                        <span class="tag">Book</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/Concurrency/">
-                        <span class="tag">Concurrency</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/Data-structure/">
-                        <span class="tag">Data structure</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/Dynamic-programming/">
-                        <span class="tag">Dynamic programming</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
                     <a class="tags has-addons" href="/tags/ECNU/">
                         <span class="tag">ECNU</span>
                         <span class="tag is-grey">1</span>
@@ -1503,20 +1394,6 @@
                 <div class="control">
                     <a class="tags has-addons" href="/tags/LCA/">
                         <span class="tag">LCA</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/SSH/">
-                        <span class="tag">SSH</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/Server/">
-                        <span class="tag">Server</span>
                         <span class="tag is-grey">1</span>
                     </a>
                 </div>
@@ -1557,15 +1434,8 @@
                 </div>
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/javascript/">
-                        <span class="tag">javascript</span>
-                        <span class="tag is-grey">1</span>
-                    </a>
-                </div>
-                
-                <div class="control">
-                    <a class="tags has-addons" href="/tags/term/">
-                        <span class="tag">term</span>
+                    <a class="tags has-addons" href="/tags/js/">
+                        <span class="tag">js</span>
                         <span class="tag is-grey">1</span>
                     </a>
                 </div>
@@ -1585,6 +1455,13 @@
                 </div>
                 
                 <div class="control">
+                    <a class="tags has-addons" href="/tags/几何/">
+                        <span class="tag">几何</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
                     <a class="tags has-addons" href="/tags/分块/">
                         <span class="tag">分块</span>
                         <span class="tag is-grey">1</span>
@@ -1592,9 +1469,9 @@
                 </div>
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/切比雪夫距离/">
-                        <span class="tag">切比雪夫距离</span>
-                        <span class="tag is-grey">1</span>
+                    <a class="tags has-addons" href="/tags/动态规划/">
+                        <span class="tag">动态规划</span>
+                        <span class="tag is-grey">3</span>
                     </a>
                 </div>
                 
@@ -1609,6 +1486,13 @@
                     <a class="tags has-addons" href="/tags/启发式搜索/">
                         <span class="tag">启发式搜索</span>
                         <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/图论/">
+                        <span class="tag">图论</span>
+                        <span class="tag is-grey">4</span>
                     </a>
                 </div>
                 
@@ -1641,16 +1525,30 @@
                 </div>
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/数论分块/">
-                        <span class="tag">数论分块</span>
-                        <span class="tag is-grey">1</span>
+                    <a class="tags has-addons" href="/tags/搜索/">
+                        <span class="tag">搜索</span>
+                        <span class="tag is-grey">2</span>
                     </a>
                 </div>
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/曼哈顿距离/">
-                        <span class="tag">曼哈顿距离</span>
-                        <span class="tag is-grey">1</span>
+                    <a class="tags has-addons" href="/tags/数据结构/">
+                        <span class="tag">数据结构</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/数论/">
+                        <span class="tag">数论</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/旅游/">
+                        <span class="tag">旅游</span>
+                        <span class="tag is-grey">4</span>
                     </a>
                 </div>
                 
@@ -1711,8 +1609,8 @@
                 </div>
                 
                 <div class="control">
-                    <a class="tags has-addons" href="/tags/瞎搞/">
-                        <span class="tag">瞎搞</span>
+                    <a class="tags has-addons" href="/tags/红楼梦/">
+                        <span class="tag">红楼梦</span>
                         <span class="tag is-grey">1</span>
                     </a>
                 </div>
