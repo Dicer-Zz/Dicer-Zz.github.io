@@ -1,14 +1,13 @@
 # Dicer's Blog
 
 [![GitHub Pages](https://img.shields.io/badge/GitHub-Pages-blue)](https://dicer-zz.github.io)
-[![Live Site](https://img.shields.io/badge/Live-blog.dicer.fun-brightgreen)](https://blog.dicer.fun)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
 
 > Some blogs about computer science and my life.
 
 ## About
 
-This is the source repository for [Dicer's Blog](https://blog.dicer.fun), a personal technical blog by **Zhicheng Wang** (alias: Dicer), a graduate student at [AntNLP@ECNU](https://github.com/AntNLP), East China Normal University.
+This is the source repository for **Dicer's Blog**, a personal technical blog by **Zhicheng Wang** (alias: Dicer), a graduate student at [AntNLP@ECNU](https://github.com/AntNLP), East China Normal University.
 
 The blog covers topics including:
 
@@ -62,9 +61,9 @@ The blog is built as a **static site** and deployed via GitHub Pages. Key techno
 
 ## Notable Articles
 
-- [素性测试：A Survey](https://blog.dicer.fun/2021/11/27/Primailty-Test-A-survey/) — A comprehensive survey on primality testing algorithms
-- [如何在M系芯片的Macbook上玩原神](https://blog.dicer.fun/2022/07/28/Play-Genshim-Impact-on-Apple-Silicon-Chip/) — Guide to running Genshin Impact on Apple Silicon MacBooks
-- [Utilize Apple Silicon's GPU by Pytorch nightly](https://blog.dicer.fun/2022/07/27/Utilize-Apple-Silicon-s-GPU-by-Pytorch-nightly/) — Using PyTorch with MPS backend
+- **素性测试：A Survey** — A comprehensive survey on primality testing algorithms
+- **如何在M系芯片的Macbook上玩原神** — Guide to running Genshin Impact on Apple Silicon MacBooks
+- **Utilize Apple Silicon's GPU by Pytorch nightly** — Using PyTorch with MPS backend
 - LeetCode weekly & biweekly contest writeups (2021–2022)
 
 ## License
@@ -75,4 +74,3 @@ All blog content is licensed under [Creative Commons Attribution-NonCommercial 4
 
 - **Email**: dicer@gmail.com
 - **GitHub**: [Dicer-Zz](https://github.com/Dicer-Zz)
-- **Blog**: https://blog.dicer.fun
