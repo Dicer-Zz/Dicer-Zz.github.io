@@ -1,10 +1,10 @@
 ---
-title: 洛谷 P1131
+title: 洛谷 P1131 时态同步
 published: 2019-09-18
 description: ""
 image: "/gallery/thumbnails/hei3.jpg"
 tags: ["搜索"]
-category: ""
+category: "搜索"
 draft: false
 ---
 

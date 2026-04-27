@@ -4,7 +4,7 @@ published: 2019-09-05
 description: ""
 image: "/gallery/thumbnails/johannes-roots-in-the-treetops-by-jkroots-d9t9p4y.jpg"
 tags: ["几何"]
-category: ""
+category: "数学"
 draft: false
 ---
 

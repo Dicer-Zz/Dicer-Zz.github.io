@@ -3,8 +3,8 @@ title: 拉格朗日乘数法
 published: 2019-07-19
 description: ""
 image: "/gallery/others/LagrangeMultipliers2D.svg"
-tags: ["拉格朗日乘数法", "数论"]
-category: ""
+tags: ["拉格朗日乘数法", "Math"]
+category: "数论"
 draft: false
 ---
 

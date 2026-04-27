@@ -1,10 +1,10 @@
 ---
-title: Codeforces 568G1
+title: Codeforces 568G1 First-Come-First-Served
 published: 2019-06-24
 description: ""
 image: "/gallery/thumbnails/0_Kaero, Anton Fadeev_01.jpg"
 tags: ["动态规划"]
-category: ""
+category: "动态规划"
 draft: false
 ---
 

@@ -4,7 +4,7 @@ published: 2019-06-16
 description: ""
 image: "/gallery/thumbnails/2_Sea Landscapes, Anton Fadeev_03.jpg"
 tags: ["数据结构", "线段树"]
-category: ""
+category: "竞赛"
 draft: false
 ---
 

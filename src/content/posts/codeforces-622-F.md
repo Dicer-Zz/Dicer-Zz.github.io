@@ -1,10 +1,10 @@
 ---
-title: Codeforces 622F
+title: Codeforces 622F The Sum of the k-th Powers
 published: 2019-06-18
 description: ""
 image: "/gallery/thumbnails/Lagrange_polynomial.svg"
 tags: ["拉格朗日插值法", "数论"]
-category: ""
+category: "数论"
 draft: false
 ---
 

@@ -4,7 +4,7 @@ published: 2019-08-06
 description: ""
 image: "/gallery/thumbnails/0_Obsidian woods_2, Anton Fadeev_01.jpg"
 tags: ["LCA", "图论"]
-category: ""
+category: "图论"
 draft: false
 ---
 

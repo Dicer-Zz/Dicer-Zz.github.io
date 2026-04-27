@@ -1,10 +1,10 @@
 ---
-title: Codeforces 1207F
+title: Codeforces 1207F Remainder Problem
 published: 2019-08-29
 description: ""
 image: "/gallery/thumbnails/girl-pick.jpg"
 tags: ["数据结构"]
-category: ""
+category: "数据结构"
 draft: false
 ---
 

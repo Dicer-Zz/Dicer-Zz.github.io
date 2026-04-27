@@ -4,7 +4,7 @@ published: 2021-03-10
 description: ""
 image: "/gallery/thumbnails/Mariadb.png"
 tags: ["MySQL", "Python"]
-category: ""
+category: "工具"
 draft: false
 ---
 
