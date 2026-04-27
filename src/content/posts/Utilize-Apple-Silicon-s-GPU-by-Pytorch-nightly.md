@@ -2,6 +2,7 @@
 title: "Utilize Apple Silicon's GPU by PyTorch Nightly"
 published: 2022-07-27
 description: "Pytorch nightly 已经支持了 Apple Silicon 的 GPU，可以通过以下方式来使用它： 首先，你的 Macbook 应该是使用 Apple Silicon (M系列芯片) 新款笔记本，而不是使用 Intel 的笔记本。另外，需要 Mac OS 是 12.3 或更高版本。"
+image: "/gallery/cover/pytorch-apple-silicon.png"
 tags: ["Apple Silicon"]
 category: "Tech"
 draft: false

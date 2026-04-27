@@ -2,6 +2,7 @@
 title: LeetCode Weekly Contest 321
 published: 2022-11-28
 description: "Problem 1: 普通做法：遍历每个数，判断左边和右边的和是否相等，时间复杂度$O(n^2)$，用等比数列求和公式可以将复杂度降到$O(n)$。从 1 到 n 枚举 x 即可。"
+image: "/gallery/cover/leetcode-weekly.png"
 tags: ["LeetCode", "Weekly Contest"]
 category: "LeetCode"
 draft: false

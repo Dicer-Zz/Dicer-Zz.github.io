@@ -2,6 +2,7 @@
 title: LeetCode 2081. Sum of k-Mirror Numbers
 published: 2021-11-25
 description: "昨天闲来无事做了一个LeetCode的周赛，看到大佬不到二十分钟就AK了，真是Orz 本篇记录一下第四题的答案。 比赛链接"
+image: "/gallery/cover/leetcode-hard.png"
 tags: ["LeetCode-Hard"]
 category: "LeetCode"
 draft: false

@@ -2,6 +2,7 @@
 title: Claude Code 黑科技手册：10 个大多数人不知道的隐藏玩法
 published: 2026-04-27
 description: 你以为 Claude Code 只是个聊天框？自定义命令、Hooks 自动化、多 Agent 并行、手机遥控、AI 审查 AI……这些骚操作才是它真正的杀手锏。
+image: "/gallery/cover/claude-code.png"
 tags: ["Claude Code", "AI", "开发工具", "效率"]
 category: 工具
 draft: false
