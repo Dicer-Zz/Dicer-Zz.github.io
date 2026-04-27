@@ -4,7 +4,7 @@ published: 2021-11-27
 description: "素数素数（Prime number），又称质数，指在大于1的自然数中，除了1和该数自身之外，无法被其他自然数整除的数。大于1的自然数，若不是素质，则为合数。前十个素数分别是：2、3、5、7、11、13、17、19、23、29。 RSA加密是现在网络安全系统中非常常用的一种非对称加密方法，这种方法的安全性依赖于大数质因子分解非常困难。 任何一个大于1的自然数都可以表示成素数乘积的形式，并且如果将素数"
 image: "/gallery/cover/primality-test.png"
 tags: ["数论"]
-category: "Mathematics"
+category: "数学"
 draft: false
 ---
 

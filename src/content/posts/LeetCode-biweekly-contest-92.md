@@ -4,7 +4,7 @@ published: 2022-11-29
 description: "Problem 1: 找规律可以发现，n为奇数时，由于不对称，无法进行过圆心的切分，所以只能切n刀；n为偶数时，可以通过切n/2刀。特殊的是n=1时不需要切分。"
 image: "/gallery/cover/leetcode-biweekly.png"
 tags: ["LeetCode", "Biweekly Contest"]
-category: "LeetCode"
+category: "算法题解"
 draft: false
 ---
 

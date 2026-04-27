@@ -4,7 +4,7 @@ published: 2021-09-30
 description: "有一些知乎问题下的回答中包含了很多精美的图片，比如一些壁纸、风景图。 如果想保存的话，手动一张一张的保存有太慢了。 我自己用Python爬虫实现了一个并发的知乎回答图片爬虫，只需要将知乎问题ID输入即可，还能支持多问题同时爬取。速度非常快。只需要python环境和一些很基础的网络工具包就可以了，快来试试吧！ 项目地址：ZhihuPicCrawler"
 image: "/gallery/cover/zhihu-spider.png"
 tags: ["爬虫", "知乎"]
-category: "Projects"
+category: "项目"
 draft: false
 ---
 

@@ -4,7 +4,7 @@ published: 2021-05-18
 description: ""
 image: "/gallery/cover/hlm.png"
 tags: ["word2vec", "红楼梦"]
-category: "NLP"
+category: "机器学习"
 draft: false
 ---
 

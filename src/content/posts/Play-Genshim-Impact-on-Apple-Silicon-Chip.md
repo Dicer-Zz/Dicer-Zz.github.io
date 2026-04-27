@@ -4,7 +4,7 @@ published: 2022-07-28
 description: "在用上M系芯片之后苹果开始在自家的Mac系列电脑上使用新的M系芯片（也就是所谓的Apple Silicon Chip）之后，iPhone、iPad、Mac的芯片就被统一成了ARM架构，使用同一套RISC指令集。这意味着，我们甚至可能在iPhone运行MacOs。当然，我觉得刀法精准的厨子不会这么做。"
 image: "/gallery/cover/genshin-macbook.png"
 tags: ["Genshin Impact", "PlayCover"]
-category: "Gaming"
+category: "游戏"
 draft: false
 ---
 

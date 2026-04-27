@@ -4,7 +4,7 @@ published: 2021-05-05
 description: ""
 image: "/gallery/cover/sklearn.png"
 tags: ["sklearn"]
-category: "NLP"
+category: "机器学习"
 draft: false
 ---
 

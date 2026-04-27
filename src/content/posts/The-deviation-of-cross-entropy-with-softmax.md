@@ -4,7 +4,7 @@ published: 2021-06-28
 description: ""
 image: "/gallery/cover/softmax.png"
 tags: ["Machine Learning", "Math"]
-category: "NLP"
+category: "机器学习"
 draft: false
 ---
 

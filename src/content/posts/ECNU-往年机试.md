@@ -4,7 +4,7 @@ published: 2021-03-08
 description: ""
 image: "/gallery/thumbnails/kite.png"
 tags: ["考研"]
-category: "ECNU"
+category: "考试"
 draft: false
 ---
 
