@@ -1,362 +1,214 @@
 ---
 title: "Attention 架构演进：从 MHA 到 MLA，一场关于 KV Cache 的战争"
 published: 2026-04-29
-description: "2017 年 Vaswani 提出 Multi-Head Attention，开启了 Transformer 时代。九年间，MQA、GQA、MLA、NSA 相继登场；2026 年，DeepSeek V4 的 Engram Memory、MiMo V2 的 Hybrid SWA+GA、GLM-5.1 的 DSA 将架构竞争推向白热化。本文从数学公式出发，梳理这场演进的完整脉络。"
+description: "标准 Attention 有两个可优化的自由度：KV 投影的特征维度，和每个 query 关注的序列范围。九年间，MQA、GQA、MLA 沿第一条轴将 KV Cache 压缩了 57 倍；SWA、NSA、DSA 沿第二条轴将注意力计算从 O(n) 降到 O(k)。2026 年，DeepSeek V4、MiMo V2、GLM-5.1、Kimi K2.6 在两条轴上做出了截然不同的选择。本文从数学公式出发，沿这两条轴线梳理完整脉络。"
 image: "/gallery/cover/attention-evolution.png"
 tags: ["LLM", "Attention", "Transformer", "AI"]
 category: "技术"
 draft: false
 ---
 
-## 引言：一切始于那个平方
+## 引言：一个公式，两个自由度
 
-2017 年，Vaswani 等人在 *"Attention Is All You Need"* 中提出了 Transformer 架构，其核心是 **Multi-Head Attention (MHA)**。这个机制简洁而强大——它让序列中的每个 token 都能「看到」所有其他 token，通过学习 Query、Key、Value 三组投影来计算注意力权重。
+Transformer 的核心是一行公式：
 
-但 MHA 有一个与生俱来的代价：**KV Cache**。
+$$\text{Attn}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \text{softmax}\!\left(\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d_h}}\right) \mathbf{V}$$
 
-在自回归推理中，每生成一个新 token，模型需要缓存所有已生成 token 的 Key 和 Value 向量。对于一个 32 层、32 头、head 维度 128 的模型，每个 token 的 KV Cache 占用 512 KB（FP16）。一个 4096 token 的上下文就需要 2 GB 的纯 KV Cache——这还只是一条请求。当你要同时服务成千上万的用户时，KV Cache 就成了 GPU 显存中最大的「房间里的大象」。
+其中 $\mathbf{Q}, \mathbf{K}, \mathbf{V}$ 分别由输入 $\mathbf{X}$ 经线性投影得到。在自回归推理时，每生成一个 token，模型需要缓存所有已生成 token 的 $\mathbf{K}$ 和 $\mathbf{V}$——这就是 **KV Cache**。对于一个 32 层、32 头、head 维度 128 的模型，一个 4096 token 的上下文需要约 **2 GB** 的 KV Cache（FP16），而这只是一条请求。
 
-过去七年，Attention 架构的演进本质上就是一场围绕 KV Cache 的战争：**如何在保持注意力质量的前提下，尽可能压缩 KV Cache 的大小？** 从 MQA 的「共享一切」到 GQA 的「分组折中」，再到 MLA 的「低秩压缩」，每一步都是对这个问题的不同回答。
+过去九年，所有 Attention 架构创新都在优化这个公式的两个正交自由度：
 
-## 一、MHA：万物起源
+**自由度一：投影维度**——$\mathbf{K}$、$\mathbf{V}$ 的特征向量需要多宽？MHA 为每个头独立存储完整的 K、V；MQA 让所有头共享一份；GQA 分组共享；MLA 通过低秩投影将 KV 压到一个紧凑的潜在空间。这条线压缩的是 KV Cache 中**每个 token 占多少字节**。
 
-### 1.1 数学公式
+**自由度二：注意力模式**——每个 query 需要关注多少个 token？标准 Attention 让每个 query 看完整序列（$n$ 个 token）；SWA 只看最近 $W$ 个；NSA/DSA 动态选出 top-$k$ 个最相关的。这条线压缩的是 **KV Cache 中有多少 token 需要被读取**，以及注意力计算本身的 FLOPs。
 
-给定输入隐藏状态 $\mathbf{X} \in \mathbb{R}^{n \times d_{\text{model}}}$（$n$ 为序列长度），MHA 为每个头 $i$（共 $n_h$ 个头）独立计算 Q、K、V：
+两条轴完全正交——一个压缩"宽度"，一个压缩"长度"——可以独立施加，也可以同时叠加。接下来沿两条轴线分别展开。
 
-$$\mathbf{Q}_i = \mathbf{X} \mathbf{W}_i^Q, \quad \mathbf{K}_i = \mathbf{X} \mathbf{W}_i^K, \quad \mathbf{V}_i = \mathbf{X} \mathbf{W}_i^V$$
+## Part I &ensp; 改投影：KV 的特征维度能压多低？
 
-其中 $\mathbf{W}_i^Q, \mathbf{W}_i^K \in \mathbb{R}^{d_{\text{model}} \times d_h}$，$d_h = d_{\text{model}} / n_h$ 是每个头的维度。
+### 1. MHA：基线
 
-每个头的注意力计算为：
+给定输入 $\mathbf{X} \in \mathbb{R}^{n \times d_{\text{model}}}$，MHA 为 $n_h$ 个头各自独立投影 Q、K、V：
 
-$$\text{head}_i = \text{softmax}\left(\frac{\mathbf{Q}_i \mathbf{K}_i^\top}{\sqrt{d_h}}\right) \mathbf{V}_i$$
+$$\mathbf{Q}_i = \mathbf{X}\mathbf{W}_i^Q,\quad \mathbf{K}_i = \mathbf{X}\mathbf{W}_i^K,\quad \mathbf{V}_i = \mathbf{X}\mathbf{W}_i^V$$
 
-最终拼接所有头的输出，经过一个输出投影：
+$$\text{head}_i = \text{softmax}\!\left(\frac{\mathbf{Q}_i \mathbf{K}_i^\top}{\sqrt{d_h}}\right) \mathbf{V}_i,\qquad \text{MHA}(\mathbf{X}) = \text{Concat}(\text{head}_1, \ldots, \text{head}_{n_h})\,\mathbf{W}^O$$
 
-$$\text{MHA}(\mathbf{X}) = \text{Concat}(\text{head}_1, \ldots, \text{head}_{n_h}) \mathbf{W}^O$$
+其中 $d_h = d_{\text{model}} / n_h$。每层参数量 $4\,d_{\text{model}}^2$（Q / K / V / 输出投影各 $d_{\text{model}}^2$）。
 
-### 1.2 参数量与 KV Cache
+**KV Cache**：每 token 每层缓存 $2 \times n_h \times d_h$ 个元素。以 GPT-3（$d_{\text{model}}=12288$，$n_h=96$，$d_h=128$，96 层）为例，每 token 合计约 **4.5 MB**（FP16），2048 token 上下文对应 **9 GB**。
 
-**参数量**（每层）：Q、K、V 各 $d_{\text{model}}^2$ 个参数，加上输出投影 $d_{\text{model}}^2$，共 $4 d_{\text{model}}^2$。
+FLOPs 为 $O(n^2 d_{\text{model}})$（注意力矩阵）加 $O(n\,d_{\text{model}}^2)$（投影）。上下文超过 $d_{\text{model}}$ 后（GPT-3 约 12K token）二次项开始主导。2017–2022 年间 GPT 系列、BERT、PaLM 初版均使用标准 MHA，当时序列长度普遍在 2K–4K，KV Cache 尚未成为工程痛点。
 
-**KV Cache**（每 token 每层）：需要缓存 $n_h$ 个头的 K 和 V，共 $2 \times n_h \times d_h$ 个元素。
+### 2. MQA：极端共享
 
-以 GPT-3（$d_{\text{model}}=12288$，$n_h=96$，$d_h=128$）为例：每 token 每层缓存 $2 \times 96 \times 128 = 24576$ 个元素，96 层合计约 **4.5 MB/token**（FP16）。一个 2048 token 的上下文就要 **9 GB** 的 KV Cache。
+2019 年，Shazeer 提出 **Multi-Query Attention**：**所有头共享同一组 K、V**。
 
-### 1.3 计算特性
+$$\mathbf{Q}_i = \mathbf{X}\mathbf{W}_i^Q \;\;(\text{每头独立}),\qquad \mathbf{K} = \mathbf{X}\mathbf{W}^K,\;\; \mathbf{V} = \mathbf{X}\mathbf{W}^V \;\;(\text{全头共享})$$
 
-MHA 的 FLOPs 为 $O(n^2 d_{\text{model}})$（注意力矩阵）加 $O(n \cdot d_{\text{model}}^2)$（线性投影）。当 $n < d_{\text{model}}$ 时投影主导，$n > d_{\text{model}}$ 时二次项主导。以 GPT-3（$d_{\text{model}} = 12288$）为例，上下文超过 12K token 后二次复杂度开始成为系统瓶颈。
+KV Cache 从 $2 n_h d_h$ 降到 $2 d_h$，**压缩 $n_h$ 倍**（32 头即 32x）。代价是质量下降——从信息论角度看，MQA 迫使所有头通过同一个 KV 瓶颈获取信息：
 
-2017–2022 年间 GPT 系列、BERT、PaLM（初版）等模型均采用标准 MHA。当时序列长度普遍在 2K–4K，KV Cache 尚未构成工程级痛点——真正的压力要到上下文窗口扩展至 32K–128K 量级时才全面爆发。
+$$I(\text{head}_i;\,\mathbf{X}) \leq I(\mathbf{K},\mathbf{V};\,\mathbf{X}) \quad \forall\, i$$
 
-## 二、MQA：一个极端的想法
+当不同头需要的上下文模式差异较大时，单一 KV 的表达力不够。PaLM（540B）和 Falcon-180B 验证了 MQA 的吞吐优势，但在多跳推理任务上性能衰减明显。
 
-### 2.1 核心思想
+### 3. GQA：分组折中
 
-2019 年，Google 的 Noam Shazeer 在 *"Fast Transformer Decoding: One Write-Head is All You Need"* 中提出了一个激进的想法：**所有头共享同一组 K 和 V**。
+2023 年，Ainslie 等人提出 **Grouped-Query Attention**：将 $n_h$ 个 Q 头分成 $n_g$ 组，每组共享一套 K、V。
 
-直觉上这似乎不可思议——如果所有头看到的 Key 和 Value 完全一样，注意力的「多头多视角」优势不就丧失了吗？但 Shazeer 发现，不同头之间的 K、V 本身就高度相关，共享它们造成的质量损失远小于预期。
+$$\mathbf{Q}_i = \mathbf{X}\mathbf{W}_i^Q,\quad \mathbf{K}_j = \mathbf{X}\mathbf{W}_j^K,\;\; \mathbf{V}_j = \mathbf{X}\mathbf{W}_j^V \quad (j=1,\ldots,n_g)$$
 
-### 2.2 数学公式
+$$\text{head}_i = \text{softmax}\!\left(\frac{\mathbf{Q}_i \mathbf{K}_{g(i)}^\top}{\sqrt{d_h}}\right) \mathbf{V}_{g(i)},\quad g(i) = \lceil i \cdot n_g / n_h \rceil$$
 
-$$\mathbf{Q}_i = \mathbf{X} \mathbf{W}_i^Q \quad (\text{每个头独立})$$
+$n_g = n_h$ 退化为 MHA，$n_g = 1$ 退化为 MQA。KV Cache 为 $2 n_g d_h$，压缩 $n_h / n_g$ 倍。典型 $n_h=32, n_g=8$ 压缩 4 倍，质量几乎无损。
 
-$$\mathbf{K} = \mathbf{X} \mathbf{W}^K, \quad \mathbf{V} = \mathbf{X} \mathbf{W}^V \quad (\textbf{所有头共享})$$
+消融实验表明 $n_g = n_h/4 \sim n_h/8$ 是最优区间，且从 7B 到 405B（LLaMA 3.1）都稳健——最优分组数似乎更多取决于 $d_h$ 而非模型规模。GQA 论文还证明了现有 MHA checkpoint 可通过均值池化 K/V 投影 + 约 5% 继续训练转为 GQA，无需从头训练。自 LLaMA 2 起，Meta、Mistral AI、阿里巴巴 Qwen、Google Gemma 全线采用 GQA，使其成为 2023–2024 年的事实标准。
 
-$$\text{head}_i = \text{softmax}\left(\frac{\mathbf{Q}_i \mathbf{K}^\top}{\sqrt{d_h}}\right) \mathbf{V}$$
+### 4. MLA：低秩压缩
 
-唯一的区别在于 K 和 V 的投影矩阵只有一份，而不是 $n_h$ 份。
+2024 年，DeepSeek-V2 提出 **Multi-head Latent Attention**。不再减少 KV 头数，而是**将所有头的 KV 联合投影到一个低维潜在空间**。MQA/GQA 问"哪些头可以共享 KV？"，MLA 问"KV 的本征维度是多少？"
 
-### 2.3 KV Cache 压缩
+**KV 联合压缩**。将隐藏状态 $\mathbf{h}_t$ 投影到 $d_c$ 维潜在向量，推理时只缓存它：
 
-每 token 每层的 KV Cache 从 $2 \times n_h \times d_h$ 降到 $2 \times d_h$，**压缩了 $n_h$ 倍**。对于 32 头模型，这是 32 倍的压缩。
+$$\mathbf{c}_t^{KV} = \mathbf{W}^{DKV}\mathbf{h}_t,\quad \mathbf{W}^{DKV} \in \mathbb{R}^{d_c \times d_{\text{model}}},\quad d_c \ll n_h d_h$$
 
-但代价是：质量确实会下降。单一的 K、V 必须编码足以满足所有 Query 头需求的信息，这是一个过于苛刻的约束。在需要多样化注意力模式的任务上，MQA 的劣势尤为明显。
+需要时通过上投影恢复：$\mathbf{K}_C = \mathbf{W}^{UK}\mathbf{c}_t^{KV}$，$\mathbf{V} = \mathbf{W}^{UV}\mathbf{c}_t^{KV}$。
 
-### 2.4 信息瓶颈视角
+**解耦 RoPE**。RoPE 逐元素应用，与低秩压缩不兼容——在压缩表示上施加 RoPE 会破坏推理时的矩阵吸收技巧。DeepSeek 将位置信息解耦为独立的低维位置键：
 
-从信息论角度看，MQA 迫使所有 Query 头通过同一个 KV 瓶颈获取信息。若将每个头的注意力分布视为对上下文的一个"视角"，MQA 要求所有视角共享同一个信息检索接口：
+$$\mathbf{K}_t = [\mathbf{K}_{C,t} \;;\; \mathbf{K}_{R,t}],\quad \mathbf{K}_{R,t} = \text{RoPE}(\mathbf{W}^{KR}\mathbf{h}_t),\quad \dim(\mathbf{K}_R) = d_{\text{rope}}$$
 
-$$I(\text{head}_i;\, \mathbf{X}) \leq I(\mathbf{K}, \mathbf{V};\, \mathbf{X}) \quad \forall\, i$$
+注意力分数因此分解为内容相关性与位置相关性两个独立分量：
 
-当不同头需要的上下文模式差异较大（如一个头关注语法结构、另一个关注语义关联）时，单一 KV 的表达力不足以同时满足所有需求。PaLM (540B) 和 Falcon-180B 的工程实践验证了 MQA 的推理吞吐优势，但也暴露了这种瓶颈——在需要精细多跳推理的任务上，性能衰减尤为明显。
+$$\mathbf{Q}_t \cdot \mathbf{K}_s^\top = \underbrace{\mathbf{Q}_{C,t} \cdot \mathbf{K}_{C,s}^\top}_{\text{内容}} + \underbrace{\mathbf{Q}_{R,t} \cdot \mathbf{K}_{R,s}^\top}_{\text{位置}}$$
 
-## 三、GQA：优雅的折中
+**矩阵吸收**。内容注意力展开后：
 
-### 3.1 核心思想
+$$\mathbf{Q}_C \cdot \mathbf{K}_C^\top = \mathbf{c}^Q \cdot \underbrace{(\mathbf{W}^{UQ})^\top \mathbf{W}^{UK}}_{\text{可预计算}} \cdot \mathbf{c}^{KV}$$
 
-2023 年，Google Research 的 Ainslie 等人提出了 **Grouped-Query Attention (GQA)**。核心思想极为简洁：将 $n_h$ 个 Query 头分成 $n_g$ 个组，每组内共享一套 K、V。
+推理时直接用低维潜在向量计算，无需恢复完整 K 矩阵。V 的上投影同理被吸收到输出投影中。
 
-$$\text{GQA} = \begin{cases} \text{MHA} & \text{当 } n_g = n_h \\ \text{MQA} & \text{当 } n_g = 1 \\ \text{折中} & \text{当 } 1 < n_g < n_h \end{cases}$$
+**压缩效果**。以 DeepSeek-V2（$n_h=128$，$d_h=128$，$d_c=512$，$d_{\text{rope}}=64$）为例：
 
-GQA 不是一个新想法，而是一个**光谱上的正确位置**。它用一个参数 $n_g$ 连续地在 MHA 和 MQA 之间插值。
-
-### 3.2 数学公式
-
-设 $n_h$ 个 Query 头被分成 $n_g$ 组，每组 $n_h / n_g$ 个头。对于第 $i$ 个 Query 头，其所属的组为 $g(i) = \lceil i \cdot n_g / n_h \rceil$：
-
-$$\mathbf{Q}_i = \mathbf{X} \mathbf{W}_i^Q \quad (\text{每个头独立})$$
-
-$$\mathbf{K}_j = \mathbf{X} \mathbf{W}_j^K, \quad \mathbf{V}_j = \mathbf{X} \mathbf{W}_j^V \quad (j = 1, \ldots, n_g)$$
-
-$$\text{head}_i = \text{softmax}\left(\frac{\mathbf{Q}_i \mathbf{K}_{g(i)}^\top}{\sqrt{d_h}}\right) \mathbf{V}_{g(i)}$$
-
-### 3.3 KV Cache 压缩
-
-每 token 每层的 KV Cache 为 $2 \times n_g \times d_h$，相比 MHA 压缩了 $n_h / n_g$ 倍。
-
-典型配置 $n_h = 32, n_g = 8$（LLaMA 2/3、Mistral）：压缩 4 倍。这个比例在实践中被证明是质量和效率的最佳平衡点——质量几乎无损，KV Cache 减少到 1/4。
-
-### 3.4 从 MHA 到 GQA 的「上训练」
-
-GQA 论文的另一个关键贡献是：**现有的 MHA 模型可以转换为 GQA 模型**。方法是将同一组内的 K、V 投影矩阵取均值池化，然后只需约 5% 的原始预训练量进行继续训练。这避免了从头训练的巨大开销。
-
-### 3.5 最优分组数的经验规律
-
-一个自然的问题是：$n_g$ 应该取多少？GQA 论文的消融实验表明，$n_g = n_h / 4$ 到 $n_g = n_h / 8$ 是大多数配置下的最优区间——每 4–8 个 Query 头共享一组 KV 即可维持质量。
-
-以 LLaMA 2/3（$n_h=32, n_g=8$）为例，每组 4 个头共享 KV。Mistral/Mixtral 同样选择 $n_g=8$。有趣的是，从 7B 到 405B（LLaMA 3.1），$n_g=8$ 都表现稳健——这暗示最优分组数可能更多取决于头维度 $d_h$ 而非模型总规模。GQA 自 2023 年起迅速成为开源模型的事实标准（Meta LLaMA 系列、Mistral AI、阿里巴巴 Qwen 系列、Google Gemma 系列均采用），这种收敛本身就说明了 GQA 在质量-效率 Pareto 前沿上的位置是稳健的。
-
-## 四、MLA：降维打击
-
-### 4.1 一个不同的思路
-
-2024 年 5 月，DeepSeek 在 V2 技术报告中提出了 **Multi-head Latent Attention (MLA)**。与 MQA/GQA 通过减少 KV 头数来压缩 Cache 不同，MLA 走了一条全新的路：**通过低秩联合压缩，将 KV 投影到一个低维的潜在空间。**
-
-这是一个思维范式的转换。MQA/GQA 是在问「哪些头可以共享 KV？」，而 MLA 是在问「KV 中真正有用的信息有多少维？」
-
-### 4.2 数学公式
-
-**第一步：KV 联合压缩**
-
-对于位置 $t$ 的隐藏状态 $\mathbf{h}_t$，将 KV 投影到一个 $d_c$ 维的潜在向量：
-
-$$\mathbf{c}_t^{KV} = \mathbf{W}^{DKV} \mathbf{h}_t, \quad \mathbf{W}^{DKV} \in \mathbb{R}^{d_c \times d_{\text{model}}}$$
-
-其中 $d_c \ll n_h \times d_h$。**推理时只需缓存这个 $d_c$ 维的潜在向量**，而不是完整的 K 和 V。
-
-需要时，通过上投影矩阵恢复出完整的 K 和 V：
-
-$$\mathbf{K}_C = \mathbf{W}^{UK} \mathbf{c}_t^{KV}, \quad \mathbf{V} = \mathbf{W}^{UV} \mathbf{c}_t^{KV}$$
-
-**第二步：解耦的 RoPE**
-
-RoPE（旋转位置编码）是逐元素应用的，与低秩压缩不兼容——如果直接在压缩后的表示上应用 RoPE，推理时的矩阵吸收技巧就无法使用。DeepSeek 的解决方案是**将位置信息解耦**出来：
-
-$$\mathbf{K}_t = [\mathbf{K}_{C,t} \;;\; \mathbf{K}_{R,t}]$$
-
-其中 $\mathbf{K}_{C,t}$ 是从潜在向量恢复的内容键（不含位置编码），$\mathbf{K}_{R,t} = \text{RoPE}(\mathbf{W}^{KR} \mathbf{h}_t)$ 是独立的位置键，维度仅为 $d_{\text{rope}}$（例如 64）。
-
-**第三步：Query 同样做低秩压缩**
-
-$$\mathbf{c}_t^Q = \mathbf{W}^{DQ} \mathbf{h}_t, \quad \mathbf{Q}_{C,t} = \mathbf{W}^{UQ} \mathbf{c}_t^Q$$
-
-$$\mathbf{Q}_{R,t} = \text{RoPE}(\mathbf{W}^{QR} \mathbf{c}_t^Q), \quad \mathbf{Q}_t = [\mathbf{Q}_{C,t} \;;\; \mathbf{Q}_{R,t}]$$
-
-**第四步：注意力分数的分解**
-
-$$\mathbf{Q}_t \cdot \mathbf{K}_s^\top = \mathbf{Q}_{C,t} \cdot \mathbf{K}_{C,s}^\top + \mathbf{Q}_{R,t} \cdot \mathbf{K}_{R,s}^\top$$
-
-注意力分数自然分解为**内容相关性**和**位置相关性**两个独立的分量——这不仅数学上优雅，也有直觉上的合理性。
-
-### 4.3 推理时的矩阵吸收技巧
-
-MLA 的另一个精妙之处在于推理优化。内容注意力的计算可以展开为：
-
-$$\mathbf{Q}_{C} \cdot \mathbf{K}_{C}^\top = (\mathbf{W}^{UQ} \mathbf{c}^Q) \cdot (\mathbf{W}^{UK} \mathbf{c}^{KV})^\top = \mathbf{c}^Q \cdot (\mathbf{W}^{UQ})^\top \mathbf{W}^{UK} \cdot \mathbf{c}^{KV}$$
-
-矩阵 $(\mathbf{W}^{UQ})^\top \mathbf{W}^{UK}$ 可以预计算并融合，这意味着推理时**直接用低维潜在向量计算注意力**，无需恢复出完整的 K 矩阵。V 的上投影同理可以被吸收到输出投影中。
-
-### 4.4 KV Cache 的惊人压缩
-
-以 DeepSeek-V2 为例（$n_h = 128$，$d_h = 128$，$d_c = 512$，$d_{\text{rope}} = 64$）：
-
-| 方法 | 每 token 每层缓存元素数 | 相对 MHA 压缩比 |
-|------|----------------------|---------------|
+| 方法 | 每 token 每层缓存元素数 | 相对 MHA 压缩 |
+|------|----------------------|-------------|
 | MHA | $2 \times 128 \times 128 = 32768$ | 1x |
-| GQA (8 组) | $2 \times 8 \times 128 = 2048$ | 16x |
+| GQA-8 | $2 \times 8 \times 128 = 2048$ | 16x |
 | MQA | $2 \times 128 = 256$ | 128x |
 | **MLA** | $512 + 64 = 576$ | **57x** |
 
-MLA 的压缩率介于 GQA 和 MQA 之间，但关键区别是：**MLA 的质量不仅不降，甚至优于同等配置的 MHA**。因为低秩压缩相当于一个正则化器，迫使模型在潜在空间中学习更紧凑、更有效的表示。
+压缩率介于 GQA 与 MQA 之间，但质量不降反升——低秩压缩充当正则化器，迫使模型学习更紧凑的表示。
 
-### 4.5 MLA 的扩散与变体
+**产品验证**。MLA 自 V2 起在 DeepSeek V2.5 / V3 / R1 / V4 全线沿用。月之暗面 **Kimi K2 / K2.5 / K2.6**（1T/32B，384 experts，61 layers，64 heads，$d_c=512$）完整采用 MLA + MoE，参数配置与 DeepSeek-V3 高度同源，使 MLA 成为经多家独立验证的架构范式。TransMLA（2025）还证明可通过 SVD 分解现有 GQA 的 $\mathbf{W}^K, \mathbf{W}^V$ 初始化 MLA 投影，以约 5% 继续训练量完成迁移。
 
-MLA 自 DeepSeek-V2 提出后，在 V2.5、V3、R1 全线沿用，成为 DeepSeek 系列的核心架构标识。更值得关注的是，月之暗面的 **Kimi K2/K2.5/K2.6**（1T/32B，384 experts，61 layers）完整采用了 MLA + MoE 架构——64 个注意力头、hidden dim 7168、$d_c = 512$，参数配置与 DeepSeek-V3 高度同源。这使 MLA 从单一团队的技术路线升级为经过多家独立验证的架构范式。
+### Part I 小结
 
-此外，TransMLA（2025）提出了一种将现有 GQA checkpoint 迁移到 MLA 的方法：对已有的 $\mathbf{W}^K, \mathbf{W}^V$ 做 SVD 分解来初始化低秩投影矩阵，再以约 5% 的原始预训练量做继续训练恢复性能。这为 GQA→MLA 的低成本迁移提供了可行路径。
+| 方案 | K/V 投影结构 | 每 token KV Cache | 年份 |
+|------|------------|-----------------|------|
+| MHA | 每头独立 $\mathbf{W}_i^K, \mathbf{W}_i^V$ | $2 n_h d_h$ | 2017 |
+| MQA | 全头共享 $\mathbf{W}^K, \mathbf{W}^V$ | $2 d_h$ | 2019 |
+| GQA | 分组共享 $\mathbf{W}_j^K, \mathbf{W}_j^V$ | $2 n_g d_h$ | 2023 |
+| MLA | 联合低秩 $\mathbf{W}^{DKV} \to \mathbf{c}^{KV}$ | $d_c + d_{\text{rope}}$ | 2024 |
 
-## 五、其他重要的注意力变体
+投影维度的压缩路径清晰：$2n_h d_h \to 2d_h \to 2n_g d_h \to d_c + d_{\text{rope}}$。但以上所有方案有一个共同假设——**每个 query 都会读取全部 $n$ 个 token 的 KV**。当 $n$ 达到 128K 乃至 1M 时，这个假设本身就值得质疑。
 
-### 5.1 滑动窗口注意力（SWA）
+## Part II &ensp; 改模式：每个 query 需要看多少 token？
 
-Mistral 7B（2023）将此机制推向主流：每个 token 只关注最近 $W$ 个 token（例如 $W = 4096$），而非整个上下文。
+Part I 压缩了每个 token 的 KV 存储大小。但即使每个 token 的缓存已经很小，当 $n$ 达到 1M 量级时，**需要读取的 token 数量**本身就是瓶颈——KV 总存储量 $\propto n$，每步解码的 HBM 读取量 $\propto n$，注意力 FLOPs $\propto n^2$。
 
-$$\text{SWA}(\mathbf{Q}_t) = \text{softmax}\left(\frac{\mathbf{Q}_t \mathbf{K}_{[t-W:t]}^\top}{\sqrt{d_h}}\right) \mathbf{V}_{[t-W:t]}$$
+在进入架构改进之前，值得提一句 **FlashAttention**（Dao 等人, 2022–2024）。它不改变注意力的数学定义，通过分块计算和在线 softmax 将 HBM 读写量从 $O(n^2 d)$ 降到 $O(n^2 d^2/M)$（$M$ 为 SRAM 大小），显存从 $O(n^2)$ 降到 $O(n)$，是所有主流模型的通用基础设施。但它不改变 $O(n^2)$ 的 FLOPs——要突破这个上限，必须从架构上减少每个 query 实际关注的 token 数。
 
-单层的感受野是 $W$，但通过层层堆叠，$L$ 层后的理论感受野达到 $L \times W$。Mistral 7B（32 层，$W=4096$）的感受野为 131072 个 token。SWA 的 KV Cache 是固定大小的循环缓冲区，不随序列长度增长。
+### 1. SWA：固定局部窗口
 
-Gemma 2 采用了一种混合策略：交替使用全注意力层和 SWA 层。
+最直接的想法：每个 token 只关注最近 $W$ 个 token。
 
-### 5.2 Differential Attention
+$$\text{SWA}(\mathbf{Q}_t) = \text{softmax}\!\left(\frac{\mathbf{Q}_t \mathbf{K}_{[t-W:t]}^\top}{\sqrt{d_h}}\right) \mathbf{V}_{[t-W:t]}$$
 
-2024 年 10 月，微软研究院提出 **Differential Transformer**，将每个头的 Q 和 K 各分成两半，计算两个 softmax 注意力图的**差值**：
+KV Cache 变成固定大小的循环缓冲区，不随 $n$ 增长。单层感受野为 $W$，$L$ 层堆叠后理论感受野达 $L \times W$——Mistral 7B（2023，32 层，$W=4096$）的理论感受野为 131K token。
 
-$$\text{DiffAttn}(\mathbf{X}) = \left[\text{softmax}\left(\frac{\mathbf{Q}_1 \mathbf{K}_1^\top}{\sqrt{d}}\right) - \lambda \cdot \text{softmax}\left(\frac{\mathbf{Q}_2 \mathbf{K}_2^\top}{\sqrt{d}}\right)\right] \mathbf{V}$$
+纯 SWA 的局限在于底层只能看到局部上下文，全局信息必须经过多层逐步"传播"。Gemma 2（Google, 2024）率先引入混合策略：交替使用全局注意力层和 SWA 层。
 
-其中 $\lambda$ 是可学习的标量。这种「噪声消除」机制有效减少了注意力中的噪声分量（不相关 token 获得的虚假注意力权重），在长上下文任务和减少幻觉方面效果显著。论文报告：以约 65% 的模型规模就能匹配标准 Transformer 的性能。
+### 2. Hybrid SWA + GA：周期性全局刷新
 
-### 5.3 Native Sparse Attention（NSA）
+小米 **MiMo-V2-Flash**（309B/15B）和 **MiMo-V2-Pro**（1T+/42B）将混合策略推到极端。对第 $l$ 层：
 
-DeepSeek 在 2025 年 2 月提出的 NSA 获得了 **ACL 2025 最佳论文**。它将注意力分解为三条并行路径：
+$$\text{Attn}^{(l)} = \begin{cases} \text{softmax}\!\left(\dfrac{\mathbf{Q}\,\mathbf{K}_{[t-W:t]}^\top}{\sqrt{d_h}}\right) \mathbf{V}_{[t-W:t]} & l \bmod (r+1) \neq 0 \\[6pt] \text{softmax}\!\left(\dfrac{\mathbf{Q}\,\mathbf{K}^\top}{\sqrt{d_h}}\right) \mathbf{V} & l \bmod (r+1) = 0 \end{cases}$$
 
-**Token 压缩分支**：将 token 块压缩为摘要表示，提供粗粒度的全局上下文。
+Flash 版 $r=5$（每 6 层 5 层 SWA + 1 层 GA），Pro 版 $r=7$。关键：窗口 $W = 128$ token，远小于 Mistral 的 4096。这个极端窗口之所以可行，是因为 GA 层周期性地"刷新"全局信息，SWA 层只负责局部精细建模。
 
-**Token 选择分支**：基于压缩分支的注意力分数，选出 top-k 个最相关的 token，提供细粒度的关键上下文。
+**KV Cache**。设模型 $L$ 层，每层 KV 元素数 $C$：
 
-**滑动窗口分支**：关注最近 $W$ 个 token，提供局部上下文。
+$$\text{KV}_{\text{total}} = \underbrace{\frac{L}{r+1} \cdot n \cdot C}_{\text{GA 层：完整缓存}} + \underbrace{\frac{Lr}{r+1} \cdot W \cdot C}_{\text{SWA 层：滚动缓冲}}$$
 
-三条路径通过学习到的门控权重融合：
+$n \gg W$ 时 SWA 项可忽略，总 KV Cache 约为全注意力的 $1/(r+1)$。Flash 版约 **1/6**，Pro 版约 **1/8**。值得注意的是 MiMo V2 没有使用 MLA——KV 压缩完全靠序列维度裁剪，与 Part I 的投影维度压缩正交，理论上可以叠加。
 
-$$\text{Output} = g_{\text{cmp}} \cdot \mathbf{A}_{\text{cmp}} + g_{\text{sel}} \cdot \mathbf{A}_{\text{sel}} + g_{\text{win}} \cdot \mathbf{A}_{\text{win}}$$
+### 3. NSA：可学习的动态稀疏
 
-关键创新在于所有分支都是可微的（包括 token 选择，通过 straight-through 估计器），因此模型可以端到端地用稀疏注意力训练——不存在训练-推理不一致的问题。
+固定窗口 SWA 的局限：窗口外的重要 token（如段首主题句）被无条件丢弃。2025 年，DeepSeek 的 **Native Sparse Attention** 让模型自己学会每个 query 应该关注哪些 token，将注意力分为三条并行路径：
 
-### 5.4 FlashAttention：不改架构改实现
+- **压缩分支**：将 token 块压缩为摘要表示（粗粒度全局信息）
+- **选择分支**：基于压缩分支评分选出 top-$k$ 相关 token（细粒度关键信息）
+- **窗口分支**：关注最近 $W$ 个 token（局部上下文）
 
-FlashAttention（Tri Dao 等人，2022-2024）不是一个新的注意力架构，而是一种 **IO 感知的精确注意力实现**。它通过分块计算和在线 softmax 技巧，避免将完整的 $n \times n$ 注意力矩阵写入 GPU HBM：
+三路通过门控融合：
 
-标准实现的 HBM 读写量：$O(n^2 d)$
+$$\text{NSA}(\mathbf{q}_t) = g_{\text{cmp}} \cdot \mathbf{A}_{\text{cmp}} + g_{\text{sel}} \cdot \mathbf{A}_{\text{sel}} + g_{\text{win}} \cdot \mathbf{A}_{\text{win}}$$
 
-FlashAttention 的 HBM 读写量：$O(n^2 d^2 / M)$（$M$ 为 SRAM 大小）
+关键创新：所有分支（包括离散 token 选择）通过 straight-through 估计器实现端到端可微训练，不存在训练-推理不一致。NSA 获 **ACL 2025 最佳论文**。
 
-显存从 $O(n^2)$ 降到 $O(n)$，速度提升 2-4 倍。FlashAttention 已经是事实上的通用基础设施——LLaMA、Mistral、GPT-4、Claude、Gemini、DeepSeek、Qwen 等所有主流模型的训练和推理都在使用它。
+### 4. DSA：NSA 的产品化与正交叠加
 
-### 5.5 混合架构的趋势
+**智谱 GLM-5/5.1**（744B/\~14B，78 层，256 routed experts + 1 shared，top-8 routing）直接将 NSA 思路部署为 **Dynamic Sparse Attention**。通过可学习的 indexer 矩阵做快速近似评分，选出每个 query 需要精确计算的子集：
 
-Qwen3-Next（阿里巴巴，2025 年）标志着一个重要趋势：**混合注意力架构**。它以 3:1 的比例混合了 Gated DeltaNet（一种线性注意力变体，推理时 $O(1)$ 复杂度、恒定内存）和 Gated Attention（标准 softmax 注意力 + 门控机制）。这种设计大幅减少了推理时的 KV Cache 增长，同时保持了质量。
+$$\mathcal{S}_t = \operatorname{TopK}\!\left(\mathbf{q}_t^\top \mathbf{I}\,\tilde{\mathbf{K}}^\top,\; k\right)$$
 
-RetNet（微软，2023）提出的多尺度保持机制（Multi-Scale Retention）也属于这个方向：通过指数衰减因子 $\gamma$ 替代 softmax，实现了训练时并行、推理时递归的双模式计算。
+$$\text{DSA}(\mathbf{q}_t) = \text{softmax}\!\left(\frac{\mathbf{q}_t\,\mathbf{K}_{\mathcal{S}_t}^\top}{\sqrt{d_h}}\right) \mathbf{V}_{\mathcal{S}_t}$$
 
-## 六、2026 产品级模型：三条分岔路
+$\mathbf{I} \in \mathbb{R}^{d_h \times d_h}$ 为可学习 indexer，$\tilde{\mathbf{K}}$ 为块级压缩 key。每个 query 的注意力计算从 $O(n)$ 降到 $O(k)$。GLM-5.1 是 DSA 在 750B 级上的首个生产验证，支撑 200K 上下文。
 
-前五节梳理的架构大多停留在论文或单一模型的验证阶段。2026 年上半年，几个千亿级产品模型的发布让我们第一次看到这些技术在生产环境中的大规模碰撞——有趣的是，它们走出了三条截然不同的路线。
+**DeepSeek V4-Pro**（1.6T/49B，61 层，384 experts + 1 shared）则展示了两条轴的**正交叠加**——在 MLA 的低秩 KV 上施加 DSA 的动态稀疏。MLA 压缩特征维度 $d \to d_c$，DSA 压缩有效序列长度 $n \to k$，两者同时生效。V4 还引入了 Engram Memory（一个 attention 之外的 hash-based 稀疏查找模块，将事实检索从 attention 路径中剥离），但这已超出注意力架构本身的范畴。
 
-### 6.1 DeepSeek V4：MLA + DSA + Engram Memory
+### 5. 算子变体：softmax 之外的探索
 
-DeepSeek V4-Pro（1.6T/49B，61 层，hidden dim 7168，384 routed experts + 1 shared expert，top-8 routing）在注意力层保留了 V3 的 MLA 架构，但叠加了两个关键扩展。
+以上所有方案都保留了 softmax 作为注意力算子。少数工作尝试改变算子本身：
 
-**Dynamic Sparse Attention (DSA)**。在 MLA 的低秩 KV 基础上，引入类似 NSA（第 5.3 节）的动态稀疏机制。每个 query 不再与所有 key 计算注意力，而是先通过压缩分支做粗粒度评分，再选出 top-k 相关 token 做精确计算，将注意力的有效复杂度从 $O(n)$ 降至 $O(k)$。MLA 压缩了 KV 的**维度**，DSA 压缩了 KV 的**长度**——两者正交，可以同时施加。
+**Differential Attention**（微软，2024）将每个头的 Q、K 各分成两半，计算两个 softmax 注意力图的差值：
 
-**Engram Memory**。这是 V4 最大的架构创新——在 attention 之外开辟了一条并行的信息检索路径。形式化地，每层的输出变为：
+$$\text{DiffAttn}(\mathbf{X}) = \left[\text{softmax}\!\left(\frac{\mathbf{Q}_1\mathbf{K}_1^\top}{\sqrt{d}}\right) - \lambda\,\text{softmax}\!\left(\frac{\mathbf{Q}_2\mathbf{K}_2^\top}{\sqrt{d}}\right)\right]\mathbf{V}$$
 
-$$\mathbf{o}_t = \underbrace{\text{MLA-DSA}(\mathbf{h}_t)}_{\text{上下文建模}} + \underbrace{\text{Engram}(\mathbf{h}_t)}_{\text{事实检索}}$$
+$\lambda$ 可学习。差分消除了不相关 token 的虚假注意力权重，论文报告约 65% 规模即可匹配标准 Transformer。
 
-Engram 模块通过 hash-based indexing 实现 $O(1)$ 的稀疏查找：
+**线性注意力**用 $\phi(\mathbf{Q})\phi(\mathbf{K})^\top$ 替代 softmax，将复杂度从 $O(n^2)$ 降到 $O(n)$。MiniMax-M1（456B/46B）以 Lightning Attention 为核心架构，是线性注意力在超大规模上的最激进尝试。但后续 **M2/M2.7 系列全面回退到标准 softmax attention**——在推理和多轮对话中，线性注意力的精度严重崩坏。这个工业级教训是一个重要信号：**attention 算子的表达力比理论效率更关键**。
 
-$$\text{Engram}(\mathbf{h}_t) = \sum_{k \in \mathcal{H}(\mathbf{h}_t)} \alpha_k \, \mathbf{m}_k$$
+## 全景：两轴定位
 
-其中 $\mathcal{H}(\cdot)$ 是 hash 函数选出的记忆槽索引集合，$\mathbf{m}_k$ 是存储的记忆向量，$\alpha_k$ 是门控权重。Engram 参数约占总稀疏参数的 20–25%，关键特性是这部分参数为静态查找表，可以完全 offload 到主机 DRAM，吞吐损失 $< 3\%$。
+将 2024–2026 主要产品模型定位到「投影 × 模式」二维空间：
 
-这种设计的深层含义在于：**attention 不再需要同时承担"上下文推理"和"事实记忆"两个功能**。将事实性知识卸载到 Engram 后，attention 的 KV Cache 只需编码当前上下文的动态关系，进一步缓解了长序列下的缓存压力。
+| 模型 | 投影（Part I） | 模式（Part II） | KV Cache 效果 |
+|------|-------------|---------------|-------------|
+| LLaMA 3.x / Qwen 3 | GQA | Full Attention | ~4x 宽度压缩 |
+| DeepSeek V3 / R1 | MLA | Full Attention | ~57x 宽度压缩 |
+| Kimi K2.6 | MLA | Full Attention | ~57x 宽度压缩 |
+| MiMo V2 Flash | GQA | Hybrid SWA+GA (5:1) | ~4x 宽 × ~6x 长 |
+| MiMo V2 Pro | GQA | Hybrid SWA+GA (7:1) | ~4x 宽 × ~8x 长 |
+| GLM-5.1 | 标准 | DSA (top-$k$) | FLOPs $O(k)$，存储不变 |
+| DeepSeek V4 | MLA | DSA | ~57x 宽 × $O(k)$ 长 |
 
-### 6.2 MiMo V2：Hybrid SWA + GA
-
-小米 MiMo-V2-Flash（309B/15B）和 MiMo-V2-Pro（1T+/42B）没有使用 MLA 或稀疏注意力，而是走了一条更工程化的路线：以固定比例交替堆叠**滑动窗口注意力 (SWA)** 和**全局注意力 (GA)** 层。
-
-形式化地，对于第 $l$ 层（从 0 开始计数）：
-
-$$\text{Attn}^{(l)} = \begin{cases} \text{softmax}\!\left(\dfrac{\mathbf{Q} \, \mathbf{K}_{[t-W:t]}^\top}{\sqrt{d_h}}\right) \mathbf{V}_{[t-W:t]} & \text{if } l \bmod (r+1) \neq 0 \\[6pt] \text{softmax}\!\left(\dfrac{\mathbf{Q} \, \mathbf{K}^\top}{\sqrt{d_h}}\right) \mathbf{V} & \text{if } l \bmod (r+1) = 0 \end{cases}$$
-
-其中 $r$ 是 SWA 与 GA 的比例——Flash 版 $r=5$（每 6 层中 5 层 SWA、1 层 GA），Pro 版 $r=7$（每 8 层中 7 层 SWA、1 层 GA）。窗口大小 $W = 128$ tokens——远小于 Mistral 的 $W=4096$，这个极端的局部窗口之所以可行，是因为周期性的 GA 层负责"刷新"全局信息。
-
-**KV Cache 分析**。设模型共 $L$ 层，序列长度 $n$，每层 KV 元素数为 $C$：
-
-$$\text{KV}_{\text{total}} = \underbrace{\frac{L}{r+1} \cdot n \cdot C}_{\text{GA 层: full cache}} \;+\; \underbrace{\frac{L \cdot r}{r+1} \cdot W \cdot C}_{\text{SWA 层: rolling buffer}}$$
-
-当 $n \gg W$（长上下文场景）时，SWA 层的缓存项 $W \cdot C$ 相对 $n \cdot C$ 可以忽略，总 KV Cache 约为纯全注意力模型的 $\frac{1}{r+1}$。以 Flash 版 $r=5$ 为例，KV Cache 约为同规模全注意力模型的 **1/6**。
-
-MiMo V2 的两个版本都使用了 **MTP（Multi-Token Prediction）** 加速推理，上下文均支持到 1M tokens。值得注意的是它没有使用 MLA——KV Cache 的压缩完全靠 SWA 的长度维度裁剪来实现，而非 MLA 的维度压缩。两种思路在数学上独立，理论上可以组合。
-
-### 6.3 GLM-5/5.1：DSA 的规模化验证
-
-智谱 GLM-5（744B/\~14B，78 层，前 3 层 dense + 后 75 层 sparse MoE，每层 256 routed experts + 1 shared expert，top-8 routing）在注意力层面直接采用了 **DSA（Dynamic Sparse Attention）**，本质上是 NSA（第 5.3 节）思路的生产级部署。
-
-DSA 通过可学习的 indexer 矩阵对 key 做快速近似评分，动态选择每个 query 需要关注的 token 子集：
-
-$$\mathcal{S}_t = \operatorname{TopK}\!\left(\mathbf{q}_t^\top \, \mathbf{I} \, \tilde{\mathbf{K}}^\top,\; k\right)$$
-
-$$\text{DSA}(\mathbf{q}_t) = \text{softmax}\!\left(\frac{\mathbf{q}_t \, \mathbf{K}_{\mathcal{S}_t}^\top}{\sqrt{d_h}}\right) \mathbf{V}_{\mathcal{S}_t}$$
-
-其中 $\mathbf{I} \in \mathbb{R}^{d_h \times d_h}$ 是可学习的 indexer 矩阵，$\tilde{\mathbf{K}}$ 是经过块级压缩的 key 表示（用于快速粗粒度检索），$\mathcal{S}_t \subset \{1, \ldots, n\}$ 是选出的 top-$k$ 个 token 索引。最终只对 $|\mathcal{S}_t| = k$ 个 token 计算精确注意力，将每个 query 的注意力计算从 $O(n)$ 降到 $O(k)$。
-
-GLM-5/5.1 是 NSA/DSA 思路在 750B 级模型上的首个大规模生产验证，支撑了 200K 的上下文长度。配合 MoE 的 top-8 routing（激活参数仅 \~14B，占总参数 $< 2\%$），实现了稀疏注意力 + 稀疏 FFN 的双重稀疏架构。
-
-### 6.4 三条路线的数学对比
-
-三种方案压缩 KV Cache 的维度完全不同：
-
-| 模型 | 方案 | 压缩维度 | KV Cache 渐近量级 |
-|------|------|---------|-----------------|
-| DeepSeek V4 | MLA + DSA + Engram | 特征维度 $d$ + 序列长度 $n$ | $O(n \cdot d_c + n_{\text{engram}})$ |
-| MiMo V2 | Hybrid SWA + GA | 序列长度 $n$（SWA 层） | $O\!\left(\frac{n}{r+1} + \frac{r \cdot W}{r+1}\right) \cdot d$ |
-| GLM 5.1 | DSA | 序列长度 $n$（top-k 选择） | $O(n \cdot d)$，但注意力计算 $O(k \cdot d)$ |
-
-DeepSeek V4 同时压缩了两个维度——MLA 压缩特征维度 $d \to d_c$，DSA 压缩有效序列长度 $n \to k$，Engram 进一步将事实检索从 attention 路径中分离。MiMo V2 只压缩序列维度（SWA 层固定窗口），但实现简洁、训练稳定。GLM 5.1 的 DSA 不减少 KV Cache 存储量，但减少了每步注意力计算的 FLOPs——存储和计算是两个不同的瓶颈，GLM 选择优先解决后者。
-
-## 七、全景对比与演进脉络
-
-### 7.1 KV Cache 压缩的定量对比
-
-以 $n_h = 32$，$d_h = 128$，FP16 为例，每 token 每层的 KV Cache 大小：
-
-| 机制 | 缓存大小 (bytes) | 相对 MHA | 质量影响 | 年份 |
-|------|----------------|---------|---------|------|
-| MHA | 16,384 | 1x | 基线 | 2017 |
-| MQA | 512 | 32x 压缩 | 轻微下降 | 2019 |
-| GQA ($n_g=8$) | 4,096 | 4x 压缩 | 几乎无损 | 2023 |
-| MLA | ~1,152 | ~14x 压缩 | 持平或更优 | 2024 |
-| Hybrid SWA+GA (5:1) | ~2,731 + 固定缓冲 | ~6x 压缩 | 几乎无损 | 2026 |
-| MLA + DSA | ~576 (有效) | ~28x 压缩 | 持平或更优 | 2026 |
-
-注：Hybrid SWA+GA 的数值为等效每 token 平均，假设 $n \gg W$；MLA+DSA 的有效压缩考虑了 DSA 只对 top-k token 做精确计算的影响。
-
-### 7.2 演进的六个阶段
-
-**2017-2020：MHA 时代**。原始注意力机制，简洁强大但昂贵。GPT 系列和 BERT 奠定了 Transformer 的统治地位，KV Cache 的问题尚未成为瓶颈（模型规模和上下文长度都较小）。
-
-**2019-2022：MQA 萌芽**。Shazeer 的洞察——K、V 共享是可行的——为后续所有工作奠定了基础。PaLM 是第一个在超大规模上验证 MQA 的模型，但质量损失限制了其广泛采用。
-
-**2023：GQA 成为标准**。Ainslie 的 GQA 找到了 KV 压缩光谱上的最优位置。从 MHA checkpoint 上训练转换的能力是其被广泛采用的关键因素。LLaMA 2 的发布使 GQA 成为事实标准，此后几乎所有主流模型都跟进。
-
-**2024：MLA 革命**。DeepSeek 的 MLA 证明了 KV 压缩问题可以从一个全新的角度——低秩投影——来攻克。它不是在「选择共享哪些头」，而是在问「KV 的本征维度是多少」。这种方法实现了更大的压缩率和更好（或不降的）质量。
-
-**2025：多元融合**。前沿正在走向混合架构——Qwen3-Next 混合线性注意力与 softmax 注意力，NSA 将压缩、选择和局部注意力融为一体，Differential Attention 用减法消除噪声。越来越清楚的是，**没有单一的注意力机制能在所有场景下最优**，未来属于在同一模型中灵活组合多种注意力类型的架构。
-
-**2026：路线分裂**。当架构从论文走向千亿级产品部署，分歧变得尖锐：DeepSeek V4 在 MLA 基础上叠加 DSA 和 Engram Memory，追求极致压缩和功能解耦；MiMo V2 选择简洁的 SWA+GA 混合，用最朴素的方法压缩序列维度；GLM-5.1 直接采用 DSA 做注意力稀疏化，优先解决计算瓶颈而非存储瓶颈；Kimi K2.6 则坚守 MLA 架构，用更大的 MoE 规模和工程优化来弥补。几家公司对"注意力应该怎么做"给出了完全不同的回答——这在 GQA 大一统的 2023 年是不可想象的。
-
-## 八、反思：为什么 KV Cache 如此重要？
-
-回头看这段历史，一个有趣的观察是：**训练时的计算量和推理时的 KV Cache 是两个几乎独立的瓶颈**。
-
-训练时，FLOPs 是主要约束，序列长度带来 $O(n^2)$ 的计算开销。FlashAttention 和稀疏注意力主要在解决这个问题。
-
-推理时，**内存带宽**才是真正的瓶颈。自回归解码的每一步都需要从 HBM 加载完整的 KV Cache，而现代 GPU 的计算能力远超其内存带宽。MQA/GQA/MLA 都在解决这个问题——减少 KV Cache 大小直接减少了 HBM 读取量，从而提高了解码吞吐。
-
-这也解释了为什么 MLA 尽管数学上更复杂（需要额外的投影矩阵），但推理速度反而更快——因为投影的计算量远小于 KV Cache 读取节省的带宽。在内存受限的推理场景下，**少读一些数据比少算一些乘法重要得多**。
+DeepSeek V4 是目前唯一同时压缩两个维度的产品模型。MiMo V2 不用 MLA，完全靠序列维度裁剪。GLM-5.1 的 DSA 不减存储但大幅降低计算 FLOPs。Kimi K2.6 坚守 MLA + Full Attention，将效率问题交给工程优化。2023 年 GQA 大一统的局面已经终结——2026 年的前沿模型在两条轴上做出了截然不同的组合选择。
 
 ## 结语
 
-从 MHA 到 MLA，Attention 架构的演进遵循了一条清晰的数学逻辑：
+投影维度的演进：
 
-$$\text{MHA} \xrightarrow[\text{共享全部 KV}]{n_h \to 1} \text{MQA} \xrightarrow[\text{分组共享 KV}]{1 \to n_g} \text{GQA} \xrightarrow[\text{低秩压缩 KV}]{\text{降维}} \text{MLA}$$
+$$\text{MHA} \xrightarrow[\text{共享全部 KV}]{n_h \to 1} \text{MQA} \xrightarrow[\text{分组共享}]{1 \to n_g} \text{GQA} \xrightarrow[\text{低秩压缩}]{\text{降维}} \text{MLA}$$
 
-每一步都在回答同一个问题：KV Cache 中有多少冗余信息可以被安全移除？MQA 说「不同头之间的 KV 高度冗余」；GQA 说「适度共享可以在质量和效率间取得更好的平衡」；MLA 说「KV 的本征维度远低于其表面维度，可以通过低秩投影来压缩」。
+注意力模式的演进：
 
-但 2026 年的产品实践表明，这条线性叙事已经不够了。DeepSeek V4 的 Engram Memory 提出了一个更激进的问题：**注意力是否应该独自承担所有信息检索？** MiMo V2 的 Hybrid SWA+GA 则从另一个角度切入：**每个 token 真的需要关注所有其他 token 吗？大部分层只看 128 个 token 就够了**。GLM-5.1 的 DSA 用可学习的 indexer 回答了同一个问题：**不需要看全部，但应该让模型自己学会看哪些。**
+$$\text{Full} \xrightarrow[\text{固定窗口}]{n \to W} \text{SWA} \xrightarrow[\text{周期全局}]{\text{混合}} \text{Hybrid} \xrightarrow[\text{动态选择}]{n \to k} \text{NSA/DSA}$$
 
-当 KV Cache 的维度压缩（MLA）、长度压缩（SWA/DSA）和功能分离（Engram）同时出现在产品级模型中，我们正在见证的不再是一场关于 KV Cache 的战争——而是关于**注意力本身边界**的重新定义。
+两条线独立发展，正交叠加。当它们在 DeepSeek V4 中首次完整交汇——MLA 将每个 token 的 KV 压缩 57 倍，DSA 再将每次需要读取的 token 数从 $n$ 降到 $k$——Attention 的效率边界被同时从两个方向推进了一大步。
+
+而 MiniMax 从线性注意力回退到 softmax 的工业教训提醒我们：**在这场优化中，唯一不能妥协的是 attention 的表达力**。所有成功的方案——MLA 的低秩投影、SWA 的局部窗口、DSA 的动态选择——都保留了 softmax attention 的精确计算，只是在"对哪些 token"和"用多少维度"上做文章。这或许是九年演进给出的最重要启示。
 
 ## 参考文献
 
@@ -367,9 +219,7 @@ $$\text{MHA} \xrightarrow[\text{共享全部 KV}]{n_h \to 1} \text{MQA} \xrighta
 5. Ye, Z., et al. "Differential Transformer." 2024. [arXiv:2410.05258](https://arxiv.org/abs/2410.05258)
 6. DeepSeek & PKU. "NSA: Hardware-Aligned and Natively Trainable Sparse Attention." ACL 2025 Best Paper. [arXiv:2502.11089](https://arxiv.org/abs/2502.11089)
 7. Dao, T., et al. "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness." NeurIPS 2022. [arXiv:2205.14135](https://arxiv.org/abs/2205.14135)
-8. Sun, Y., et al. "Retentive Network: A Successor to Transformer for Large Language Models." 2023. [arXiv:2307.08621](https://arxiv.org/abs/2307.08621)
-9. DeepSeek-AI. "DeepSeek-V4: A Preview." 2026. [api-docs.deepseek.com](https://api-docs.deepseek.com/news/news250424)
-10. DeepSeek-AI. "Conditional Memory via Scalable Lookup: A New Axis of Sparsity for Large Language Models." 2026. [arXiv:2601.07372](https://arxiv.org/abs/2601.07372)
-11. Chen, Z., et al. "MiMo-V2-Flash Technical Report." 2026. [arXiv:2601.02780](https://arxiv.org/abs/2601.02780)
-12. Zhipu AI. "GLM-5 Technical Report." 2026.
-13. Moonshot AI. "Kimi K2." 2025. [github.com/moonshotai/Kimi-K2](https://github.com/moonshotai/Kimi-K2)
+8. Chen, Z., et al. "MiMo-V2-Flash Technical Report." 2026. [arXiv:2601.02780](https://arxiv.org/abs/2601.02780)
+9. Zhipu AI. "GLM-5 Technical Report." 2026.
+10. Moonshot AI. "Kimi K2." 2025. [github.com/moonshotai/Kimi-K2](https://github.com/moonshotai/Kimi-K2)
+11. DeepSeek-AI. "DeepSeek-V4: A Preview." 2026. [api-docs.deepseek.com](https://api-docs.deepseek.com/news/news250424)
