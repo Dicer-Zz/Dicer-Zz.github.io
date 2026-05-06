@@ -237,6 +237,8 @@ Claude Code 和 GitHub Copilot / Cursor 最大的区别在于它是 **agentic** 
 
 **管道输入**。`cat error.log | claude -p "分析这个报错的根因"` 可以把任意输出通过管道传给 Claude 分析。
 
+Claude Code 还有一套 **Commands 系统**，可以把常用的 prompt 模板保存为项目级别的斜杠命令，团队共享工作流。关于 Commands 的详细用法，我之前写过一篇专门的文章：[Claude Code Commands 实用指南](/posts/claude-code-commands-guide/)。
+
 Claude Code 配合 Lazygit 的工作流特别顺畅：用 Claude Code 写代码 → 用 Lazygit 查看 diff 并逐 hunk stage → commit → push。整个过程不离开终端。
 
 ## 6. 配套工具
