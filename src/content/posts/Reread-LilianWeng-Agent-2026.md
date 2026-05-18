@@ -1,5 +1,5 @@
 ---
-title: "三年后，我重新打开了那篇文章"
+title: "2026 重读 Lilian Weng：Agent 的三年与那张未老的地图"
 published: 2026-05-18
 description: "2023 年 6 月，Lilian Weng 写下了「LLM Powered Autonomous Agents」。三年后重读，99% 的 AI 文章已成废墟，这篇不是——她画下的地图，至今还在指引方向。"
 image: "/gallery/cover/reread-lilianweng-agent.png"
@@ -70,14 +70,14 @@ Lilian 在 2023 年就看到了这个矛盾。她写的不是"现在的模型还
 
 **Multi-agent 编排从概念变成了工程现实。** 原文完全没有讨论多个 agent 之间的协作——这在 2023 年还只是学术实验室里的玩具。但 Claude Code 的 subagent、CrewAI 的角色编排、AutoGen 的多轮对话，都已经在生产环境里跑起来了。这个维度的核心问题其实是 Memory 的延伸：agent 之间如何共享上下文、如何避免重复劳动、如何合并结果。Lilian 的框架不需要大改就能容纳它——Memory 不只是"agent 怎么记"，也包括"agent 之间怎么通信"。
 
-**从 Autonomous 到 Collaborative 的范式转移。** 这是最大的变化，也是 Lilian 的标题在今天读起来最需要重新审视的地方。2023 年的 agent 叙事是"全自主"——给它目标，它自己搞定一切。三年实践证明，这个叙事在工程上失败了。AutoGPT 死了，BabyAGI 沉寂了，"autonomous"这个词在产品宣传里越来越少见。取而代之的是人机协作：agent 做粗活，人做决策；agent 提方案，人做选择；agent 跑测试，人看结果。这不是退步，是对 Lilian 写的那个可靠性问题的诚实回应——既然自然语言接口天然不可靠，那就把人放回环路里。Human-in-the-loop 不是"autonomous"的反面，是她写的三个挑战指向的必然归途。
+**从 Autonomous 到 Human-in-the-loop：不是转向，是攀爬。** 2023 年的 agent 叙事是"全自主"——给它目标，它自己搞定一切。三年实践证明，这个叙事在工程上还不够成熟。AutoGPT 死了，BabyAGI 沉寂了，"autonomous"这个词在产品宣传里让位给了更务实的表述。取而代之的是人机协作：agent 做粗活，人做决策；agent 提方案，人做选择；agent 跑测试，人看结果。但不要误读这个变化——这不是方向的偏转，而是路径上的必经之站。Lilian 写的那个可靠性问题挡在前面，人机协作是翻山之前的大本营，不是换了目的地。
 
 ## 一张不需要重绘的地图
 
-如果这篇文章今天重写，标题大概会从「LLM Powered **Autonomous** Agents」变成「LLM Powered **Collaborative** Agents」。
+如果这篇文章今天重写，标题不需要改。
 
-但正文不需要大改。
+Autonomous 仍然是终点。三年的实践没有动摇"让 agent 自主完成复杂任务"这个方向——Devin 尝试全自主开发，Claude Code 的 subagent 在后台独立跑测试，OpenAI 的 Operator 直接操作浏览器。人类还在环路里，不是因为"协作"是更好的哲学，而是因为 Lilian 写下的那三道坎还没有被翻过去。人机协作是通往自主的桥梁，不是目的地。当可靠性问题被攻克、长程规划能力成熟，agent 会自然而然地走向 autonomous——就像 Lilian 在 2023 年就预见的那样。
 
-框架还在，挑战还在，三根柱子撑起的结构还在。具体的路标换了——ReAct 留下了，ToT 淡出了；HNSW 还在，LSH 退场了；Toolformer 被原生的 function calling 取代了，但 Tool Use 的方向比任何时候都更正确。这些是地图上的道路更替，不是地图本身的重绘。
+所以正文也不需要大改。框架还在，挑战还在，三根柱子撑起的结构还在。具体的路标换了——ReAct 留下了，ToT 淡出了；HNSW 还在，LSH 退场了；Toolformer 被原生的 function calling 取代了，但 Tool Use 的方向比任何时候都更正确。这些是地图上的道路更替，不是地图本身的重绘。
 
 一个框架三年不需要大改。在 AI 领域——这个以月为单位衡量范式迁移的领域——这大概是最高的赞美。
