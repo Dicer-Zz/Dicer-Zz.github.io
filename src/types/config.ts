@@ -77,6 +77,13 @@ export type LicenseConfig = {
 	url: string;
 };
 
+export type ContactConfig = {
+	enable: boolean;
+	wechat?: string;
+	email?: string;
+	github?: string;
+};
+
 export type LIGHT_DARK_MODE =
 	| typeof LIGHT_MODE
 	| typeof DARK_MODE

@@ -1,0 +1,45 @@
+---
+import { Icon } from "astro-icon/components";
+import { contactConfig } from "../../config";
+
+interface Props {
+	class?: string;
+}
+
+const className = Astro.props.class;
+const { wechat, email, github } = contactConfig;
+---
+<div class={`relative transition overflow-hidden bg-[var(--license-block-bg)] py-5 px-6 ${className ?? ""}`}>
+    <div class="transition font-bold text-black/75 dark:text-white/75 mb-3">
+        Get in Touch
+    </div>
+    <div class="flex flex-col gap-2">
+        {wechat && (
+            <div class="flex items-center gap-3">
+                <div class="transition h-7 w-7 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center shrink-0">
+                    <Icon name="fa6-brands:weixin" class="text-base"></Icon>
+                </div>
+                <div class="transition text-sm text-black/30 dark:text-white/30 w-16 shrink-0">WeChat</div>
+                <div class="transition text-sm text-black/75 dark:text-white/75 select-all">{wechat}</div>
+            </div>
+        )}
+        {email && (
+            <div class="flex items-center gap-3">
+                <div class="transition h-7 w-7 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center shrink-0">
+                    <Icon name="fa6-solid:envelope" class="text-base"></Icon>
+                </div>
+                <div class="transition text-sm text-black/30 dark:text-white/30 w-16 shrink-0">Email</div>
+                <a href={`mailto:${email}`} class="link text-sm text-[var(--primary)]">{email}</a>
+            </div>
+        )}
+        {github && (
+            <div class="flex items-center gap-3">
+                <div class="transition h-7 w-7 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center shrink-0">
+                    <Icon name="fa6-brands:github" class="text-base"></Icon>
+                </div>
+                <div class="transition text-sm text-black/30 dark:text-white/30 w-16 shrink-0">GitHub</div>
+                <a href={github} target="_blank" rel="noopener noreferrer" class="link text-sm text-[var(--primary)]">{github.replace(/^https?:\/\//, "")}</a>
+            </div>
+        )}
+    </div>
+</div>

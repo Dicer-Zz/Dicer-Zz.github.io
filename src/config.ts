@@ -1,4 +1,5 @@
 import type {
+	ContactConfig,
 	ExpressiveCodeConfig,
 	LicenseConfig,
 	NavBarConfig,
@@ -71,6 +72,13 @@ export const licenseConfig: LicenseConfig = {
 	enable: true,
 	name: "CC BY-NC 4.0",
 	url: "https://creativecommons.org/licenses/by-nc/4.0/",
+};
+
+export const contactConfig: ContactConfig = {
+	enable: true,
+	wechat: "Dicer__",
+	email: "dicer0615@gmail.com",
+	github: "https://github.com/Dicer-Zz",
 };
 
 export const expressiveCodeConfig: ExpressiveCodeConfig = {
