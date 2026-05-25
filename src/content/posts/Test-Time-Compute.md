@@ -16,7 +16,7 @@ draft: false
 
 正是在这个背景下，一个不同方向的思路浮出水面：**与其在训练时砸更多算力，不如在推理时让模型多想一会儿。**
 
-2024 年，一篇后来成为 ICLR Oral 的论文给了这个方向最清晰的表述："Scaling LLM Test-Time Compute Optimally Can be More Effective than Scaling Model Parameters"——推理时的算力扩展，可以比扩大模型参数更高效。
+2024 年，一篇后来成为 ICLR 2025 Oral 的论文给了这个方向最清晰的表述：[Scaling LLM Test-Time Compute Optimally Can be More Effective than Scaling Model Parameters](https://arxiv.org/abs/2408.03314)——推理时的算力扩展，可以比扩大模型参数更高效。
 
 这不是一个小优化。它在暗示 LLM 的能力提升可以沿着一条全新的轴进行——不是"训一个更大的模型"，而是"让现有模型在每个问题上多花一点时间"。就像同一个学生，面对难题时多草稿纸上演算一会儿，比再多读一年学制更有效。
 
@@ -38,7 +38,7 @@ Test-Time Compute 的做法是在最终回复之前，插入一段模型自己�
 
 如果"想得越多越好"是成立的，那 test-time compute 就是一个纯粹的"花钱买准确率"的生意——预算越高，效果越好。可现实不是这样。
 
-2025 到 2026 年的一系列研究揭示了一个令人不安的现象：**思考 token 数量与准确率之间不是单调递增的关系，而是一条倒 U 型曲线。**
+2025 到 2026 年的一系列研究揭示了一个令人不安的现象：**思考 token 数量与准确率之间不是单调递增的关系，而是一条倒 U 型曲线。** 其中 [When More Thinking Hurts: Overthinking in LLM Test-Time Compute Scaling](https://arxiv.org/abs/2604.10739) 对这个现象做了系统性的实验验证。
 
 简单任务在大约 2K thinking tokens 之后开始出现"过度思考"（overthinking）——模型的推理链越长，准确率反而下降。困难任务的拐点大约在 8K tokens。过度思考的典型表现是：模型在推理链的中段已经得出了正确答案，但因为还有预算，它继续推演，结果说服自己推翻了之前正确的结论。
 
@@ -54,11 +54,11 @@ Test-Time Compute 的做法是在最终回复之前，插入一段模型自己�
 
 Anthropic 的演进最完整，也最值得细看——因为它在两年内经历了一次完整的范式转移。
 
-**第一阶段**是 Extended Thinking，从 Claude 3.7 Sonnet 开始引入，一直延续到 Opus 4.6 和 Sonnet 4.6。开发者通过 `budget_tokens` 精确设定思考预算的上限——比如 10000 个 token。模型在这个预算内自由推理，可以用不满，但不能超出。这像是给了开发者一把手术刀：你精确地决定模型在每个请求上花多少脑力。
+**第一阶段**是 [Extended Thinking](https://platform.claude.com/docs/en/build-with-claude/extended-thinking)，从 Claude 3.7 Sonnet 开始引入，一直延续到 Opus 4.6 和 Sonnet 4.6。开发者通过 `budget_tokens` 精确设定思考预算的上限——比如 10000 个 token。模型在这个预算内自由推理，可以用不满，但不能超出。这像是给了开发者一把手术刀：你精确地决定模型在每个请求上花多少脑力。
 
 问题是，手术刀要求你知道该切多深。一个简单的分类任务和一个复杂的数学证明需要的思考量差了两个数量级，但 `budget_tokens` 是写在代码里的固定值。给多了简单任务浪费钱，给少了复杂任务思考不充分。倒 U 型曲线让这个问题更加尖锐——给多了不仅浪费，可能还会伤害质量。
 
-**第二阶段**是 Adaptive Thinking，随 Opus 4.7 落地。`budget_tokens` 被直接移除——在 Opus 4.7 上传入这个参数会返回 400 错误。取而代之的是 `thinking: {type: "adaptive"}` 配合 `effort` 参数，后者只有几个语义级别：`low`、`medium`、`high`、`xhigh`、`max`。
+**第二阶段**是 [Adaptive Thinking](https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking)，随 [Opus 4.7](https://www.anthropic.com/news/claude-opus-4-7) 落地。`budget_tokens` 被直接移除——在 Opus 4.7 上传入这个参数会返回 400 错误（详见 [迁移指南](https://platform.claude.com/docs/en/about-claude/models/migration-guide)）。取而代之的是 `thinking: {type: "adaptive"}` 配合 `effort` 参数，后者只有几个语义级别：`low`、`medium`、`high`、`xhigh`、`max`。
 
 从精确数值到语义级别，看起来是控制力的丧失，实际上是判断权的移交。模型自己来决定每个请求需要多少思考——effort 只是一个宏观的指导方针，告诉模型"这个任务你大概需要多认真"。简单问题即使 effort 设了 high，模型也可能只想几百个 token；复杂问题在 medium 下也可能产生长长的推理链。
 
@@ -68,15 +68,15 @@ Opus 4.7 还引入了一个值得注意的设计：thinking 默认关闭。不�
 
 ### OpenAI：推理模型是另一个物种
 
-OpenAI 走了一条完全不同的路。它没有在通用模型上加一个"思考开关"，而是训练了专门的推理模型——o1、o3、o4 系列。这些模型天生就会思考，你不需要开启任何特性，发请求就会自动产生 reasoning tokens。
+OpenAI 走了一条完全不同的路。它没有在通用模型上加一个"思考开关"，而是训练了专门的[推理模型](https://developers.openai.com/api/docs/guides/reasoning)——o1、o3、o4 系列。这些模型天生就会思考，你不需要开启任何特性，发请求就会自动产生 reasoning tokens。
 
-思考强度通过 `reasoning.effort` 控制，值域从 `none` 到 `xhigh`。和 Anthropic 一样是语义级别，但有一个关键区别：OpenAI 从来没有提供过 `budget_tokens` 这样的精确数值控制。它一开始就是语义级别，跳过了 Anthropic 走过的"精确控制→发现不好用→改成语义"的弯路。
+思考强度通过 [`reasoning.effort`](https://developers.openai.com/api/docs/guides/reasoning#reasoning-effort) 控制，值域从 `none` 到 `xhigh`。和 Anthropic 一样是语义级别，但有一个关键区别：OpenAI 从来没有提供过 `budget_tokens` 这样的精确数值控制。它一开始就是语义级别，跳过了 Anthropic 走过的"精确控制→发现不好用→改成语义"的弯路。
 
 另一个差异是透明度。OpenAI 的 reasoning tokens 不暴露原始内容——你看不到模型在想什么，只能通过 `summary` 参数获取摘要。Anthropic 则允许开发者选择是否显示思考过程（Opus 4.7 默认隐藏，但可以设 `display: "summarized"` 打开）。这背后是对"思考过程是产品特性还是实现细节"的不同判断。
 
 ### Google Gemini：两代参数并存
 
-Google 的设计最务实，也最"Google"——它同时保留了两种控制方式。
+Google 的设计最务实，也最"Google"——它同时保留了[两种控制方式](https://ai.google.dev/gemini-api/docs/thinking)。
 
 Gemini 2.5 系列用 `thinkingBudget`，接受具体数值，设 0 关闭思考，设 -1 让模型自行决定。这和 Anthropic 早期的 `budget_tokens` 思路几乎一致。Gemini 3.x 系列则引入了 `thinkingLevel`，值域 `minimal` / `low` / `medium` / `high`，和 Anthropic 的 adaptive thinking 走到了同一条路上。
 
@@ -86,7 +86,7 @@ Gemini 2.5 系列用 `thinkingBudget`，接受具体数值，设 0 关闭思考�
 
 ### DeepSeek：只有开关，没有刻度
 
-DeepSeek 的实现最简洁——思考模式只有开和关，没有强度调节。R1 和 V4 等模型通过 `thinking: {type: "enabled"}` 开启，开启后 `temperature` 等采样参数被忽略，思考链通过 `reasoning_content` 字段返回。
+DeepSeek 的实现最简洁——思考模式只有开和关，没有强度调节。R1 和 V4 等模型通过 [`thinking: {type: "enabled"}`](https://api-docs.deepseek.com/guides/thinking_mode) 开启，开启后 `temperature` 等采样参数被忽略，思考链通过 [`reasoning_content`](https://api-docs.deepseek.com/guides/reasoning_model) 字段返回。
 
 没有 budget，没有 effort，没有 level。模型想多少就想多少，开发者无法在 API 层面限制。R1 的思考链可以长达数万个 token，完全由模型内部决定。
 
@@ -131,3 +131,21 @@ Prompt Caching 做的是把第二段尽可能多地变成第一段——通过"�
 两个方向互不相交，但共享同一个信念：**推理的成本结构不是铁板一块，它可以被理解、被拆解、被重新设计。** 识别哪些计算是重复的（缓存它），识别哪些计算是有价值的（投入它），识别哪些计算是浪费的（砍掉它）——这是 2026 年做 LLM 应用绕不开的基本功。
 
 非对称性是成本结构的本质特征。上一篇讲了"读"这一侧的优化。这一篇讲了"写"这一侧的权衡。把它们放在一起，你对 LLM 推理的钱花在哪里、该怎么花，应该有了一张完整的地图。
+
+---
+
+## 参考资料
+
+**论文**
+
+- Snell, C., Lee, J., Xu, K., & Kumar, A. (2024). [Scaling LLM Test-Time Compute Optimally Can be More Effective than Scaling Model Parameters](https://arxiv.org/abs/2408.03314). *ICLR 2025 Oral*.
+- Chen, X., et al. (2026). [When More Thinking Hurts: Overthinking in LLM Test-Time Compute Scaling](https://arxiv.org/abs/2604.10739). *arXiv preprint*.
+
+**厂商文档**
+
+- Anthropic. [Extended Thinking](https://platform.claude.com/docs/en/build-with-claude/extended-thinking) — budget_tokens 机制说明（适用于 Opus 4.6 及之前版本）。
+- Anthropic. [Adaptive Thinking](https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking) — Opus 4.7 推荐的思考控制方式。
+- Anthropic. [Migration Guide: Claude Opus 4.7](https://platform.claude.com/docs/en/about-claude/models/migration-guide) — 从 budget_tokens 到 adaptive thinking 的迁移指南。
+- OpenAI. [Reasoning Models](https://developers.openai.com/api/docs/guides/reasoning) — reasoning.effort 参数与推理模型使用指南。
+- Google. [Gemini Thinking](https://ai.google.dev/gemini-api/docs/thinking) — thinkingBudget 与 thinkingLevel 参数说明。
+- DeepSeek. [Thinking Mode](https://api-docs.deepseek.com/guides/thinking_mode) 与 [Reasoning Model](https://api-docs.deepseek.com/guides/reasoning_model) — R1 思考模式文档。
