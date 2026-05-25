@@ -1,10 +1,11 @@
 ---
 import { Icon } from "astro-icon/components";
-import { profileConfig } from "../../config";
+import { contactConfig, profileConfig } from "../../config";
 import { url } from "../../utils/url-utils";
 import ImageWrapper from "../misc/ImageWrapper.astro";
 
 const config = profileConfig;
+const wechat = contactConfig.enable ? contactConfig.wechat : undefined;
 ---
 <div class="card-base p-3">
     <a aria-label="Go to About Page" href={url('/about/')}
@@ -33,7 +34,41 @@ const config = profileConfig;
                 <Icon name={config.links[0].icon} class="text-[1.5rem]"></Icon>
                 {config.links[0].name}
             </a>}
+            {wechat &&
+                <button type="button" aria-label={`WeChat: ${wechat}`} title={`WeChat: ${wechat} (click to copy)`}
+                        data-wechat-id={wechat}
+                        class="wechat-copy-btn btn-regular rounded-lg h-10 w-10 active:scale-90 relative">
+                    <Icon name="fa6-brands:weixin" class="text-[1.5rem]"></Icon>
+                </button>
+            }
         </div>
     </div>
 </div>
+
+<script>
+    function bindWechatCopy() {
+        document.querySelectorAll<HTMLButtonElement>(".wechat-copy-btn").forEach(btn => {
+            if ((btn as any)._wechatBound) return;
+            (btn as any)._wechatBound = true;
+            btn.addEventListener("click", async () => {
+                const id = btn.dataset.wechatId;
+                if (!id) return;
+                try {
+                    await navigator.clipboard.writeText(id);
+                    const original = btn.title;
+                    btn.title = `Copied: ${id}`;
+                    btn.classList.add("ring-2", "ring-[var(--primary)]");
+                    setTimeout(() => {
+                        btn.title = original;
+                        btn.classList.remove("ring-2", "ring-[var(--primary)]");
+                    }, 1500);
+                } catch (e) {
+                    alert(`WeChat: ${id}`);
+                }
+            });
+        });
+    }
+    bindWechatCopy();
+    document.addEventListener("astro:page-load", bindWechatCopy);
+</script>
 
