@@ -1,17 +1,17 @@
-# About
+# About Me
 
-## Hi, I'm Dicer
+Welcome to my blog — a space where I write about technology and life.
 
-欢迎来到我的博客，这是一个关于技术和生活的博客。
+I'm Zhicheng Wang (alias: Dicer), a graduate of East China Normal University. During my master's studies, my research focused on the interpretability of pre-trained language models in natural language processing.
 
-我是 Zhicheng Wang（alias: Dicer），毕业于华东师范大学，研究方向是自然语言处理中预训练语言模型的可解释性。
+I'm currently an algorithm engineer at Alibaba, with a focus on self-evolution and harness engineering in AI Agents.
 
-这个博客涵盖的内容包括：自然语言处理、算法竞赛、深度学习、计算机科学基础，以及一些生活随笔。
+This blog covers topics including large language models, agents and life events.
 
-如果有任何问题或者合作，欢迎联系我。
+Feel free to contact me:
 
-微信：Dicer__（有两个下划线哦）
+WeChat: Dicer__ (two underscores)
 
 Email: dicer0615@gmail.com
 
-::github{repo="Dicer-Zz/Dicer-Zz.github.io"}
+Github: https://github.com/Dicer-Zz
