@@ -96,7 +96,7 @@ DeepSeek 的实现最简洁——思考模式只有开和关，没有强度调�
 
 把四家厂商的实现铺在一起看，有几条共性值得提炼。
 
-**所有厂商都把 thinking tokens 按 output token 计费。** 以 Claude Opus 4.7 为例，output 价格是 $25/MTok。一次中等深度的思考大约产生 8K thinking tokens，成本约 $0.20；一次深度思考可能 32K tokens，成本约 $0.80。这些成本在每轮推理中都要重新支付——thinking tokens 不像 prompt 那样可以被缓存。
+**所有厂商都把 thinking tokens 按 output token 计费。** 以 Claude Opus 4.7 为例，output 价格是 \$25/MTok。一次中等深度的思考大约产生 8K thinking tokens，成本约 \$0.20；一次深度思考可能 32K tokens，成本约 \$0.80。这些成本在每轮推理中都要重新支付——thinking tokens 不像 prompt 那样可以被缓存。
 
 **Thinking tokens 在本轮生成后被丢弃，不带入下一轮。** 这是它和普通 assistant message 的关键区别。模型上一轮的回复会变成下一轮的 input（走 prefill，可被 prompt cache 覆盖），但模型上一轮的思考过程不会——它在生成完毕后就消失了。下一轮推理时，模型需要重新思考。
 
