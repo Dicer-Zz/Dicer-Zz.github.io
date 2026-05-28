@@ -1,7 +1,7 @@
 ---
-title: "Agent 的钱花在哪里：一次推理的四层成本拆解"
+title: "用了一天 Claude Code，20 美元花在哪里"
 published: 2026-05-26
-description: "用了几天 Claude Code，账单比你想象的高？把一次 Agent 推理的 token 消耗拆开看会发现，钱并没有花在你以为的地方。这篇文章用四层结构讲清楚 Agent 的成本来自哪里、能从哪里省、以及具体能省多少。"
+description: "用了一天 Claude Code，账单比你想象的高？把 token 消耗按来源拆开看，你输入的字 + 模型生成的字加起来不到 20%，剩下 80% 是你压根没注意到的东西。这篇文章拆清楚钱花在哪四个地方、每处能不能省、以及具体能省多少。"
 image: "/gallery/cover/agent-cost-structure.png"
 tags: ["LLM", "Agent", "推理优化", "成本", "Prompt Caching"]
 category: "技术"
@@ -23,11 +23,11 @@ draft: false
 
 这些内容很少出现在 prompt engineering 的教程里，也不在你写代码时关心的范围里。但它们才是账单的主角。
 
-本文要做的事情就是把这张账单拆开看清楚——一次 Agent 推理的 token 都花在哪四个地方、每一处能不能省、以及具体能省多少。文末会用 Claude Opus 4.7 的官方价目算清楚每一层值多少钱。
+本文要做的事情就是把这张账单拆开看清楚——一次 Coding Agent 推理的 token 都花在哪四个地方、每一处能不能省、以及具体能省多少。文末会用 Claude Opus 4.7 的官方价目算清楚每一层值多少钱。
 
-## 先把账单分成四份
+## 钱去了四个地方
 
-一次 Agent 推理的 token 消耗，可以按来源分成四个独立的层次：
+一次 Coding Agent 推理的 token 消耗，可以按来源分成四个独立的层次：
 
 | 层次 | 钱花在哪 | 时间特性 | 典型构成 |
 |------|----------|----------|----------|
@@ -42,7 +42,7 @@ draft: false
 
 下面四节分别看每一层。
 
-## 工具输出层：result 一旦进 context，钱就花了
+## 工具说了一堆，Agent 只看了一眼
 
 先讲一个具体场景。
 
@@ -58,7 +58,7 @@ draft: false
 
 但 rtk 有它的边界。它针对的是 CLI 工具，所以受益最大的是重命令行的 coding agent。如果你做的是客服 agent、RAG agent，工具调用本身就不是 CLI，rtk 用不上。这种场景下"压缩工具输出"得靠工具自己——返回字段精简一点、内置分页、提供按需细化的接口。**让工具一开始就只返回 Agent 需要的，永远比事后压缩优雅**。但现实是工具设计者很少考虑 Agent 场景，所以才有 rtk 这种"中间层"的位置。
 
-## 数据入口层：网页和 PDF 喂进去之前先洗一下
+## 一篇网页 80K token，有用的不到五分之一
 
 第二个场景：Agent 抓了一篇博客让你总结。
 
@@ -78,7 +78,7 @@ PDF 更夸张。一份带版式信息的 PDF 直接转 base64 喂进去，token 
 
 这一层和 [Prompt Caching：被忽视的非对称性](/posts/prompt-caching-asymmetry/) 那篇有个有趣的关系。那篇讲的是"输入侧的减法"——能不进 context 的就不要进。本层是这个减法的**前置**：先洗净再缓存。一份脏 PDF 就算缓存了，每次读取也是在为大量噪声 token 付 0.1 倍的费用——便宜但仍是浪费。先洗再缓存，才是组合出最优解。
 
-## 上下文累积层：老内容会被反复读，反复付钱
+## 第 1 轮说的话，到第 30 轮还在付钱
 
 第三个场景，最容易被忽略：
 
@@ -88,7 +88,9 @@ Agent 跑到第 30 轮，需要回答一个新问题。
 
 也就是说，**第 1 轮产生的那 5K，你已经付过 30 次钱了**。
 
-这是 Agent 系统里增长最快的一笔账。每轮新增看起来不多——平均也就 2-3K——但累积是平方级的：第 t 轮新增的 token 会被付 (N-t+1) 次，N 越大，老内容的重复支付越爆炸。
+这是 Coding Agent 里增长最快的一笔账。每轮新增看起来不多——平均也就 2-3K——但累积是平方级的：第 t 轮新增的 token 会被付 (N-t+1) 次，N 越大，老内容的重复支付越爆炸。
+
+**与前两层的关系。** 工具输出层和数据入口层是"当轮产生"的成本，通过源头压缩可以一次性解决；上下文累积层是"跨轮重复"的成本，它的膨胀源于 Agent 框架将历史完整保留的设计决策。但两者并非独立——**前两层的优化会在这一层产生放大收益**。第 t 轮如果用 rtk 压缩了 3K 的 CLI 输出、用 defuddle 去除了 5K 的网页噪声，这省下来的 8K 不只是当轮少付了一次钱，而是在后续每一轮都少付一次——累计节省 8K × (N-t) token 的 prefill 费用。源头做的减法，在这一层被时间放大。
 
 这一层的省钱方法和前两层完全不同。前两层靠外部工具，这一层**几乎全部依赖 Agent 框架自己的策略**。装外部工具基本帮不上忙，决定权在框架的上下文管理逻辑里。用户能做的不是"装对工具"，是"用对策略"。
 
@@ -102,199 +104,201 @@ Agent 跑到第 30 轮，需要回答一个新问题。
 
 举个例子：你让 Agent "搜一下这个项目里所有用到 Redis 的地方"。直接做的话，主 Agent 要 grep 出几十个文件、Read 进十几个，工具结果一堆累积在 context 里。换成 subagent 的做法是——主 Agent 派一个 subagent 去做这件事，subagent 来回 grep + Read 折腾半天，最后只回报一句"主要在 cache.py、queue.py、session.py 三个文件用了"。整个搜索过程对主 Agent 不可见，主 Agent 只承担那一行结论的成本。
 
-这种做法把"上下文管理"问题转化成了"任务划分"问题。代价是每个 subagent 都要重新承担系统提示词的固定开销，所以适合"结论简短、过程复杂"的子任务——典型如代码搜索、文件分析、独立验证。
+Claude Code 目前内置了三个等级的 subagent：**Explore**（用 Haiku 跑，只有只读权限，专干代码搜索）、**Plan**（继承主模型，只读，用于规划前的信息收集）、**General-purpose**（全工具权限，处理复杂的多步骤任务）。注意 Explore 用的是 Haiku——这意味着不但主 Agent 的 context 没被污染，subagent 本身跑的还是便宜模型。一次代码搜索如果在主 session（Opus）里跑完全程要花 \$0.15，派给 Explore（Haiku）可能只花 \$0.01，而主 Agent 只接收几十 token 的结论。
 
-Claude Code 用户最容易踩的一个坑，是把所有任务都堆在一个主 session 里反复 `/compact`。这是治标。从一开始就把可独立的子任务分流到 subagent，才是分而治之。
+你也可以[自定义 subagent](https://code.claude.com/docs/en/sub-agents)——指定名字、系统提示、允许哪些工具、用哪个模型。比如定义一个 `test-runner` subagent，只有 Bash 和 Read 权限，用 Sonnet 跑。每次主 Agent 想确认测试是否通过，就派它去跑一遍 pytest，主 Agent 只拿到 pass/fail 和失败摘要。整个 pytest 输出（动辄上千行）永远不会出现在主 context 里。
 
-## 固定开销层：那段每次都重复的开头
+更进一步，Claude Code 还有一个实验功能叫 [Agent Teams](https://code.claude.com/docs/en/agent-teams)（专家团）——多个 Claude Code 实例组成一个团队，各自拥有独立的 context，通过共享任务列表和消息系统协作。一个 session 充当 team lead（组长），其他 session 是 teammate（组员）。每个 teammate 在自己的 context 窗口里独立工作，完成后把结论汇报给 lead。
 
-最后一层最简单，但收益可能最大。
+Agent Teams 比单个 subagent 更激进：subagent 是"主 Agent 派出去干活再收回结论"的一次性代理；Agent Teams 是多个持续运行的独立 Agent，它们之间可以**互相通信、互相质疑**，不需要通过主 Agent 中转。典型用法是让三个 teammate 分别从安全、性能、测试覆盖率三个角度审查同一段代码——三个人各自在自己的 context 里翻文件、推理、写结论，互相看到对方的发现再做补充。最后 lead 只接收三份审查报告的综合摘要。
 
-Agent 的 system prompt 加上工具定义，通常占 8-15K token。具体到 Claude Code，社区反编译的数据是约 12K。这部分内容**整个会话内不变**，但每一轮请求都被完整重传、重新 prefill 一遍。
+从成本视角看这件事：
 
-Agent 跑 30 轮，那 12K 就被 prefill 了 30 次。**每一次都在为同样的内容付同样的钱**。
+- **单个 subagent** = 一次固定开销（~12K system prompt）+ 自己的过程 token，只返回结论。适合"结论简短、过程复杂"的子任务。
+- **Agent Teams** = N 个独立 context 各承担一份固定开销（N × 12K），但彼此之间的过程完全隔离，主 Agent 的 context 极轻。适合"任务可并行、需要多视角"的大型工作。
 
-这层的解法叫 [prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)——简单说，就是让模型给那段不变的开头打个标记缓存起来。下次请求来的时候，不用重新算了，直接读缓存就行。Anthropic 的缓存读取价是基础输入价的 0.1 倍，相当于打了一折。OpenAI、Google 都有类似机制，倍率略不同。
+代价很明确：**每多开一个 subagent / teammate，就多付一份系统提示词的底钱**。所以子任务不能切得太碎——一个只需要 `ls` 一下的任务，不值得为它开一个新 context。经验法则是：**如果子任务的过程 token > 2 × 系统提示词（~24K），分流就是值的**。
 
-这一层的好处是**不依赖任何外部工具**。要做的就三件事：
+Claude Code 用户最容易踩的一个坑，是把所有任务都堆在一个主 session 里反复 `/compact`。这是治标。更好的做法分两步：第一，从任务规划阶段就识别出"结论简短、过程复杂"的子任务，显式分流到 subagent；第二，如果有多个可并行的独立方向（代码审查、竞品调研、多方案验证），考虑开 Agent Teams 让它们各自在独立 context 里跑完再汇总。compact 是止血，subagent 是预防，Agent Teams 是分而治之的极致形态。
 
-第一，**prompt 结构纪律**。静态内容放前面、动态内容放后面，避免在 system prompt 里塞时间戳、随机 ID 这种破坏前缀稳定性的字段。前缀只要变一个字符，缓存就废了。
+## 同一段开场白，念了 30 遍
 
-第二，**确认厂商和模型支持**。三家头部厂商都已实现，但小模型、老版本、第三方接口可能没有。
+你用 Claude Code 打开一个项目的时候，第一件事是什么？模型读了 12K token 的内容——system prompt、所有工具定义、权限规则、CLAUDE.md 文件。你什么都还没说，这 12K 就已经被 prefill 了一遍、付了一次钱。
 
-第三，**确认 Agent 框架配合**。框架在拼接 message 时不能无意打乱前缀（比如随机化工具顺序、把动态内容插入 system 中部）。Claude Code 默认是支持的，但如果你自己写 Agent，需要自己保证。
+然后你说了第一句话，模型回了你。第二轮开始，这 12K 原封不动地再来一次——因为每次 API 调用都是一次独立的推理，模型不会在两次调用之间记住任何东西，唯一让它"看见历史"的方式就是每次从头传。第三轮又一次。第十轮又一次。**30 轮会话下来，同一段你从未修改过的文本被重复读了 30 遍，每一遍都按全价计费**。
 
-具体的机制和工程细节，[Prompt Caching：被忽视的非对称性](/posts/prompt-caching-asymmetry/) 那篇讲得很细，这里不重复。但要强调一句——**Agent 是 prompt caching 收益最大的应用形态**，因为它的固定开销占比远超普通对话。下面的测算会量化这一点。
+这就是固定开销层的荒谬之处：内容完全不变，但成本线性增长。
 
-## 用数字说话：这四层各占多少钱
+解法叫 [Prompt Caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)。原理不复杂：模型在第一次 prefill 那段不变的前缀时，把计算出来的 KV 状态存下来；后续请求只要前缀没变，就跳过重算，直接读缓存。Anthropic 的缓存读取价是基础输入价的 0.1 倍——也就是 12K 的 system prompt，第一次写入缓存花 1.25 倍，后面 29 次每次只花 0.1 倍。
 
-到这里四层都讲完了。但具体到比例，还得算一笔账。
+但这里有一个很多人没意识到的点：**Prompt Caching 命中的不只是 system prompt**。
 
-下面这套估算基于"中等强度 coding 任务"建模——参数取自社区对 Claude Code system prompt 反编译的公开数据，以及对常见 tool 输出的经验估计。**不同任务形态会改变分布**——重读取场景的 tool_result 会更高、纯写代码场景的 assistant 输出会更高，但"固定开销是大头"这个结构性结论基本不变。
+缓存的判定逻辑是前缀匹配——只要本轮请求的 token 序列和上一轮请求有相同的前缀，这段前缀全部命中缓存。在 Coding Agent 场景里，"前缀"包含什么？system prompt + tools 定义 + 从第 1 轮到第 t-1 轮的完整历史。也就是说，**上一节讲的那些累积历史——只要它们在本轮没有被修改或截断——全部走缓存读取**。每轮请求里真正需要全价 prefill 的，只有"本轮新增的部分"（当前 user 输入 + 上一轮的 assistant 输出 + 上一轮的 tool_result）。
 
-参数：
+这意味着 Prompt Caching 实际上同时缓解了两层成本：固定开销层（system prompt 反复重传）和上下文累积层（老历史反复读取）。后面的测算会量化这一点——开缓存后，10 轮会话的输入侧成本直接降 73%。
 
-| 项目 | 取值 | 说明 |
+你可能会问：既然每次都要传完整的 message list，为什么不做成"绑定 session id、只发增量"的设计？答案是：**重传的成本不在网络**。200K token 的文本在 JSON 里不过 1-2MB，网络传输可忽略。贵的是模型收到这些 token 后要做的事——每个 token 都要参与 attention 计算，这才是按 token 收钱的原因。Prompt Caching 解决的正是这个计算层面的重复——让已经算过的前缀不用再算一遍。API 形式上保持无状态（便于调度和容错），计算层面做了有状态的缓存复用。
+
+要让缓存生效，需要守住三条纪律：
+
+**第一，前缀稳定性。** 缓存判定是逐 token 比对前缀的。只要前缀中任何一个 token 变了，从那个位置开始往后的缓存全部失效。最常见的破坏方式：在 system prompt 里插一个 `当前时间：2026-05-28 14:32:07`——每一秒都在变，于是 12K 的 system prompt 每轮都要重新写入缓存。正确做法是**把所有动态内容移到消息列表的末尾**，而不是塞进 system prompt。
+
+**第二，确认模型和接口支持。** Anthropic（显式标记缓存段）、OpenAI（全自动前缀匹配）、Google（隐式 + 显式双模式）三家都已支持，但倍率和 TTL 不同。第三方中转接口、老版本 API、以及部分开源模型部署可能没有实现这一层——调之前先确认 `usage` 返回字段里有没有 `cache_read_input_tokens`。
+
+**第三，框架不能无意破坏前缀。** 如果你的 Agent 框架在每次拼 message 列表时随机化了工具定义的顺序，或者把某个动态字段插到了 system prompt 中间，前缀就断了。Claude Code 默认保证了这一点——tools 定义的顺序固定、system prompt 结构不变。但如果你自己写 Agent 框架，需要做一个简单的回归测试：连续两轮请求，对比 token 序列前缀是否一致。不一致就意味着每轮都在做 cache write 而不是 cache read。
+
+一个容易被忽略的反面案例：某些 Agent 框架在 system prompt 末尾追加了 `当前工作目录：/Users/xxx/project` 这类运行时信息。大部分时候目录不变所以没问题——但一旦 agent 执行了 `cd` 或者切了分支，这个字段变了，整段 system prompt 的缓存就废了。Debug 时表现为突然出现一次 `cache_creation_input_tokens` 而非 `cache_read_input_tokens`，账单上是一个不可见的尖刺。
+
+具体的物理机制（KV Cache 复用、前缀哈希、TTL 管理）以及三家厂商的设计哲学对比，在 [Prompt Caching：被忽视的非对称性](/posts/prompt-caching-asymmetry/) 那篇里讲得很细，这里不重复。但要强调一句——**Coding Agent 是 Prompt Caching 收益最大的应用形态**。普通对话的 system prompt 可能只有几百 token，缓存与否差别不大；Coding Agent 的固定开销占到总 prefill 的 50%，再加上稳定的历史前缀，缓存命中率天然就高。下面的测算会用具体数字证明这一点。
+
+## 掏计算器：一个 Session 到底花多少钱
+
+前面四层都是定性分析。现在用具体数字算一遍——一个中等强度的 coding session，开缓存和不开缓存，分别要花多少钱。
+
+**建模参数：**
+
+| 项目 | 取值 | 来源 |
 |------|------|------|
-| system + tools | 12K token | Claude Code 反编译数据 |
-| 每轮 user 输入 | 0.2K | 经验值 |
-| 每轮 assistant 输出（含 tool_use） | 0.8K | text + 工具调用的 JSON |
+| system + tools | 12K token | Claude Code 社区反编译数据 |
+| 每轮 user 输入 | 0.2K | 经验值（一两句指令） |
+| 每轮 assistant 输出 | 0.8K | text + tool_use JSON |
 | 每轮 tool_result | 1.5K | Read/Bash/Grep 混合场景 |
-| 总轮数 N | 10 | 假设 |
+| 每轮新增合计 | 2.5K | user + assistant + tool_result |
 
-每一轮的 prefill 量等于：12K（固定开销）+ 之前所有轮次累积的 (user + assistant + tool_result)。
+这组参数对应的场景是"中等强度 coding"——不是纯聊天（那样 tool_result 为零），也不是重文件读取（那样 tool_result 可能 4-8K）。后面会讨论参数变化对结论的影响。
+
+**[Claude Opus 4.7](https://platform.claude.com/docs/en/about-claude/pricing) 费率（2026 年 5 月）：**
+
+| 项目 | 单价 |
+|------|------|
+| Input | \$5 / MTok |
+| Cache write（5min） | \$6.25 / MTok（1.25×） |
+| Cache read | \$0.50 / MTok（0.1×） |
+| Output | \$25 / MTok |
+
+### 每轮要 prefill 多少 token
+
+第 t 轮的输入 = 固定开销 + 前面所有轮次的历史：
 
 ```
 prefill(t) = 12K + (t-1) × 2.5K
 ```
 
-把 10 轮加起来：
-
-```
-Σ prefill(t) for t=1..10
-= 10 × 12K + 2.5K × (0+1+2+...+9)
-= 120K + 112.5K
-= 232.5K token
-```
-
-模型输出（decode）= 10 × 0.8K = 8K。
-
-按来源拆开（总量 ≈ 240.5K）：
-
-| 桶 | token | 占比 |
-|------|--------|------|
-| 固定开销（system + tools 重复 10 轮） | 120K | **49.9%** |
-| 历史 tool_result 累积 | 67.5K | 28.1% |
-| 历史 assistant 累积 | 36K | 15.0% |
-| 历史 user 累积 | 9K | 3.7% |
-| 模型 decode 输出 | 8K | 3.3% |
-
-固定开销一项就占了一半。这是 Agent 系统区别于普通对话的最大特征——普通对话的 system prompt 可能只有几百 token，所以固定开销几乎可以忽略；Agent 因为带着十几个工具定义，system + tools 一直保持在 10K 量级。**这是 prompt caching 在 Agent 场景收益巨大的根本原因**。
-
-## 算钱：开缓存能省多少
-
-[Claude Opus 4.7](https://platform.claude.com/docs/en/about-claude/pricing) 的官方价目（2026 年 5 月）：
-
-| 项目 | 单价 |
-|------|------|
-| Base input | \$5 / MTok |
-| 5m cache write | \$6.25 / MTok（1.25×） |
-| 1h cache write | \$10 / MTok（2×） |
-| Cache read | \$0.50 / MTok（0.1×） |
-| Output | \$25 / MTok |
-
-**不开缓存的情况：**
-
-```
-Prefill: 232.5K × $5/MTok      = $1.1625
-Decode:  8K     × $25/MTok     = $0.2000
-─────────────────────────────────────────
-Total:                         ≈ $1.36
-```
-
-注意一个细节：prefill 占了总成本的 85%，decode 只占 15%。**钱主要花在"读"上，不在"写"上**。Output 单价是 input 的 5 倍听起来很贵，但 Agent 任务里 output 的总量远小于 input，所以总成本仍然由 input 主导。这跟 [Prompt Caching：被忽视的非对称性](/posts/prompt-caching-asymmetry/) 里讲的输入输出非对称性是一回事——只是 Agent 场景把这个不对称放得更大。
-
-**开缓存的情况（5 分钟自动缓存）：**
-
-每次新发请求，前一轮的所有内容都已经在缓存里了，只有"本轮新增的部分"需要写进缓存。具体到我们这个模型：
-
-```
-prefix(t)   = 12K + (t-1) × 2.5K
-cache_read  = prefix(t-1)              (上一轮的内容，全部命中)
-cache_write = 本轮新增 = 2.5K           (除了第 1 轮要写 12K 的初始 prompt)
-```
-
 10 轮累计：
 
 ```
-总 cache_write = 12K + 9 × 2.5K = 34.5K
-总 cache_read  = 0 + 12K + 14.5K + ... + 32K = 198K
-（验证：34.5K + 198K = 232.5K ✓）
+Σ prefill = 10×12K + 2.5K×(0+1+...+9)
+          = 120K + 112.5K
+          = 232.5K token
 ```
 
-成本：
+总 output = 10 × 0.8K = 8K token。
+
+一个 10 轮 session，模型总共要"读" 232.5K token、"写" 8K token。读写比接近 30:1。
+
+### 不开缓存的费用
 
 ```
-Cache write: 34.5K × $6.25/MTok = $0.2156
-Cache read:  198K  × $0.50/MTok = $0.0990
-Decode:      8K    × $25/MTok   = $0.2000
-─────────────────────────────────────────
-Total:                          ≈ $0.51
+Input:  232.5K × \$5/MTok   = \$1.16
+Output: 8K × \$25/MTok      = \$0.20
+───────────────────────────────────
+Total:                        \$1.36
 ```
 
-**对比一下：**
+Prefill 占总费用的 **85%**。虽然 output 单价是 input 的 5 倍，但 Coding Agent 场景里 output 总量远小于 input，所以总成本完全由"读"主导。这跟 [Prompt Caching：被忽视的非对称性](/posts/prompt-caching-asymmetry/) 里讲的输入输出非对称性是一回事——只是 Coding Agent 场景把这个不对称放得更大。
 
-| 项目 | 无缓存 | 有缓存 | 节省 |
-|------|--------|--------|------|
-| 输入侧 | \$1.1625 | \$0.3146 | **−73%** |
-| 输出侧 | \$0.2000 | \$0.2000 | 0% |
-| **总计** | **\$1.36** | **\$0.51** | **−62%** |
+### 开缓存的费用
 
-10 轮就省了 62%。Anthropic 官方宣传的"输入侧节省高达 90%"，在这里看到的是 73%，没完全兑现——因为会话还不够长，cache write 的固定成本还没被充分摊薄。
+Prompt Caching 的工作方式：每轮请求的前缀如果和上一轮一致，就命中缓存（按 0.1× 计费）；只有本轮新增的部分需要写入缓存（按 1.25× 计费）。
 
-把模型推到更长的会话：
+在 Coding Agent 场景里，turn t 的输入前缀 = turn t-1 的完整输入（system + 历史都没变），所以前缀**必然完全命中**。每轮真正需要全价处理的只有新增的 2.5K。
 
-| 会话长度 | 无缓存输入费 | 有缓存输入费 | 输入节省 | 总成本节省 |
-|----------|--------------|--------------|----------|------------|
-| 10 轮 | \$1.16 | \$0.31 | 73% | 62% |
-| 30 轮 | \$7.24 | \$1.21 | **83%** | 76% |
-| 50 轮 | \$18.31 | \$2.60 | **86%** | 79% |
+```
+总 cache_write = 12K（首轮写入 system）+ 9×2.5K = 34.5K
+总 cache_read  = 232.5K - 34.5K = 198K
+```
 
-50 轮时输入侧节省 86%，已经接近官方口径。**Prompt Caching 的收益是会话长度的单调函数**——会话越长，固定开销和老历史被反复读取的次数越多，缓存的价值越大。
+```
+Cache write: 34.5K × \$6.25/MTok  = \$0.22
+Cache read:  198K × \$0.50/MTok   = \$0.10
+Output:      8K × \$25/MTok       = \$0.20
+───────────────────────────────────────────
+Total:                              \$0.51
+```
 
-几个值得单独提的观察：
+**10 轮 session：从 \$1.36 降到 \$0.51，省 62%。**
 
-**Cache write 不是免费的**。1.25 倍的写入费意味着，如果某段内容写入后只被读 1 次就过期，反而比不缓存还贵（写 1.25 + 读 0.1 = 1.35，不如直接付 1.0）。盈亏点是被读 2 次：1.25 + 0.2 = 1.45 vs 直接付 2.0。Agent 场景每轮都命中，远高于盈亏点，所以始终划算。
+### 会话越长，缓存越值
 
-**真正爆发式的省钱来自"老历史的反复读"**。固定开销虽然占比 50%，但只构成一笔固定的写入费；真正赚的是历史累积——每轮新增 2.5K 写入一次，但接下来所有轮次都按 0.1 倍读取。**节省总量近似与会话轮数的平方成正比**。
+把模型推到更长的 session：
 
-**Opus 4.7 的 tokenizer 换了**。官方文档明确写了 Opus 4.7 用了新 tokenizer，"may use up to 35% more tokens for the same fixed text"。也就是同一段代码 Opus 4.7 算出的 token 数比 4.5/4.6 多 35%。账单层面不能忽略——从 4.6 升级到 4.7 的直观感受可能是"价格没变但账单涨了"。
+| 轮数 | 总 prefill | 无缓存费用 | 有缓存费用 | 节省 |
+|------|-----------|-----------|-----------|------|
+| 10 轮 | 232.5K | \$1.36 | \$0.51 | 62% |
+| 30 轮 | 1,447.5K | \$7.84 | \$1.81 | 77% |
+| 50 轮 | 3,662.5K | \$19.31 | \$3.60 | 81% |
 
-## 想自己测一遍？
+50 轮时总 prefill 接近 3.7M token——没有缓存的话，一个 session 光输入就要 \$18.31。这不是一个理论极端：Claude Code 跑一个中型重构任务跑 50 轮是很常见的事。开了缓存压到 \$3.60，仍然不便宜，但至少可控。
 
-上面的数字是建模值，不是实测。要拿到自己 Agent 的真实分布，可以这样跑一次：
+为什么会话越长节省比例越高？因为 cache_write 只在每轮新增的 2.5K 上付 1.25×，但 cache_read 覆盖了全部历史前缀按 0.1× 计费。历史前缀以 N² 速度膨胀，而 cache_write 只以 N 速度线性增长——两者的差距随轮数拉大，缓存的摊薄效应越来越强。
 
-1. **选一个可控任务**——比如"用 Claude Code 写一个 FastAPI hello world，包含路由、单元测试、README"。任务要能稳定触发 Read、Write、Bash 这些典型 tool call。
-2. **开 token 日志**——Claude Code 直接用 `/cost` 看 session 累计；如果是自己调 API，每次请求保存完整 messages 列表和 `response.usage` 字段。
-3. **分桶**——每次 model invocation 的输入按来源分成六类：`system_static`、`tools_static`、`history_user`、`history_assistant`、`history_tool_result`、`current`。
-4. **测量**——`system_static` 和 `tools_static` 用 Anthropic 的 `count_tokens` API 单独算（整个 session 不变）；历史三桶从 messages 列表中按 role 拆出后逐个跑 token counter；`current` 是本轮新加入的最后一条 message。
-5. **累加算占比**——跑 10-30 轮后，把每一轮六个桶的数字累加，算各桶占总 prefill 的百分比，与上面的建模值对照。
+### 几个值得单独说的观察
 
-如果你的实测和建模差异很大，多半是任务形态偏向——大文件读取多则 tool_result 偏高，纯代码生成则 assistant 偏高。但结构性结论（固定开销占大头、历史累积是放大器）应当稳定。
+**Output 占比随轮数急剧缩小。** 10 轮时 output 费 \$0.20 占 15%；50 轮时仍然是 \$1.00 但只占 5%。这验证了一个直觉：Coding Agent session 的钱几乎全花在"读"上。优化"写"（比如让模型少生成）对总账单的影响微乎其微。
 
-## 钱到底怎么省：先做免费的，再做困难的
+**Cache write 有盈亏点。** 一段内容写入缓存花 1.25×，读一次花 0.1×。如果它只被读 1 次就过期：1.25 + 0.1 = 1.35×，反而比直接付 1.0× 还贵。盈亏点是被读 **2 次以上**（1.25 + 0.2 = 1.45× < 2.0×）。Coding Agent 场景里每段内容从写入到会话结束，每轮都被读一次，远超盈亏点。
 
-四个层次对应四种省钱手段：工具侧（rtk）、数据侧（defuddle、markitdown）、框架侧（截断、compact、subagent）、机制侧（prompt caching）。它们不可互相替代，**理解一个工具属于哪一层，是判断它是否解决你问题的前提**。
+**Opus 4.7 新 tokenizer 的隐性涨价。** 官方文档写了 Opus 4.7 用了新 tokenizer，同样的文本可能多算 35% 的 token。也就是说从 Sonnet 4.6 换到 Opus 4.7，即使单价不变，账单也可能涨三分之一——因为同一段 system prompt 被算成了更多 token。
 
-各层的 ROI 极不均匀：
+## 怎么省：从不花力气的开始
 
-- **Prompt caching** 几乎零成本、收益最大——10 轮会话省 62%，30 轮会话省 76%。这是免费的钱，应当作为基线先开。
-- **数据入口层**收益稳定可预期，工程链路也轻——defuddle 和 markitdown 都是命令行工具，集成成本极低。
-- **工具输出层**依赖场景，主要在 coding agent 价值显著——rtk 的目标群体是重 CLI 的 Agent 框架开发者，普通使用者用处有限。
-- **上下文累积层**的策略选择最复杂，需要结合任务长度和保真要求权衡——subagent 比 compact 优雅，但要求任务能被合理切分。
+四个层次对应四套不同的省钱手段：工具侧（rtk）、数据侧（defuddle、markitdown）、框架侧（截断、compact、subagent、Agent Teams）、机制侧（prompt caching）。它们解决的问题不同，不可互相替代——**判断一个工具属于哪一层，是判断它能不能解决你的问题的前提**。比如你看到账单高就去装 rtk，但实际上你的成本大头是 system prompt 反复重算——rtk 帮不了这件事。
 
-**优化的次序应该是这样的**：先做免费且高收益的（prompt caching、数据入口清洗），再考虑场景特定的（工具输出压缩），最后处理需要架构层介入的（上下文管理策略）。这是一条由廉到贵、由易到难的路径，也是 Agent 工程最朴素的成本规约。
+各层的投入产出比（ROI）极不均匀，按"花多少力气、省多少钱"排列：
 
-呼应一下两篇相关文章。本文讲的是"读"侧——输入 token 的成本结构与减法路径；[Prompt Caching：被忽视的非对称性](/posts/prompt-caching-asymmetry/) 是"读"侧的物理机制；[Test-Time Compute：让模型在回答之前先想一想](/posts/test-time-compute/) 是"写"侧的算力经济学。三篇合起来，构成一次 Agent 推理成本的完整地图——读侧有结构有缓存，写侧有预算有强度，每一笔花销都有去向。
+**Prompt Caching：零投入，最大收益。** 如果你用的是 Claude Code、Cursor 这类主流框架，prompt caching 已经默认开启了——你什么都不用做，就已经在享受 0.1x 的缓存读取费率。如果你自己写 Agent 框架调 API，要做的只是保证 prompt 前缀稳定（别在 system prompt 里塞动态内容）。没有外部依赖、没有工程改造，10 轮省 62%，30 轮省 76%。**这是免费的钱，唯一的成本是"别做蠢事把缓存搞废了"。**
 
-Agent 的成本不是一个数字，是一张地图。读懂这张地图，比省掉任何单一处都更值钱。
+**数据入口清洗：10 分钟集成，稳定回报。** `npx defuddle parse <url> --md` 或 `markitdown input.pdf` 就是全部操作。一篇 80K 的网页 HTML 洗完变 15K，一份带版式的 PDF 转 Markdown 压缩率通常在 3-5 倍。而且这些省下来的 token 不是只省一次——如果这份内容留在 context 里被后续轮次反复读取，每省 1K 就是后续每一轮都少付 1K 的缓存读取费。**源头做的减法会被时间放大**。
+
+**工具输出压缩：场景依赖，重 CLI 场景价值显著。** rtk 对 coding agent 效果拔群（git log、pytest、grep 这些重输出命令压缩 60-90%），但如果你做的是客服 agent 或 RAG agent，工具调用本身不是 CLI 命令，rtk 帮不上忙。这一层的通用策略是让工具返回精简的结构化数据而不是 dump 全文——但这需要改工具实现或找到支持分页/过滤的替代工具，工程量因场景而异。
+
+**上下文管理策略：架构层介入，收益高但决策复杂。** 滑动窗口、compact、subagent、Agent Teams——这些不是装一个工具就搞定的事。它们要求你理解自己的任务结构：哪些子任务可以独立？会话还要走多远？哪些早期信息后面还会用到？决策空间大，做对了收益很高（subagent 可以让主 context 始终保持精简），做错了要么丢信息要么浪费固定开销。这一层的优化更像架构设计，不像装工具。
+
+**优化的次序就是按这个顺序来**：先确认 prompt caching 没有被你的实现意外破坏（查 `usage` 字段里 `cache_read` 是否正常），再处理数据入口（脏内容别往 context 里塞），然后看场景决定是否需要工具输出压缩，最后规划上下文管理策略。**由免费到昂贵、由通用到场景特定、由被动享受到主动设计**——这是 Coding Agent 工程最朴素的成本规约路径。
+
+还有一个容易忽略的点：**各层的优化是可以叠加的**。在数据入口层把一篇 80K 的网页洗成 15K，这 65K 的减量不仅当轮省了钱，还让后续每一轮少付 65K × 0.1x 的缓存读取费（上下文累积层收益），同时如果这份内容恰好在 system prompt 的缓存前缀之后紧接着（固定开销层），它被缓存的概率也更高。**层与层之间不是独立的减法，是乘法**。
+
+## 带走这几句话
+
+**1. Coding Agent 的钱花在"读"上，不在"写"上。** 一个 10 轮 session 的读写比是 30:1，prefill 占总费用 85%。Output 单价虽然是 input 的 5 倍，但 Coding Agent 场景里 output 总量太小，对总账单的影响不到 15%。优化方向永远是减少输入、而不是让模型少说话。
+
+**2. 四个层次的优化路径完全不同，工具不可混用。** rtk 只能压 CLI 输出（工具输出层），defuddle 只能洗网页（数据入口层），compact/subagent 只能管历史（上下文累积层），prompt caching 只能缓存不变前缀（固定开销层）。搞清楚自己的钱花在哪一层，是选对工具的前提。
+
+**3. Prompt Caching 是 ROI 最高的单一优化。** 零工程投入、零外部依赖，10 轮省 62%，50 轮省 81%。主流框架已经默认开启，唯一要做的是别把它搞废——不要在 system prompt 里塞动态内容。
+
+**4. 源头做的减法会被时间放大。** 第 t 轮省下来的 token 不是省一次，是在后续每一轮都少付一次缓存读取费。数据入口层洗掉 60K 噪声，在 50 轮 session 里的累计节省远不止 60K × 一次费率——它避免了 60K 被反复缓存读取 49 次。各层优化之间是乘法关系，不是加法。
+
+**5. 上下文管理是最难但最根本的一层。** Subagent 隔离和 Agent Teams 从架构上解决了"过程 token 不应进入主 context"的问题。它们不是事后压缩，是事前预防。代价是每个 subagent 都要重新承担一份固定开销——所以只适合"过程复杂、结论简短"的子任务。
+
+**6. 这张地图和另外两篇文章一起读。** 本文讲的是"读"侧——输入 token 的来源与减法路径。[Prompt Caching：被忽视的非对称性](/posts/prompt-caching-asymmetry/) 是"读"侧的物理机制——为什么前缀能被缓存、为什么 prefill 是计算密集而 decode 是带宽密集。[Test-Time Compute：让模型在回答之前先想一想](/posts/test-time-compute/) 是"写"侧的算力经济学——thinking token 的定价逻辑和预算控制。三篇合起来，构成一次 Coding Agent 推理成本的完整地图。
 
 ## 参考资料
 
-### 工具仓库
+### 工具与框架
 
-- [rtk](https://github.com/rtk-ai/rtk) — Rust 编写的 CLI 输出压缩代理，针对 Agent 场景做规则改写
-- [defuddle](https://github.com/kepano/defuddle) — TypeScript 网页正文抽取工具，Readability 的现代替代
-- [markitdown](https://github.com/microsoft/markitdown) — Microsoft 出品的异构文档转 Markdown 工具
-- [cline](https://github.com/cline/cline) — 开源 coding agent，内置滑动窗口与上下文管理
+- [rtk](https://github.com/rtk-ai/rtk) — Rust 编写的 CLI 输出压缩代理，在 shell 和 Agent 之间做规则改写，压缩率 60-90%
+- [defuddle](https://github.com/kepano/defuddle) — 网页正文抽取工具，Readability 的现代替代，输出干净 Markdown
+- [markitdown](https://github.com/microsoft/markitdown) — Microsoft 出品的异构文档转 Markdown 工具，支持 PDF/Office/OCR/音频
+- [Cline](https://github.com/cline/cline) — 开源 coding agent，内置滑动窗口截断与上下文管理
 
 ### 厂商文档
 
-- [Claude API Pricing](https://platform.claude.com/docs/en/about-claude/pricing) — Opus 4.7 / Sonnet 4.6 / Haiku 4.5 完整定价表与 prompt caching 倍率说明
-- [Anthropic Prompt Caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) — Anthropic 的 cache_control 接口与最佳实践
-- [Claude Code Documentation](https://docs.claude.com/en/docs/claude-code) — Claude Code 官方文档，包含 `/compact`、`/cost` 等命令
+- [Claude Opus 4.7 Pricing](https://platform.claude.com/docs/en/about-claude/pricing) — 完整定价表，含 prompt caching 倍率与新 tokenizer 说明
+- [Anthropic Prompt Caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) — cache_control 接口、TTL 机制与工程最佳实践
+- [Claude Code Subagents](https://code.claude.com/docs/en/sub-agents) — 自定义 subagent 的定义、工具限制、模型选择与持久化记忆
+- [Claude Code Agent Teams](https://code.claude.com/docs/en/agent-teams) — 多 Agent 协作的实验功能：共享任务列表、消息通信、并行工作
 
 ### 相关阅读
 
-- [Prompt Caching：被忽视的非对称性](/posts/prompt-caching-asymmetry/) — KV Cache 到 Prompt Cache 的物理基础与三家厂商设计哲学
-- [Test-Time Compute：让模型在回答之前先想一想](/posts/test-time-compute/) — 推理时算力扩展的学术源头与工业实现
+- [Prompt Caching：被忽视的非对称性](/posts/prompt-caching-asymmetry/) — 从 KV Cache 到 Prompt Cache 的物理基础，三家厂商的设计哲学对比
+- [Test-Time Compute：让模型在回答之前先想一想](/posts/test-time-compute/) — 推理时算力扩展的学术源头、工业实现与 thinking token 经济学
