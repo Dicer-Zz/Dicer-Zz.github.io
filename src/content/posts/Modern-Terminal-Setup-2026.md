@@ -12,6 +12,8 @@ draft: false
 
 选终端工具链本质上是在回答一个问题：日常开发中，你在哪些操作上花了不必要的时间？对我来说答案很明确——频繁地在终端和 GUI 应用之间切换。看 diff 切到 Git GUI，浏览文件切到 Finder，问 AI 切到浏览器。这套方案的目标就是**把所有高频操作收拢到终端里**，用键盘完成一切。
 
+> **想跳过手动配置？** 我把整套方案整理成了一份 agent 可执行的手册，覆盖 macOS 和主流 Linux 发行版（Debian/Ubuntu、Fedora、Arch）。把 [这份 gist](https://gist.github.com/Dicer-Zz/6868cea25c6f252da1e72e5296c3d999) 的链接贴给 Claude Code / Cursor / Codex CLI，告诉它「按这份手册帮我配置终端」即可。下面继续讲每个工具的设计理由和配置思路。
+
 ## 1. Ghostty：Zig 写的 GPU 终端
 
 Ghostty 是 Mitchell Hashimoto（HashiCorp 创始人）用 Zig 从零写的终端模拟器。选它的理由很简单：**它是我用过的启动最快、渲染最流畅的终端**。
