@@ -277,6 +277,16 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 ```
 
+**uv**——如果你写 Python，把它列入清单。Astral 用 Rust 重写的 Python 工具链，一个二进制覆盖 pip / venv / pyenv / poetry 的全部职能，速度 10-100 倍。
+
+```bash
+brew install uv     # macOS
+# 或者跨平台官方脚本
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+常用：`uv venv` 建虚拟环境、`uv add <pkg>` 装包、`uv run script.py` 直接跑（自动管理 venv）、`uv python install 3.13` 装解释器。它和上面的核心五件套是一个气质——单二进制、零配置、Rust 写的、把一类老工具替换得明明白白。
+
 ## 7. 统一色彩：Catppuccin Mocha
 
 整套方案的视觉一致性靠 **Catppuccin Mocha** 主题保证。Catppuccin 是一套低对比度的暖色调调色板，有 Latte（亮）、Frappe、Macchiato、Mocha（暗）四个变体。我用 Mocha（最深的暗色变体），背景色 `#1e1e2e`，文字色 `#cdd6f4`，对比度刚好不刺眼。
