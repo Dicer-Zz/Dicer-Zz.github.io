@@ -5,7 +5,7 @@ description: "递归自我改进（RSI）从 AI 安全社区的思想实验变�
 image: "/gallery/cover/when-ai-improves-ai.png"
 tags: ["LLM", "RSI", "Autoresearch", "AI Safety", "Self-Improvement"]
 category: "技术"
-draft: true
+draft: false
 ---
 
 ## 一个六十年前的推演
