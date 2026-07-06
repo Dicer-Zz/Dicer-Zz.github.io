@@ -23,4 +23,16 @@ const currentYear = new Date().getFullYear();
         <span id="busuanzi_container_site_uv" style="display:none">Visitors: <span id="busuanzi_value_site_uv"></span></span>
     </div>
 </div>
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+function loadBusuanzi() {
+    const existingScript = document.getElementById('busuanzi_script');
+    if (existingScript) existingScript.remove();
+    const script = document.createElement('script');
+    script.id = 'busuanzi_script';
+    script.src = '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
+    script.async = true;
+    document.body.appendChild(script);
+}
+loadBusuanzi();
+document.addEventListener('swup:contentReplaced', loadBusuanzi);
+</script>
