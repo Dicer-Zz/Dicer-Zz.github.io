@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>周邦彦词集</title>
+<style>
+  :root {
+    --bg: #faf8f5;
+    --text: #2c2c2c;
+    --text-light: #6b6b6b;
+    --accent: #8b4513;
+    --accent-light: #c89660;
+    --border: #e8e0d8;
+    --card-bg: #ffffff;
+    --sidebar-bg: #f5f2ed;
+    --highlight: #fff8f0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.9;
+    min-height: 100vh;
+  }
+
+  /* Layout */
+  .layout {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 280px;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    padding: 2rem 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+    z-index: 100;
+  }
+
+  .sidebar-header {
+    padding: 0 1.5rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1rem;
+  }
+
+  .sidebar-header h2 {
+    font-size: 1.1rem;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .sidebar-header p {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-top: 0.3rem;
+  }
+
+  .nav-section {
+    padding: 0.5rem 1.5rem;
+  }
+
+  .nav-section-title {
+    font-size: 0.75rem;
+    color: var(--accent-light);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  .nav-item {
+    display: block;
+    padding: 0.4rem 0.8rem;
+    margin: 0.15rem 0;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .nav-item:hover {
+    background: var(--highlight);
+    color: var(--accent);
+  }
+
+  .nav-item.active {
+    background: var(--highlight);
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Main Content */
+  .main {
+    flex: 1;
+    margin-left: 280px;
+    padding: 3rem 4rem;
+    max-width: 900px;
+  }
+
+  /* Header */
+  .page-header {
+    text-align: center;
+    padding: 2rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+
+  .page-header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+
+  .page-header .subtitle {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 3rem;
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid var(--accent-light);
+    letter-spacing: 0.08em;
+  }
+
+  /* Poem Card */
+  .poem-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem 2.5rem;
+    margin-bottom: 1.5rem;
+    transition: box-shadow 0.2s;
+  }
+
+  .poem-card:hover {
+    box-shadow: 0 2px 12px rgba(139, 69, 19, 0.08);
+  }
+
+  .poem-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .poem-body {
+    font-size: 1rem;
+    line-height: 2.2;
+    color: var(--text);
+  }
+
+  .poem-body p {
+    margin-bottom: 0.8rem;
+    text-indent: 0;
+  }
+
+  .poem-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Mobile toggle */
+  .menu-toggle {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 200;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.8rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--accent);
+  }
+
+  /* Back to top */
+  .back-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 40px;
+    height: 40px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .back-top.visible {
+    opacity: 0.8;
+  }
+
+  .back-top:hover {
+    opacity: 1;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .sidebar {
+      transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+    }
+
+    .menu-toggle {
+      display: block;
+    }
+
+    .main {
+      margin-left: 0;
+      padding: 2rem 1.5rem;
+      padding-top: 4rem;
+    }
+
+    .page-header h1 {
+      font-size: 1.8rem;
+    }
+
+    .poem-card {
+      padding: 1.5rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="toggleSidebar()">&#9776;</button>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>周邦彦词集</h2>
+      <p>清真居士 (1056-1121)</p>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">兰陵王</div>
+      <a class="nav-item" href="#poem-1">兰陵王·柳</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">六丑</div>
+      <a class="nav-item" href="#poem-2">六丑·蔷薇谢后作</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">瑞龙吟</div>
+      <a class="nav-item" href="#poem-3">瑞龙吟·大石春景</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">花犯</div>
+      <a class="nav-item" href="#poem-4">花犯·小石梅花</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">渡江云</div>
+      <a class="nav-item" href="#poem-5">渡江云·晴岚低楚甸</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">拜星月慢</div>
+      <a class="nav-item" href="#poem-6">拜星月慢·夜色催更</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">西河</div>
+      <a class="nav-item" href="#poem-7">西河·金陵怀古</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">夜飞鹊</div>
+      <a class="nav-item" href="#poem-8">夜飞鹊·河桥送人处</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">满庭芳</div>
+      <a class="nav-item" href="#poem-9">满庭芳·夏日溧水无想山作</a>
+      <a class="nav-item" href="#poem-10">满庭芳·咏茶</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">浣溪沙</div>
+      <a class="nav-item" href="#poem-11">浣溪沙·楼上晴天碧四垂</a>
+      <a class="nav-item" href="#poem-12">浣溪沙·雨过残红湿未飞</a>
+      <a class="nav-item" href="#poem-13">浣溪沙·翠葆参差竹径成</a>
+      <a class="nav-item" href="#poem-14">浣溪沙·水涨鱼天拍柳桥</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">少年游</div>
+      <a class="nav-item" href="#poem-15">少年游·朝云漠漠散轻丝</a>
+      <a class="nav-item" href="#poem-16">少年游·并刀如水</a>
+      <a class="nav-item" href="#poem-17">少年游·南都石黛扫晴山</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">苏幕遮</div>
+      <a class="nav-item" href="#poem-18">苏幕遮·燎沉香</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">蝶恋花</div>
+      <a class="nav-item" href="#poem-19">蝶恋花·早行</a>
+      <a class="nav-item" href="#poem-20">蝶恋花·梦入江南烟水路</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">玉楼春</div>
+      <a class="nav-item" href="#poem-21">玉楼春·桃溪不作从容住</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">解语花</div>
+      <a class="nav-item" href="#poem-22">解语花·上元</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">大酺</div>
+      <a class="nav-item" href="#poem-23">大酺·春雨</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">关河令</div>
+      <a class="nav-item" href="#poem-24">关河令·秋阴时晴渐向暝</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">风流子</div>
+      <a class="nav-item" href="#poem-25">风流子·新绿小池塘</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">尉迟杯</div>
+      <a class="nav-item" href="#poem-26">尉迟杯·隋堤路</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">应天长</div>
+      <a class="nav-item" href="#poem-27">应天长·条风布暖</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">齐天乐</div>
+      <a class="nav-item" href="#poem-28">齐天乐·绿芜凋尽台城路</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">点绛唇</div>
+      <a class="nav-item" href="#poem-29">点绛唇·伤感</a>
+      <a class="nav-item" href="#poem-30">点绛唇·台上披襟</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">一落索</div>
+      <a class="nav-item" href="#poem-31">一落索·眉共春山争翠</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">解连环</div>
+      <a class="nav-item" href="#poem-32">解连环·怨怀无托</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">琐窗寒</div>
+      <a class="nav-item" href="#poem-33">琐窗寒·暗柳啼鸦</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">绮寮怨</div>
+      <a class="nav-item" href="#poem-34">绮寮怨·上马人扶残醉</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">夜游宫</div>
+      <a class="nav-item" href="#poem-35">夜游宫·叶下斜阳照水</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">过秦楼</div>
+      <a class="nav-item" href="#poem-36">过秦楼·水浴清蟾</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">望江南</div>
+      <a class="nav-item" href="#poem-37">望江南·游妓散</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">忆旧游</div>
+      <a class="nav-item" href="#poem-38">忆旧游·记愁横浅黛</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">荔枝香近</div>
+      <a class="nav-item" href="#poem-39">荔枝香近·照水残红零乱</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">霜叶飞</div>
+      <a class="nav-item" href="#poem-40">霜叶飞·露迷衰草</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">浪淘沙慢</div>
+      <a class="nav-item" href="#poem-41">浪淘沙慢·晓阴重</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">庆春宫</div>
+      <a class="nav-item" href="#poem-42">庆春宫·云接平冈</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">庆宫春</div>
+      <a class="nav-item" href="#poem-43">庆宫春·双桨莼波</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">红林檎近</div>
+      <a class="nav-item" href="#poem-44">红林檎近·风雪惊初霁</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">醉落魄</div>
+      <a class="nav-item" href="#poem-45">醉落魄·江天一色</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">虞美人</div>
+      <a class="nav-item" href="#poem-46">虞美人·疏篱曲径田家小</a>
+      <a class="nav-item" href="#poem-47">虞美人·廉纤小雨池塘遍</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">青玉案</div>
+      <a class="nav-item" href="#poem-48">青玉案·良夜灯光簇如豆</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">诉衷情</div>
+      <a class="nav-item" href="#poem-49">诉衷情·出林杏子落金盘</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">忆秦娥</div>
+      <a class="nav-item" href="#poem-50">忆秦娥·灯花结</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">思越人</div>
+      <a class="nav-item" href="#poem-51">思越人·紫府东风放夜时</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">隔浦莲近</div>
+      <a class="nav-item" href="#poem-52">隔浦莲近·中山县圃姑射亭避暑作</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">侧犯</div>
+      <a class="nav-item" href="#poem-53">侧犯·大石秋景</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">长相思慢</div>
+      <a class="nav-item" href="#poem-54">长相思慢·夜色澄明</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">意难忘</div>
+      <a class="nav-item" href="#poem-55">意难忘·衣染莺黄</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">醉桃源</div>
+      <a class="nav-item" href="#poem-56">醉桃源·冬衣初染远山青</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">塞翁吟</div>
+      <a class="nav-item" href="#poem-57">塞翁吟·暗叶飘风</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">红窗迥</div>
+      <a class="nav-item" href="#poem-58">红窗迥·几日来真个醉</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">氐州第一</div>
+      <a class="nav-item" href="#poem-59">氐州第一·波落寒汀</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">瑞鹤仙</div>
+      <a class="nav-item" href="#poem-60">瑞鹤仙·悄郊原带郭</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">木兰花令</div>
+      <a class="nav-item" href="#poem-61">木兰花令·蛾眉芳草吴宫路</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">拜星月慢</div>
+      <a class="nav-item" href="#poem-62">拜星月慢·绿遍蒲芽</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">绕佛阁</div>
+      <a class="nav-item" href="#poem-63">绕佛阁·暗尘四敛</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">华胥引</div>
+      <a class="nav-item" href="#poem-64">华胥引·秋思</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">宴清都</div>
+      <a class="nav-item" href="#poem-65">宴清都·地僻无钟鼓</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">曲玉管</div>
+      <a class="nav-item" href="#poem-66">曲玉管·陇首云飞</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">法曲献仙音</div>
+      <a class="nav-item" href="#poem-67">法曲献仙音·蝉咽凉柯</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">丹凤吟</div>
+      <a class="nav-item" href="#poem-68">丹凤吟·迢迢芳草路</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">蓦山溪</div>
+      <a class="nav-item" href="#poem-69">蓦山溪·湖平春水</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">定风波</div>
+      <a class="nav-item" href="#poem-70">定风波·莫倚危楼独怅然</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">菩萨蛮</div>
+      <a class="nav-item" href="#poem-71">菩萨蛮·梅雪</a>
+      <a class="nav-item" href="#poem-72">菩萨蛮·春雨</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">鹤冲天</div>
+      <a class="nav-item" href="#poem-73">鹤冲天·梅雨霁</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">望江南</div>
+      <a class="nav-item" href="#poem-74">望江南·歌席上赠某</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">忆旧游</div>
+      <a class="nav-item" href="#poem-75">忆旧游·飞云冉冉蘅皋暮</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">采桑子</div>
+      <a class="nav-item" href="#poem-76">采桑子·满庭花影斜红绿</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">归去来</div>
+      <a class="nav-item" href="#poem-77">归去来·双脸桃花开未落</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">绛都春</div>
+      <a class="nav-item" href="#poem-78">绛都春·南楼坠燕</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">清真词补遗</div>
+      <a class="nav-item" href="#poem-79">南乡子·春闺</a>
+      <a class="nav-item" href="#poem-80">醉蓬莱·归故山</a>
+      <a class="nav-item" href="#poem-81">拜星月慢·夜色催更（又一首）</a>
+    </div>
+
+  </nav>
+
+  <main class="main">
+    <header class="page-header">
+      <h1>周邦彦词集</h1>
+      <p class="subtitle">周邦彦（1056—1121），字美成，号清真居士，钱塘人，北宋著名词人。精通音律，善于创调，词风富丽精工，结构严密，被誉为"词中老杜"。其词集《片玉词》存词约二百余首，语言典雅浑成，章法绵密多变，对南宋词坛影响深远。</p>
+    </header>
+    <section class="section" id="section-兰陵王">
+      <h2 class="section-title">兰陵王</h2>
+
+      <div class="poem-card" id="poem-1">
+        <h3 class="poem-title">兰陵王·柳</h3>
+        <div class="poem-body">
+          <p>柳阴直，烟里丝丝弄碧。隋堤上、曾见几番，拂水飘绵送行色。登临望故国，谁识京华倦客。长亭路，年去岁来，应折柔条过千尺。</p>
+          <p>闲寻旧踪迹，又酒趁哀弦，灯照离席。梨花榆火催寒食。愁一箭风快，半篙波暖，回头迢递便数驿，望人在天北。</p>
+          <p>凄恻，恨堆积。渐别浦萦回，津堠岑寂。斜阳冉冉春无极。念月榭携手，露桥闻笛。沉思前事，似梦里，泪暗滴。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-六丑">
+      <h2 class="section-title">六丑</h2>
+
+      <div class="poem-card" id="poem-2">
+        <h3 class="poem-title">六丑·蔷薇谢后作</h3>
+        <div class="poem-body">
+          <p>正单衣试酒，怅客里、光阴虚掷。愿春暂留，春归如过翼，一去无迹。为问花何在，夜来风雨，葬楚宫倾国。钗钿堕处遗香泽，乱点桃蹊，轻翻柳陌。多情为谁追惜。但蜂媒蝶使，时叩窗隔。</p>
+          <p>东园岑寂，渐蒙笼暗碧。静绕珍丛底，成叹息。长条故惹行客，似牵衣待话，别情无极。残英小、强簪巾帻。终不似一花一叶眼中人，花如人瘦，柳如眉翠。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-瑞龙吟">
+      <h2 class="section-title">瑞龙吟</h2>
+
+      <div class="poem-card" id="poem-3">
+        <h3 class="poem-title">瑞龙吟·大石春景</h3>
+        <div class="poem-body">
+          <p>章台路，还见褪粉梅梢，试花桃树。愔愔坊陌人家，定巢燕子，归来旧处。</p>
+          <p>黯凝伫，因念个人痴小，乍窥门户。侵晨浅约宫黄，障风映袖，盈盈笑语。</p>
+          <p>前度刘郎重到，访邻寻里，同时歌舞。唯有旧家秋娘，声价如故。吟笺赋笔，犹记燕台句。知谁伴、名园露饮，东城闲步。事与孤鸿去。探春尽是，伤离意绪。官柳低金缕。归骑晚、纤纤池塘飞雨。断肠院落，一帘风絮。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-花犯">
+      <h2 class="section-title">花犯</h2>
+
+      <div class="poem-card" id="poem-4">
+        <h3 class="poem-title">花犯·小石梅花</h3>
+        <div class="poem-body">
+          <p>粉墙低，梅花照眼，依然旧风味。露痕轻缀，疑净洗铅华，无限佳丽。去年胜赏曾孤倚，冰盘同宴喜。更可惜、雪中高树，香篝熏素被。</p>
+          <p>今年对花最匆匆，相逢似有恨，依依愁悴。吟望久，青苔上、旋看飞坠。相将见、脆丸荐酒，人正在、空江烟浪里。但梦想、一枝潇洒，黄昏斜照水。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-渡江云">
+      <h2 class="section-title">渡江云</h2>
+
+      <div class="poem-card" id="poem-5">
+        <h3 class="poem-title">渡江云·晴岚低楚甸</h3>
+        <div class="poem-body">
+          <p>晴岚低楚甸，暖回雁翼，阵势起平沙。骤惊春在眼，借问何时，委曲到山家。涂香晕色，盛粉饰、争作妍华。千万丝、陌头杨柳，渐渐可藏鸦。</p>
+          <p>堪嗟，清江东注，画舸西流，指长安日下。愁宴阑、风翻旗尾，潮溅乌纱。今宵正对初弦月，傍水驿、深舣蒹葭。沉恨处，时时自剔灯花。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-拜星月慢">
+      <h2 class="section-title">拜星月慢</h2>
+
+      <div class="poem-card" id="poem-6">
+        <h3 class="poem-title">拜星月慢·夜色催更</h3>
+        <div class="poem-body">
+          <p>夜色催更，清尘收露，小曲幽坊月暗。竹槛灯窗，识秋娘庭院。笑相遇，似觉琼枝玉树相倚，暖日明霞光烂。水盼兰情，总平生稀见。</p>
+          <p>画图中、旧识春风面。谁知道、自到瑶台畔。眷恋雨润云温，苦惊风吹散。念荒寒、寄宿无人馆。重门闭、败壁秋虫叹。怎奈向、一缕相思，隔溪山不断。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-西河">
+      <h2 class="section-title">西河</h2>
+
+      <div class="poem-card" id="poem-7">
+        <h3 class="poem-title">西河·金陵怀古</h3>
+        <div class="poem-body">
+          <p>佳丽地，南朝盛事谁记。山围故国绕清江，髻鬟对起。怒涛寂寞打孤城，风樯遥度天际。</p>
+          <p>断崖树、犹倒倚，莫愁艇子曾系。空余旧迹郁苍苍，雾沉半垒。夜深月过女墙来，伤心东望淮水。</p>
+          <p>酒旗戏鼓甚处市，想依稀、王谢邻里。燕子不知何世，入寻常、巷陌人家，相对如说兴亡，斜阳里。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-夜飞鹊">
+      <h2 class="section-title">夜飞鹊</h2>
+
+      <div class="poem-card" id="poem-8">
+        <h3 class="poem-title">夜飞鹊·河桥送人处</h3>
+        <div class="poem-body">
+          <p>河桥送人处，良夜何其。斜月远堕余辉。铜盘烛泪已流尽，霏霏凉露沾衣。相将散离会，探风前津鼓，树杪参旗。花骢会意，纵扬鞭、亦自行迟。</p>
+          <p>迢递路回清野，人语渐无闻，空带愁归。何意重经前地，遗钿不见，斜径都迷。兔葵燕麦，向残阳、欲与人齐。但徘徊班草，欷歔酹酒，极望天西。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-满庭芳">
+      <h2 class="section-title">满庭芳</h2>
+
+      <div class="poem-card" id="poem-9">
+        <h3 class="poem-title">满庭芳·夏日溧水无想山作</h3>
+        <div class="poem-body">
+          <p>风老莺雏，雨肥梅子，午阴嘉树清圆。地卑山近，衣润费炉烟。人静乌鸢自乐，小桥外、新绿溅溅。凭栏久，黄芦苦竹，拟泛九江船。</p>
+          <p>年年，如社燕，飘流瀚海，来寄修椽。且莫思身外，长近尊前。憔悴江南倦客，不堪听、急管繁弦。歌筵畔，先安簟枕，容我醉时眠。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-10">
+        <h3 class="poem-title">满庭芳·咏茶</h3>
+        <div class="poem-body">
+          <p>北苑研膏，方圭圆璧，万里名动京关。碎身粉骨，功合上凌烟。尊俎风流战胜，降春睡、开拓愁边。纤纤捧，研膏浅乳，金缕鹧鸪斑。</p>
+          <p>相如，虽病渴，一觞一咏，宾有群贤。为扶起灯前，醉玉颓山。搜搅胸中万卷，还倾动、三峡词源。归来晚，文君未寐，相对小窗前。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-浣溪沙">
+      <h2 class="section-title">浣溪沙</h2>
+
+      <div class="poem-card" id="poem-11">
+        <h3 class="poem-title">浣溪沙·楼上晴天碧四垂</h3>
+        <div class="poem-body">
+          <p>楼上晴天碧四垂，楼前芳草接天涯。劝君莫上最高梯。</p>
+          <p>新笋已成堂下竹，落花都上燕巢泥。忍听林表杜鹃啼。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-12">
+        <h3 class="poem-title">浣溪沙·雨过残红湿未飞</h3>
+        <div class="poem-body">
+          <p>雨过残红湿未飞，疏篱一带透斜晖。游蜂酿蜜窃春归。</p>
+          <p>金屋无人风竹乱，衣篝尽日水沉微。一春须有忆人时。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-13">
+        <h3 class="poem-title">浣溪沙·翠葆参差竹径成</h3>
+        <div class="poem-body">
+          <p>翠葆参差竹径成，新荷跳雨泪珠倾。曲阑斜转小池亭。</p>
+          <p>风约帘衣归燕急，水摇扇影戏鱼惊。柳梢残日弄微晴。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-14">
+        <h3 class="poem-title">浣溪沙·水涨鱼天拍柳桥</h3>
+        <div class="poem-body">
+          <p>水涨鱼天拍柳桥，云鸠拖雨过江皋。一番春信入东郊。</p>
+          <p>闲碾凤团消短梦，静看燕子垒新巢。又移日影上花梢。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-少年游">
+      <h2 class="section-title">少年游</h2>
+
+      <div class="poem-card" id="poem-15">
+        <h3 class="poem-title">少年游·朝云漠漠散轻丝</h3>
+        <div class="poem-body">
+          <p>朝云漠漠散轻丝，楼阁淡春姿。柳泣花啼，九街泥重，门外燕飞迟。</p>
+          <p>而今丽日明金屋，春色在桃枝。不似当时，小桥冲雨，幽恨两人知。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-16">
+        <h3 class="poem-title">少年游·并刀如水</h3>
+        <div class="poem-body">
+          <p>并刀如水，吴盐胜雪，纤手破新橙。锦幄初温，兽烟不断，相对坐调笙。</p>
+          <p>低声问：向谁行宿？城上已三更。马滑霜浓，不如休去，直是少人行。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-17">
+        <h3 class="poem-title">少年游·南都石黛扫晴山</h3>
+        <div class="poem-body">
+          <p>南都石黛扫晴山，衣薄耐朝寒。一夕东风，海棠花谢，楼上卷帘看。</p>
+          <p>而今丽日明如洗，南陌暖雕鞍。旧赏园林，喜无风雨，春鸟报平安。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-苏幕遮">
+      <h2 class="section-title">苏幕遮</h2>
+
+      <div class="poem-card" id="poem-18">
+        <h3 class="poem-title">苏幕遮·燎沉香</h3>
+        <div class="poem-body">
+          <p>燎沉香，消溽暑。鸟雀呼晴，侵晓窥檐语。叶上初阳干宿雨，水面清圆，一一风荷举。</p>
+          <p>故乡遥，何日去。家住吴门，久作长安旅。五月渔郎相忆否，小楫轻舟，梦入芙蓉浦。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-蝶恋花">
+      <h2 class="section-title">蝶恋花</h2>
+
+      <div class="poem-card" id="poem-19">
+        <h3 class="poem-title">蝶恋花·早行</h3>
+        <div class="poem-body">
+          <p>月皎惊乌栖不定，更漏将残，辘轳牵金井。唤起两眸清炯炯，泪花落枕红绵冷。</p>
+          <p>执手霜风吹鬓影，去意徊徨，别语愁难听。楼上阑干横斗柄，露寒人远鸡相应。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-20">
+        <h3 class="poem-title">蝶恋花·梦入江南烟水路</h3>
+        <div class="poem-body">
+          <p>梦入江南烟水路，行尽江南，不与离人遇。睡里消魂无说处，觉来惆怅消魂误。</p>
+          <p>欲尽此情书尺素，浮雁沉鱼，终了无凭据。却倚缓弦歌别绪，断肠移破秦筝柱。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-玉楼春">
+      <h2 class="section-title">玉楼春</h2>
+
+      <div class="poem-card" id="poem-21">
+        <h3 class="poem-title">玉楼春·桃溪不作从容住</h3>
+        <div class="poem-body">
+          <p>桃溪不作从容住，秋藕绝来无续处。当时相候赤栏桥，今日独寻黄叶路。</p>
+          <p>烟中列岫青无数，雁背夕阳红欲暮。人如风后入江云，情似雨馀黏地絮。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-解语花">
+      <h2 class="section-title">解语花</h2>
+
+      <div class="poem-card" id="poem-22">
+        <h3 class="poem-title">解语花·上元</h3>
+        <div class="poem-body">
+          <p>风销绛蜡，露浥红莲，灯市光相射。桂华流瓦，纤云散、耿耿素娥欲下。衣裳淡雅，看楚女、纤腰一把。箫鼓喧，人影参差，满路飘香麝。</p>
+          <p>因念都城放夜，望千门如昼，嬉笑游冶。钿车罗帕，相逢处、自有暗尘随马。年光是也，唯只见、旧情衰谢。清漏移，飞盖归来，从舞休歌罢。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-大酺">
+      <h2 class="section-title">大酺</h2>
+
+      <div class="poem-card" id="poem-23">
+        <h3 class="poem-title">大酺·春雨</h3>
+        <div class="poem-body">
+          <p>对宿烟收，春禽静，飞雨时鸣高屋。墙头青玉旆，洗铅霜都尽，嫩梢相触。润逼琴丝，寒侵枕障，虫网吹黏帘竹。邮亭无人处，听檐声不断，困眠初熟。奈愁极频惊，梦轻难记，自怜幽独。</p>
+          <p>行人归意速，最先念、流潦妨车毂。怎奈向、兰成憔悴，卫玠清羸，等闲时、易伤心目。未怪平阳客，双泪落、笛中哀曲。况萧索、青芜国，红糁铺地，门外荆桃如菽。夜游共谁秉烛。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-关河令">
+      <h2 class="section-title">关河令</h2>
+
+      <div class="poem-card" id="poem-24">
+        <h3 class="poem-title">关河令·秋阴时晴渐向暝</h3>
+        <div class="poem-body">
+          <p>秋阴时晴渐向暝，变一庭凄冷。伫听寒声，云深无雁影。</p>
+          <p>更深人去寂静，但照壁孤灯相映。酒已都醒，如何消夜永。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-风流子">
+      <h2 class="section-title">风流子</h2>
+
+      <div class="poem-card" id="poem-25">
+        <h3 class="poem-title">风流子·新绿小池塘</h3>
+        <div class="poem-body">
+          <p>新绿小池塘，风帘动、碎影舞斜阳。羡金屋去来，旧时巢燕；土花缭绕，前度莓墙。绣阁里、凤帏深几许，听得理丝簧。欲说又休，虑乖芳信；未歌先咽，愁近清觞。</p>
+          <p>遥知新妆了，开朱户、应自待月西厢。最苦梦魂，今宵不到伊行。问甚时说与，佳音密耗，寄将秦镜，偷换韩香。天便教人，霎时厮见何妨。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-尉迟杯">
+      <h2 class="section-title">尉迟杯</h2>
+
+      <div class="poem-card" id="poem-26">
+        <h3 class="poem-title">尉迟杯·隋堤路</h3>
+        <div class="poem-body">
+          <p>隋堤路，渐日晚、密霭生深树。阴阴淡月笼沙，还宿河桥深处。无情画舸，都不管、烟波隔前浦。等行人醉拥重衾，载将离恨归去。</p>
+          <p>因思旧客京华，长偎傍疏林，小槛欢聚。冶叶倡条俱相识，仍惯见、珠歌翠舞。如今向、渔村水驿，夜如岁、焚香独自语。有何人念我无聊，梦魂凝想鸳侣。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-应天长">
+      <h2 class="section-title">应天长</h2>
+
+      <div class="poem-card" id="poem-27">
+        <h3 class="poem-title">应天长·条风布暖</h3>
+        <div class="poem-body">
+          <p>条风布暖，霏雾弄晴，池塘遍满春色。正是夜堂无月，沉沉暗寒食。梁间燕，前社客，似笑我、闭门愁寂。乱花过、隔院芸香，满地狼藉。</p>
+          <p>长记那回时，邂逅相逢，郊外驻油壁。又见汉宫传烛，飞烟五侯宅。青青草，迷路陌。强载酒、细寻前迹。市桥远、柳下人家，犹自相识。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-齐天乐">
+      <h2 class="section-title">齐天乐</h2>
+
+      <div class="poem-card" id="poem-28">
+        <h3 class="poem-title">齐天乐·绿芜凋尽台城路</h3>
+        <div class="poem-body">
+          <p>绿芜凋尽台城路，殊乡又逢秋晚。暮雨生寒，鸣蛩劝织，深阁时闻裁剪。云窗静掩，叹重拂罗裀，顿疏花簟。尚有綀囊，露萤清夜照书卷。</p>
+          <p>荆江留滞最久，故人相望处，离思何限。渭水西风，长安乱叶，空忆诗情宛转。凭高眺远，见家乡、只在白云深处。苦无雁足，望长淮、仍是不寄双鱼远。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-点绛唇">
+      <h2 class="section-title">点绛唇</h2>
+
+      <div class="poem-card" id="poem-29">
+        <h3 class="poem-title">点绛唇·伤感</h3>
+        <div class="poem-body">
+          <p>辽鹤归来，故乡多少伤心地。寸书不寄，鱼浪空千里。</p>
+          <p>凭仗桃根，说与凄凉意。愁无际，旧时衣袂，犹有东门泪。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-30">
+        <h3 class="poem-title">点绛唇·台上披襟</h3>
+        <div class="poem-body">
+          <p>台上披襟，快风一瞬收残雨。柳丝轻举，蛛网黏飞絮。</p>
+          <p>极目平芜，应是春归处。愁凝伫，楚歌声苦，村落黄昏鼓。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-一落索">
+      <h2 class="section-title">一落索</h2>
+
+      <div class="poem-card" id="poem-31">
+        <h3 class="poem-title">一落索·眉共春山争翠</h3>
+        <div class="poem-body">
+          <p>眉共春山争翠，可怜长皱。莫将清泪湿花枝，恐花也、如人瘦。</p>
+          <p>清润玉箫闲久，知音稀有。欲知日日倚栏愁，但问取、亭前柳。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-解连环">
+      <h2 class="section-title">解连环</h2>
+
+      <div class="poem-card" id="poem-32">
+        <h3 class="poem-title">解连环·怨怀无托</h3>
+        <div class="poem-body">
+          <p>怨怀无托，嗟情人断绝，信音辽邈。纵妙手、能解连环，似风散雨收，雾轻云薄。燕子楼空，暗尘锁、一床弦索。想移根换叶，尽是旧时，手种红药。</p>
+          <p>汀洲渐生杜若，料舟依岸曲，人在天角。谩记得、当日音书，把闲语闲言，待总烧却。水驿春回，望寄我、江南梅萼。拚今生、对花对酒，为伊泪落。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-琐窗寒">
+      <h2 class="section-title">琐窗寒</h2>
+
+      <div class="poem-card" id="poem-33">
+        <h3 class="poem-title">琐窗寒·暗柳啼鸦</h3>
+        <div class="poem-body">
+          <p>暗柳啼鸦，单衣伫立，小帘朱户。桐花半亩，静锁一庭愁雨。洒空阶、夜阑未休，故人剪烛西窗语。似楚江暝宿，风灯零乱，少年羁旅。</p>
+          <p>迟暮，嬉游处，正店舍无烟，禁城百五。旗亭唤酒，付与高阳俦侣。想东园、桃李自春，小唇秀靥今在否。到归时、定有残英，待客携尊俎。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-绮寮怨">
+      <h2 class="section-title">绮寮怨</h2>
+
+      <div class="poem-card" id="poem-34">
+        <h3 class="poem-title">绮寮怨·上马人扶残醉</h3>
+        <div class="poem-body">
+          <p>上马人扶残醉，晓风吹未醒。映水曲、翠瓦朱檐，垂杨里、乍见津亭。当时曾题败壁，蛛丝罩、淡墨苔晕青。念去来、岁月如流，徘徊久、叹息愁思盈。</p>
+          <p>去去倦寻路程，江陵旧事，何曾再问杨琼。旧曲凄清，敛愁黛、与谁听。尊前故人如在，想念我、最关情。何须渭城，歌声未尽处，先泪零。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-夜游宫">
+      <h2 class="section-title">夜游宫</h2>
+
+      <div class="poem-card" id="poem-35">
+        <h3 class="poem-title">夜游宫·叶下斜阳照水</h3>
+        <div class="poem-body">
+          <p>叶下斜阳照水，卷轻浪、沉沉千里。桥上酸风射眸子。立多时，看黄昏，灯火市。</p>
+          <p>古屋寒窗底，听几片、井桐飞坠。不恋单衾再三起。有谁知，为萧娘，书一纸。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-过秦楼">
+      <h2 class="section-title">过秦楼</h2>
+
+      <div class="poem-card" id="poem-36">
+        <h3 class="poem-title">过秦楼·水浴清蟾</h3>
+        <div class="poem-body">
+          <p>水浴清蟾，叶喧凉吹，巷陌马声初断。闲依露井，笑扑流萤，惹破画罗轻扇。人静夜久凭阑，愁不归眠，立残更箭。叹年华一瞬，人今千里，梦沉书远。</p>
+          <p>空见说、鬓怯琼梳，容销金镜，渐懒趁时匀染。梅风地溽，虹雨苔滋，一架舞红都变。谁信无聊为伊，才减江淹，情伤荀倩。但明河影下，还看稀星数点。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-望江南">
+      <h2 class="section-title">望江南</h2>
+
+      <div class="poem-card" id="poem-37">
+        <h3 class="poem-title">望江南·游妓散</h3>
+        <div class="poem-body">
+          <p>游妓散，独自绕回堤。芳草怀烟迷水曲，密云衔雨暗城西。九陌未沾泥。</p>
+          <p>桃李下，春晚未成蹊。墙外见花寻路转，柳阴行马过莺啼。无处不凄凄。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-忆旧游">
+      <h2 class="section-title">忆旧游</h2>
+
+      <div class="poem-card" id="poem-38">
+        <h3 class="poem-title">忆旧游·记愁横浅黛</h3>
+        <div class="poem-body">
+          <p>记愁横浅黛，泪洗红铅，门掩秋宵。坠叶惊离思，听寒螀夜泣，乱雨潇潇。凤钗半脱云鬓，窗影烛光摇。渐暗竹敲凉，疏萤照晚，两地魂消。</p>
+          <p>迢迢，问音信，道径底花阴，时认鸣镳。也拟临朱户，叹因郎憔悴，羞见郎招。旧巢更有新燕，杨柳拂河桥。但满目京尘，东风竟日吹露桃。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-荔枝香近">
+      <h2 class="section-title">荔枝香近</h2>
+
+      <div class="poem-card" id="poem-39">
+        <h3 class="poem-title">荔枝香近·照水残红零乱</h3>
+        <div class="poem-body">
+          <p>照水残红零乱，风唤去。尽日恻恻轻寒，帘底吹香雾。黄昏客枕无憀，细响当窗雨。看两两相依燕新乳。</p>
+          <p>楼下水，渐绿遍、行舟浦。暮往朝来，心逐片帆轻举。何日迎门，小槛朱笼报鹦鹉。共剪西窗蜜炬。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-霜叶飞">
+      <h2 class="section-title">霜叶飞</h2>
+
+      <div class="poem-card" id="poem-40">
+        <h3 class="poem-title">霜叶飞·露迷衰草</h3>
+        <div class="poem-body">
+          <p>露迷衰草，疏星淡月，水映横桥。门掩清宵，小帘灯火飘摇。梦短不到处，思量将何寄高遥。怨怀难写，但寸断回肠，自转柔绡。</p>
+          <p>频歌纵饮，可怜一梦如飘。觉也还醒，深愁难抛。彩云空入旧时凋。任无人问夜，独自凭阑销。酒醒风幔，更那堪孤枕难挨到晓。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-浪淘沙慢">
+      <h2 class="section-title">浪淘沙慢</h2>
+
+      <div class="poem-card" id="poem-41">
+        <h3 class="poem-title">浪淘沙慢·晓阴重</h3>
+        <div class="poem-body">
+          <p>晓阴重，霜凋岸草，雾隐城堞。南陌脂车待发，东门帐饮乍阕。正拂面垂杨堪揽结，掩红泪、玉手亲折。念汉浦离鸿去何许，经时信音绝。</p>
+          <p>情切，望中地远天阔，向露冷风清无人处，耿耿寒漏咽。嗟万事难忘，惟是轻别。翠尊未竭，凭断云留取，西楼残月。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-庆春宫">
+      <h2 class="section-title">庆春宫</h2>
+
+      <div class="poem-card" id="poem-42">
+        <h3 class="poem-title">庆春宫·云接平冈</h3>
+        <div class="poem-body">
+          <p>云接平冈，山围寒野，路回渐转孤城。衰柳啼鸦，惊风驱雁，动人一片秋声。倦途休驾，淡烟里、微茫见星。尘埃憔悴，生怕黄昏，离思牵萦。</p>
+          <p>华堂旧日逢迎，花艳参差，香雾飘零。弦管当头，偏怜娇凤，歌喉清丽堪听。如今赖是，无聊最、怀人歌词。眉消睡黄，春凝泪妆，秋剪愁鬟。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-庆宫春">
+      <h2 class="section-title">庆宫春</h2>
+
+      <div class="poem-card" id="poem-43">
+        <h3 class="poem-title">庆宫春·双桨莼波</h3>
+        <div class="poem-body">
+          <p>双桨莼波，一蓑松雨，暮愁渐满空阔。呼我盟鸥，翩翩欲下，背人还过木末。那回归去，荡云雪、孤舟夜发。伤心重见，依约眉山，黛痕低压。</p>
+          <p>采香径里春寒，老子婆娑，自歌谁答。垂虹西望，飘然引去，此兴平生难遏。酒醒波远，正凝想、明珰素袜。如今安在，惟有阑干，伴人一霎。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-红林檎近">
+      <h2 class="section-title">红林檎近</h2>
+
+      <div class="poem-card" id="poem-44">
+        <h3 class="poem-title">红林檎近·风雪惊初霁</h3>
+        <div class="poem-body">
+          <p>风雪惊初霁，水乡增暮寒。树杪堕飞羽，檐牙挂琅玕。才喜门堆巷积，可惜风翻日烁便清残。</p>
+          <p>薄劣东回暖律，逗几番花信，来次第留春伴。年华如许匆匆，还是带残腊，又见新正半。郊行聊整倦游冠，多少春前侣，等相看。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-醉落魄">
+      <h2 class="section-title">醉落魄</h2>
+
+      <div class="poem-card" id="poem-45">
+        <h3 class="poem-title">醉落魄·江天一色</h3>
+        <div class="poem-body">
+          <p>江天一色，转珠帘外秋如织。倚高寒、浑怕登攀跌。暗想当时，一点春风力。</p>
+          <p>多年未省淹留迹，暮云心绪谁拘得。也知飞絮由风急。开到荼蘼，难为人漫忆。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-虞美人">
+      <h2 class="section-title">虞美人</h2>
+
+      <div class="poem-card" id="poem-46">
+        <h3 class="poem-title">虞美人·疏篱曲径田家小</h3>
+        <div class="poem-body">
+          <p>疏篱曲径田家小，云树开清晓。天寒山色有无中，野外一声钟起、送孤蓬。</p>
+          <p>添衣策马寻亭堠，愁抱惟宜酒。菰蒲睡鸭占陂塘，纵被行人惊散、又成双。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-47">
+        <h3 class="poem-title">虞美人·廉纤小雨池塘遍</h3>
+        <div class="poem-body">
+          <p>廉纤小雨池塘遍，细点看萍面。一双燕子守朱门，比似寻常时候、易黄昏。</p>
+          <p>宜城酒泛浮香絮，细作更阑语。相将羁思乱如云，又是一窗灯影、两愁人。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-青玉案">
+      <h2 class="section-title">青玉案</h2>
+
+      <div class="poem-card" id="poem-48">
+        <h3 class="poem-title">青玉案·良夜灯光簇如豆</h3>
+        <div class="poem-body">
+          <p>良夜灯光簇如豆，占好事、今宵有。酒罢歌馀人散后。琵琶轻放，语声低颤，灭烛来相就。</p>
+          <p>洗铅一见风流够，消得芳年何日又。那时初识严妆透。如今宽带，寒添衣服，一样销魂瘦。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-诉衷情">
+      <h2 class="section-title">诉衷情</h2>
+
+      <div class="poem-card" id="poem-49">
+        <h3 class="poem-title">诉衷情·出林杏子落金盘</h3>
+        <div class="poem-body">
+          <p>出林杏子落金盘，齿软怕尝酸。可成小摘供煎酿，须待日华翻。</p>
+          <p>弄夜色，恍崖前。跨征鞍。念谁为我，小驻芳椒，愿眷重还。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-忆秦娥">
+      <h2 class="section-title">忆秦娥</h2>
+
+      <div class="poem-card" id="poem-50">
+        <h3 class="poem-title">忆秦娥·灯花结</h3>
+        <div class="poem-body">
+          <p>灯花结，宝钗垂见鸾又没。鸾又没，巧云翻卷，细柳低折。</p>
+          <p>人在绛纱灯影侧，临风一寸心如烈。心如烈，短歌唱入，青鸾飞歇。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-思越人">
+      <h2 class="section-title">思越人</h2>
+
+      <div class="poem-card" id="poem-51">
+        <h3 class="poem-title">思越人·紫府东风放夜时</h3>
+        <div class="poem-body">
+          <p>紫府东风放夜时，步莲秾李伴人归。五更钟动笙歌散，十里月明灯火稀。</p>
+          <p>香苒苒，梦依依，天涯寒尽减春衣。凤凰城阙知何处，寥落星河一雁飞。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-隔浦莲近">
+      <h2 class="section-title">隔浦莲近</h2>
+
+      <div class="poem-card" id="poem-52">
+        <h3 class="poem-title">隔浦莲近·中山县圃姑射亭避暑作</h3>
+        <div class="poem-body">
+          <p>新篁摇动翠葆，曲径通深窈。夏果收新脆，金丸惊飞鸟。浓翠迷岸草。蛙声闹，骤雨鸣池沼。</p>
+          <p>水亭小，浮萍破处，帘花檐影颠倒。纶巾羽扇，困卧北窗清晓。屏里吴山梦自到。惊觉，依然身在江表。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-侧犯">
+      <h2 class="section-title">侧犯</h2>
+
+      <div class="poem-card" id="poem-53">
+        <h3 class="poem-title">侧犯·大石秋景</h3>
+        <div class="poem-body">
+          <p>暮霞霁雨，小莲出水红妆靓。风清楚甸，看淮山、断处如信。断肠烟水，明月几番曾照人影。凝望久、又送归鸿，一片苍茫恨。</p>
+          <p>佩声悄、晚妆残，腰肢倦怯。谁念我、重见冷枫红舞，还似此间。秋娘渡、泰娘桥，风又飘零，就中堪恨。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-长相思慢">
+      <h2 class="section-title">长相思慢</h2>
+
+      <div class="poem-card" id="poem-54">
+        <h3 class="poem-title">长相思慢·夜色澄明</h3>
+        <div class="poem-body">
+          <p>夜色澄明，天街如水，风紧驿亭深闭。倦旅天涯，也依约、临水人家。几度断肠残照里。</p>
+          <p>渐行渐远渐无书，眺望极、千山历历。正春深，更看看、又是清明近。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-意难忘">
+      <h2 class="section-title">意难忘</h2>
+
+      <div class="poem-card" id="poem-55">
+        <h3 class="poem-title">意难忘·衣染莺黄</h3>
+        <div class="poem-body">
+          <p>衣染莺黄，爱停歌驻拍，劝酒持觞。低鬟蝉影动，私语口脂香。檐日暖，新妆艳，思何忘。</p>
+          <p>念时时、想花漏短，恨春宵长。粉泪暗相望，情不过许多长。追往事、一瞬飞电光。倚楼人，思梦里、那知今夜小窗双。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-醉桃源">
+      <h2 class="section-title">醉桃源</h2>
+
+      <div class="poem-card" id="poem-56">
+        <h3 class="poem-title">醉桃源·冬衣初染远山青</h3>
+        <div class="poem-body">
+          <p>冬衣初染远山青，双丝云雁绫。夜寒偏觉薄衾轻，暗潮何处生。</p>
+          <p>添绛蜡，缀红冰。年华惊暗更。明朝回首又天涯，新愁连旧期。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-塞翁吟">
+      <h2 class="section-title">塞翁吟</h2>
+
+      <div class="poem-card" id="poem-57">
+        <h3 class="poem-title">塞翁吟·暗叶飘风</h3>
+        <div class="poem-body">
+          <p>暗叶飘风，坠粉回沟，小池高阁闲梦。秋娘闭眼旁人见，不解意、故寻懵懂。感旧客、偏恨春浓，残花一片随风送。</p>
+          <p>偶借得、扁舟渡淮，又渐近、弦声弄。江国春寒飞雨，船窗静、日长翻成何用。清漏移，飞盖归来，又指故山肠断。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-红窗迥">
+      <h2 class="section-title">红窗迥</h2>
+
+      <div class="poem-card" id="poem-58">
+        <h3 class="poem-title">红窗迥·几日来真个醉</h3>
+        <div class="poem-body">
+          <p>几日来真个醉，不知道、窗外乱红已碎。平沙散漫连蒿荠，又几番新水。</p>
+          <p>塞鸿去矣，锦字何时寄。一段新愁无着处，倩东风教人忘记。但恨对、春光佳意，如梦竟莫醒。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-氐州第一">
+      <h2 class="section-title">氐州第一</h2>
+
+      <div class="poem-card" id="poem-59">
+        <h3 class="poem-title">氐州第一·波落寒汀</h3>
+        <div class="poem-body">
+          <p>波落寒汀，村渡向晚，遥看数点帆小。乱叶翻鸦，惊风驱雁，动人秋声满袅。行客已过清江了。望一抹、斜阳西照。倚高寒、孤城天际，溶溶烟渺。</p>
+          <p>长记平生湖海，几度凌雪，梅边吹笛残照。更回首、空城寂寞，对古道长亭晓。高楼空闭春色晓。正潮来、又无人到。谩凝伫、黄昏庭院，月华如扫。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-瑞鹤仙">
+      <h2 class="section-title">瑞鹤仙</h2>
+
+      <div class="poem-card" id="poem-60">
+        <h3 class="poem-title">瑞鹤仙·悄郊原带郭</h3>
+        <div class="poem-body">
+          <p>悄郊原带郭，行路永、客去车尘漠漠。斜阳映山落，敛馀红犹恋，孤城阑角。凌波步弱，过短亭、何用素约。有流莺劝我，重解绣鞍，缓引春酌。</p>
+          <p>不记归时早暮，上马谁扶，醒眠朱阁。惊飙动幕，扶残醉，绕红药。叹西园、已是花深无地，东风何事又恶。任流光过却，犹喜洞天自乐。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-木兰花令">
+      <h2 class="section-title">木兰花令</h2>
+
+      <div class="poem-card" id="poem-61">
+        <h3 class="poem-title">木兰花令·蛾眉芳草吴宫路</h3>
+        <div class="poem-body">
+          <p>蛾眉芳草吴宫路，又见绿杨如雨去。伤春恨远不胜情，旧时佳约凭何据。</p>
+          <p>天涯目送飞鸿暮，又送斜阳归去住。长安无限可怜人，断肠风月同羁旅。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-拜星月慢">
+      <h2 class="section-title">拜星月慢</h2>
+
+      <div class="poem-card" id="poem-62">
+        <h3 class="poem-title">拜星月慢·绿遍蒲芽</h3>
+        <div class="poem-body">
+          <p>绿遍蒲芽，萍点荷钱，暖意渐回芳信。正醺醺、困眠初觉，斜照窗明，小帘风定。帽压花枝侧，乍解短衫衬。</p>
+          <p>翠叶卷、小荷初放，露洗铅华净。柳底回塘暗叶翻，绿波深处鱼自并。对垂杨、密密风帘底，小鬟清唱金衣称。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-绕佛阁">
+      <h2 class="section-title">绕佛阁</h2>
+
+      <div class="poem-card" id="poem-63">
+        <h3 class="poem-title">绕佛阁·暗尘四敛</h3>
+        <div class="poem-body">
+          <p>暗尘四敛，楼观迥出，高映孤馆。清漏将残，骤雨初歇，满地落花飞片。推枕惘然不见，但空江、月明千里。五更飞梦环绕乡关。</p>
+          <p>陌上驴嘶，城头钟鼓。一番春色将半。倦蜂狂蝶皆相顾，又随流水去远。无言意绪如何，扑帘飞絮长丝短。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-华胥引">
+      <h2 class="section-title">华胥引</h2>
+
+      <div class="poem-card" id="poem-64">
+        <h3 class="poem-title">华胥引·秋思</h3>
+        <div class="poem-body">
+          <p>川原澄映，烟月冥濛，去舟如叶。岸足沙平，蒲根水冷留雁唼。别有孤角吟秋，对晓风鸣轧。红日三竿，醉头扶起还怯。</p>
+          <p>离思相萦，渐看看、鬓丝堪镊。舞衫歌板，暗消年少风月。遥想故园秋色老梧桐，又过重阳时节。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-宴清都">
+      <h2 class="section-title">宴清都</h2>
+
+      <div class="poem-card" id="poem-65">
+        <h3 class="poem-title">宴清都·地僻无钟鼓</h3>
+        <div class="poem-body">
+          <p>地僻无钟鼓，残灯灭、夜长人倚薰炉。倦鸳机织回文意，惟将旧恨、共谁诉。</p>
+          <p>待得归时记取，小窗横幅梅如故。恨春宵短梦难留住，一夜细雨廉纤，春色归去无处。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-曲玉管">
+      <h2 class="section-title">曲玉管</h2>
+
+      <div class="poem-card" id="poem-66">
+        <h3 class="poem-title">曲玉管·陇首云飞</h3>
+        <div class="poem-body">
+          <p>陇首云飞，江边日晚，烟波满目凭阑久。一望关河萧索，千里清秋，忍凝眸。杳杳神京，盈盈仙子，别来锦字终难偶。断雁无凭，冉冉飞下汀洲，思悠悠。</p>
+          <p>暗想当初，有多少、幽欢佳会，岂知聚散难期，翻成雨恨云愁。阑干凭遍，惆怅孤帆连夜发，带愁归、暮雨上层楼。清夜月华如练，绮窗闲倚，谁人知否，暗影灯前独自愁。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-法曲献仙音">
+      <h2 class="section-title">法曲献仙音</h2>
+
+      <div class="poem-card" id="poem-67">
+        <h3 class="poem-title">法曲献仙音·蝉咽凉柯</h3>
+        <div class="poem-body">
+          <p>蝉咽凉柯，燕辞暑幕，秋来几换华裾。正梧桐萧索，渐老难聚。但凄凉感旧，似前事、一一堪书。对暮景沉吟久，怕雁飞来、又无消息，寸心幽恨谁知。</p>
+          <p>昔曾共花下语。何计留春住。梦断瑶台路，正客怀愁思，等闲愁绪。旧时携手同行处，回首还迷去路。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-丹凤吟">
+      <h2 class="section-title">丹凤吟</h2>
+
+      <div class="poem-card" id="poem-68">
+        <h3 class="poem-title">丹凤吟·迢迢芳草路</h3>
+        <div class="poem-body">
+          <p>迢迢芳草路，极目沧波，隐隐望中天际。断鸿声里，立尽斜阳，满目伤春意。行舟载愁万斛，征衫寒逼。月明人静花影碎。</p>
+          <p>忆去年、此夜灯火前，共捻金针，对影成双自喜。而今谁在，冷落空闺，独倚西窗忆。纵有千般说不尽，堪恨无书寄。梧桐院落秋声碎。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-蓦山溪">
+      <h2 class="section-title">蓦山溪</h2>
+
+      <div class="poem-card" id="poem-69">
+        <h3 class="poem-title">蓦山溪·湖平春水</h3>
+        <div class="poem-body">
+          <p>湖平春水，菰蒲零乱飘还聚。簇簇新英，装点西湖雨。翠盖张天远，如高柳、扑人飞絮。鸣榔归棹，恰与乱鸥横。</p>
+          <p>烟波远，云帆举，谁知天际路。凭仗东风，吹梦到吴楚。临分更忆故人多，想此时、凭阑何处。无穷幽恨，一声长笛，月明人去。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-定风波">
+      <h2 class="section-title">定风波</h2>
+
+      <div class="poem-card" id="poem-70">
+        <h3 class="poem-title">定风波·莫倚危楼独怅然</h3>
+        <div class="poem-body">
+          <p>莫倚危楼独怅然，一川烟柳暗平川。去路迢迢人已远，肠断，春波无际接遥天。</p>
+          <p>多少年来风雨后，依旧，旧时亭馆柳依然。但看新愁还似旧，消瘦，伤心人在阑干前。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-菩萨蛮">
+      <h2 class="section-title">菩萨蛮</h2>
+
+      <div class="poem-card" id="poem-71">
+        <h3 class="poem-title">菩萨蛮·梅雪</h3>
+        <div class="poem-body">
+          <p>银河宛转三千曲，浴凫飞鹭澄波绿。何处是归舟，夕阳江上楼。</p>
+          <p>天憎梅浪发，故下封枝雪。深院卷帘看，应怜江上寒。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-72">
+        <h3 class="poem-title">菩萨蛮·春雨</h3>
+        <div class="poem-body">
+          <p>画堂昨夜愁无睡，风吹未碎荷声碎。都来此事，眉间心上，无计相回避。</p>
+          <p>小窗绿暗人初静，薄衾闲卧浑无定。一点春愁最难禁，梧桐细雨声声近。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-鹤冲天">
+      <h2 class="section-title">鹤冲天</h2>
+
+      <div class="poem-card" id="poem-73">
+        <h3 class="poem-title">鹤冲天·梅雨霁</h3>
+        <div class="poem-body">
+          <p>梅雨霁，暑风和，高柳乱蝉多。小园台榭远池波，鱼戏动新荷。</p>
+          <p>薄纱厨，轻羽扇，枕冷簟凉深院。此时情绪此时天，无事小神仙。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-望江南">
+      <h2 class="section-title">望江南</h2>
+
+      <div class="poem-card" id="poem-74">
+        <h3 class="poem-title">望江南·歌席上赠某</h3>
+        <div class="poem-body">
+          <p>歌筵畔，清唱遏云端。檀口小含新月样，鬓云低压落花寒。一曲断人肠。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-忆旧游">
+      <h2 class="section-title">忆旧游</h2>
+
+      <div class="poem-card" id="poem-75">
+        <h3 class="poem-title">忆旧游·飞云冉冉蘅皋暮</h3>
+        <div class="poem-body">
+          <p>飞云冉冉蘅皋暮，彩笔新题断肠句。试问闲愁都几许。一川烟草，满城风絮，梅子黄时雨。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-采桑子">
+      <h2 class="section-title">采桑子</h2>
+
+      <div class="poem-card" id="poem-76">
+        <h3 class="poem-title">采桑子·满庭花影斜红绿</h3>
+        <div class="poem-body">
+          <p>满庭花影斜红绿，风过帘旌，闲引流萤，弄影花阴坐到明。</p>
+          <p>起来无限伤春意，沉水烟消，花气如潮。小立东风感寂寥。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-归去来">
+      <h2 class="section-title">归去来</h2>
+
+      <div class="poem-card" id="poem-77">
+        <h3 class="poem-title">归去来·双脸桃花开未落</h3>
+        <div class="poem-body">
+          <p>双脸桃花开未落，紫陌春情断送。半暖轻寒，半晴微雨，抵死缠绵不离。</p>
+          <p>怎奈春如梦，恨重叠无穷。芳草连天迷路远，倚高楼、日日长亭送。此恨何时终。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-绛都春">
+      <h2 class="section-title">绛都春</h2>
+
+      <div class="poem-card" id="poem-78">
+        <h3 class="poem-title">绛都春·南楼坠燕</h3>
+        <div class="poem-body">
+          <p>南楼坠燕，又灯昏雨暗，哀弦远咽。寒食清明都过却，最怜轻负年时节。暗想连环解寄、谢池春好，恨不相与同折。</p>
+          <p>翠袖尽日少人傍，花坠处无人拾得。伤心旧恨春将歇，满院落花飞不歇。独自凝伫到黄昏，倚遍阑干十二曲。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section" id="section-清真词补遗">
+      <h2 class="section-title">清真词补遗</h2>
+
+      <div class="poem-card" id="poem-79">
+        <h3 class="poem-title">南乡子·春闺</h3>
+        <div class="poem-body">
+          <p>嗟来日苦无多，眼底春光半消磨。翠叶藏莺难觅处，偏他、偏向败丛花里歌。</p>
+          <p>侬是江南客，泪痕犹在薄罗衫。梦里相逢无处问，终朝、终是凭阑意未消。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-80">
+        <h3 class="poem-title">醉蓬莱·归故山</h3>
+        <div class="poem-body">
+          <p>渐亭皋叶下，陇首云飞，素秋新霁。华阙中天，锁葱葱佳气。嫩菊黄深，拒霜红浅，近宝阶香砌。玉宇无尘，金茎有露，碧天如水。</p>
+          <p>正值升平，万几多暇，夜色澄鲜，漏声迢递。南极星中，有老人呈瑞。此际宸游，凤辇何处，度管弦清脆。太液波翻，披香帘卷，月明风细。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-81">
+        <h3 class="poem-title">拜星月慢·夜色催更（又一首）</h3>
+        <div class="poem-body">
+          <p>天宇澄鲜，冰轮乍涌，谁倚画楼空际。记取长安，红巾翠袖，曾共论心事。</p>
+          <p>如今目断关河远，但悬想、芳容而已。断肠人在天涯，回首处、日暮云千里。</p>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
+
+<script>
+  // Sidebar toggle for mobile
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  // Close sidebar when clicking a nav item on mobile
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('open');
+      }
+    });
+  });
+
+  // Back to top button visibility
+  window.addEventListener('scroll', () => {
+    const btn = document.getElementById('backTop');
+    if (window.scrollY > 400) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+  });
+
+  // Active nav item highlighting
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        document.querySelectorAll('.nav-item').forEach(item => {
+          item.classList.toggle('active', item.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px' });
+
+  document.querySelectorAll('.poem-card').forEach(card => observer.observe(card));
+</script>
+
+</body>
+</html>

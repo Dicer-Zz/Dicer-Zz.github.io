@@ -43,6 +43,11 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.Archive,
 		LinkPreset.About,
 		{
+			name: "词集",
+			url: "/songci/",
+			noSwup: true,
+		},
+		{
 			name: "GitHub",
 			url: "https://github.com/Dicer-Zz",
 			external: true,

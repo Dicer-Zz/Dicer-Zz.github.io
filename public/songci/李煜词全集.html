@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>李煜词全集</title>
+<style>
+  :root {
+    --bg: #faf8f5;
+    --text: #2c2c2c;
+    --text-light: #6b6b6b;
+    --accent: #8b4513;
+    --accent-light: #c89660;
+    --border: #e8e0d8;
+    --card-bg: #ffffff;
+    --sidebar-bg: #f5f2ed;
+    --highlight: #fff8f0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.9;
+    min-height: 100vh;
+  }
+
+  /* Layout */
+  .layout {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 280px;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    padding: 2rem 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+    z-index: 100;
+  }
+
+  .sidebar-header {
+    padding: 0 1.5rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1rem;
+  }
+
+  .sidebar-header h2 {
+    font-size: 1.1rem;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .sidebar-header p {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-top: 0.3rem;
+  }
+
+  .nav-section {
+    padding: 0.5rem 1.5rem;
+  }
+
+  .nav-section-title {
+    font-size: 0.75rem;
+    color: var(--accent-light);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  .nav-item {
+    display: block;
+    padding: 0.4rem 0.8rem;
+    margin: 0.15rem 0;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .nav-item:hover {
+    background: var(--highlight);
+    color: var(--accent);
+  }
+
+  .nav-item.active {
+    background: var(--highlight);
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Main Content */
+  .main {
+    flex: 1;
+    margin-left: 280px;
+    padding: 3rem 4rem;
+    max-width: 900px;
+  }
+
+  /* Header */
+  .page-header {
+    text-align: center;
+    padding: 2rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+
+  .page-header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+
+  .page-header .subtitle {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 3rem;
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid var(--accent-light);
+    letter-spacing: 0.08em;
+  }
+
+  /* Poem Card */
+  .poem-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem 2.5rem;
+    margin-bottom: 1.5rem;
+    transition: box-shadow 0.2s;
+  }
+
+  .poem-card:hover {
+    box-shadow: 0 2px 12px rgba(139, 69, 19, 0.08);
+  }
+
+  .poem-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .poem-body {
+    font-size: 1rem;
+    line-height: 2.2;
+    color: var(--text);
+  }
+
+  .poem-body p {
+    margin-bottom: 0.8rem;
+    text-indent: 0;
+  }
+
+  .poem-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Appendix note */
+  .appendix-note {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.5rem;
+    background: var(--highlight);
+    border-radius: 6px;
+    border-left: 3px solid var(--accent-light);
+  }
+
+  /* Mobile toggle */
+  .menu-toggle {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 200;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.8rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--accent);
+  }
+
+  /* Back to top */
+  .back-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 40px;
+    height: 40px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .back-top.visible {
+    opacity: 0.8;
+  }
+
+  .back-top:hover {
+    opacity: 1;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .sidebar {
+      transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+    }
+
+    .menu-toggle {
+      display: block;
+    }
+
+    .main {
+      margin-left: 0;
+      padding: 2rem 1.5rem;
+      padding-top: 4rem;
+    }
+
+    .page-header h1 {
+      font-size: 1.8rem;
+    }
+
+    .poem-card {
+      padding: 1.5rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="toggleSidebar()">&#9776;</button>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>李煜词全集</h2>
+      <p>南唐后主 (937-978)</p>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">亡国前</div>
+      <a class="nav-item" href="#poem-1">菩萨蛮·花明月暗笼轻雾</a>
+      <a class="nav-item" href="#poem-2">菩萨蛮·蓬莱院闭天台女</a>
+      <a class="nav-item" href="#poem-3">菩萨蛮·铜簧韵脆锵寒竹</a>
+      <a class="nav-item" href="#poem-4">一斛珠·晚妆初过</a>
+      <a class="nav-item" href="#poem-5">玉楼春·晚妆初了明肌雪</a>
+      <a class="nav-item" href="#poem-6">喜迁莺·晓月坠</a>
+      <a class="nav-item" href="#poem-7">更漏子·金雀钗</a>
+      <a class="nav-item" href="#poem-8">长相思·一重山</a>
+      <a class="nav-item" href="#poem-9">长相思·云一涡</a>
+      <a class="nav-item" href="#poem-10">浣溪沙·红日已高三丈透</a>
+      <a class="nav-item" href="#poem-11">浣溪沙·转烛飘蓬一梦归</a>
+      <a class="nav-item" href="#poem-12">柳枝·风情渐老见春羞</a>
+      <a class="nav-item" href="#poem-13">渔父·浪花有意千里雪</a>
+      <a class="nav-item" href="#poem-14">渔父·一棹春风一叶舟</a>
+      <a class="nav-item" href="#poem-15">应天长·一钩初月临妆镜</a>
+      <a class="nav-item" href="#poem-16">采桑子·亭前春逐红英尽</a>
+      <a class="nav-item" href="#poem-17">阮郎归·呈郑王十二弟</a>
+      <a class="nav-item" href="#poem-18">蝶恋花·遥夜亭皋闲信步</a>
+      <a class="nav-item" href="#poem-19">捣练子令·深院静</a>
+      <a class="nav-item" href="#poem-20">清平乐·别来春半</a>
+      <a class="nav-item" href="#poem-21">谢新恩·秦楼不见吹箫女</a>
+      <a class="nav-item" href="#poem-22">谢新恩·樱花落尽阶前月</a>
+      <a class="nav-item" href="#poem-23">谢新恩·庭空客散人归后</a>
+      <a class="nav-item" href="#poem-24">子夜歌·人生愁恨何能免</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">亡国后</div>
+      <a class="nav-item" href="#poem-25">虞美人·春花秋月何时了</a>
+      <a class="nav-item" href="#poem-26">虞美人·风回小院庭芜绿</a>
+      <a class="nav-item" href="#poem-27">浪淘沙令·帘外雨潺潺</a>
+      <a class="nav-item" href="#poem-28">浪淘沙·往事只堪哀</a>
+      <a class="nav-item" href="#poem-29">相见欢·无言独上西楼</a>
+      <a class="nav-item" href="#poem-30">相见欢·林花谢了春红</a>
+      <a class="nav-item" href="#poem-31">破阵子·四十年来家国</a>
+      <a class="nav-item" href="#poem-32">望江南·多少恨</a>
+      <a class="nav-item" href="#poem-33">望江南·多少泪</a>
+      <a class="nav-item" href="#poem-34">乌夜啼·昨夜风兼雨</a>
+      <a class="nav-item" href="#poem-35">临江仙·樱桃落尽春归去</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">附录·存疑</div>
+      <a class="nav-item" href="#poem-36">捣练子令·云鬓乱</a>
+      <a class="nav-item" href="#poem-37">三台令·不寐倦长更</a>
+      <a class="nav-item" href="#poem-38">采桑子·辘轳金井梧桐晚</a>
+    </div>
+  </nav>
+
+  <main class="main">
+    <header class="page-header">
+      <h1>李煜词全集</h1>
+      <p class="subtitle">南唐后主李煜（937—978），字重光，号钟隐、莲峰居士。五代十国时期南唐末代君主，中国词史上承前启后的关键人物。以975年亡国为界，前期绮丽，后期沉痛，将词的境界提升至前所未有的高度。</p>
+    </header>
+
+    <!-- 第一编 -->
+    <section class="section" id="section-before">
+      <h2 class="section-title">第一编 亡国前词作</h2>
+
+      <div class="poem-card" id="poem-1">
+        <h3 class="poem-title">菩萨蛮</h3>
+        <div class="poem-body">
+          <p>花明月暗笼轻雾，今宵好向郎边去。刬袜步香阶，手提金缕鞋。</p>
+          <p>画堂南畔见，一向偎人颤。奴为出来难，教君恣意怜。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-2">
+        <h3 class="poem-title">菩萨蛮</h3>
+        <div class="poem-body">
+          <p>蓬莱院闭天台女，画堂昼寝人无语。抛枕翠云光，绣衣闻异香。</p>
+          <p>潜来珠锁动，惊觉银屏梦。脸慢笑盈盈，相看无限情。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-3">
+        <h3 class="poem-title">菩萨蛮</h3>
+        <div class="poem-body">
+          <p>铜簧韵脆锵寒竹，新声慢奏移纤玉。眼色暗相钩，秋波横欲流。</p>
+          <p>雨云深绣户，来便谐衷素。宴罢又成空，魂迷春梦中。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-4">
+        <h3 class="poem-title">一斛珠</h3>
+        <div class="poem-body">
+          <p>晚妆初过，沉檀轻注些儿个。向人微露丁香颗，一曲清歌，暂引樱桃破。</p>
+          <p>罗袖裛残殷色可，杯深旋被香醪涴。绣床斜凭娇无那，烂嚼红茸，笑向檀郎唾。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-5">
+        <h3 class="poem-title">玉楼春</h3>
+        <div class="poem-body">
+          <p>晚妆初了明肌雪，春殿嫔娥鱼贯列。笙箫吹断水云间，重按霓裳歌遍彻。</p>
+          <p>临春谁更飘香屑，醉拍阑干情味切。归时休放烛花红，待踏马蹄清夜月。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-6">
+        <h3 class="poem-title">喜迁莺</h3>
+        <div class="poem-body">
+          <p>晓月坠，宿云微，无语枕频欹。梦回芳草思依依，天远雁声稀。</p>
+          <p>啼莺散，余花乱，寂寞画堂深院。片红休扫尽从伊，留待舞人归。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-7">
+        <h3 class="poem-title">更漏子</h3>
+        <div class="poem-body">
+          <p>金雀钗，红粉面，花里暂时相见。知我意，感君怜，此情须问天。</p>
+          <p>香作穗，蜡成泪，还似两人心意。山枕腻，锦衾寒，觉来更漏残。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-8">
+        <h3 class="poem-title">长相思</h3>
+        <div class="poem-body">
+          <p>一重山，两重山，山远天高烟水寒，相思枫叶丹。</p>
+          <p>菊花开，菊花残，塞雁高飞人未还，一帘风月闲。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-9">
+        <h3 class="poem-title">长相思</h3>
+        <div class="poem-body">
+          <p>云一涡，玉一梭，淡淡衫儿薄薄罗，轻颦双黛螺。</p>
+          <p>秋风多，雨相和，帘外芭蕉三两窠，夜长人奈何。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-10">
+        <h3 class="poem-title">浣溪沙</h3>
+        <div class="poem-body">
+          <p>红日已高三丈透，金炉次第添香兽，红锦地衣随步皱。</p>
+          <p>佳人舞点金钗溜，酒恶时拈花蕊嗅，别殿遥闻箫鼓奏。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-11">
+        <h3 class="poem-title">浣溪沙</h3>
+        <div class="poem-body">
+          <p>转烛飘蓬一梦归，欲寻陈迹怅人非，天教心愿与身违。</p>
+          <p>待月池台空逝水，荫花楼阁谩斜晖，登临不惜更沾衣。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-12">
+        <h3 class="poem-title">柳枝</h3>
+        <div class="poem-body">
+          <p>风情渐老见春羞，到处芳魂感旧游。多谢长条似相识，强垂烟态拂人头。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-13">
+        <h3 class="poem-title">渔父</h3>
+        <div class="poem-body">
+          <p>浪花有意千里雪，桃花无言一队春。一壶酒，一竿身，快活如侬有几人。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-14">
+        <h3 class="poem-title">渔父</h3>
+        <div class="poem-body">
+          <p>一棹春风一叶舟，一纶茧缕一轻钩。花满渚，酒满瓯，万顷波中得自由。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-15">
+        <h3 class="poem-title">应天长</h3>
+        <div class="poem-body">
+          <p>一钩初月临妆镜，蝉鬓凤钗慵不整。重帘静，层楼迥，惆怅落花风不定。</p>
+          <p>柳堤芳草径，梦断辘轳金井。昨夜更阑酒醒，春愁过却病。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-16">
+        <h3 class="poem-title">采桑子</h3>
+        <div class="poem-body">
+          <p>亭前春逐红英尽，舞态徘徊。细雨霏微，不放双眉时暂开。</p>
+          <p>绿窗冷静芳音断，香印成灰。可奈情怀，欲睡朦胧入梦来。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-17">
+        <h3 class="poem-title">阮郎归·呈郑王十二弟</h3>
+        <div class="poem-body">
+          <p>东风吹水日衔山，春来长是闲。落花狼藉酒阑珊，笙歌醉梦间。</p>
+          <p>佩声悄，晚妆残，凭谁整翠鬟。留连光景惜朱颜，黄昏独倚阑。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-18">
+        <h3 class="poem-title">蝶恋花</h3>
+        <div class="poem-body">
+          <p>遥夜亭皋闲信步，才过清明，渐觉伤春暮。数点雨声风约住，朦胧淡月云来去。</p>
+          <p>桃杏依稀香暗度，谁在秋千，笑里轻轻语。一寸相思千万绪，人间没个安排处。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-19">
+        <h3 class="poem-title">捣练子令</h3>
+        <div class="poem-body">
+          <p>深院静，小庭空，断续寒砧断续风。无奈夜长人不寐，数声和月到帘栊。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-20">
+        <h3 class="poem-title">清平乐</h3>
+        <div class="poem-body">
+          <p>别来春半，触目柔肠断。砌下落梅如雪乱，拂了一身还满。</p>
+          <p>雁来音信无凭，路遥归梦难成。离恨恰如春草，更行更远还生。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-21">
+        <h3 class="poem-title">谢新恩</h3>
+        <div class="poem-body">
+          <p>秦楼不见吹箫女，空馀上苑风光。粉英金蕊自低昂，东风恼我，才发一衿香。</p>
+          <p>琼窗梦醒留残日，当年得恨何长。碧阑干外映垂杨，暂时相见，如梦懒思量。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-22">
+        <h3 class="poem-title">谢新恩</h3>
+        <div class="poem-body">
+          <p>樱花落尽阶前月，象床愁倚薰笼。远似去年今日，恨还同。</p>
+          <p>双鬟不整云憔悴，泪沾红抹胸。何处相思苦，纱窗醉梦中。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-23">
+        <h3 class="poem-title">谢新恩</h3>
+        <div class="poem-body">
+          <p>庭空客散人归后，画堂半掩珠帘。林风淅淅夜厌厌，小楼新月，回首自纤纤。</p>
+          <p>春光镇在人空老，新愁往恨何穷。金窗力困起还慵，一声羌笛，惊起醉怡容。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-24">
+        <h3 class="poem-title">子夜歌</h3>
+        <div class="poem-body">
+          <p>人生愁恨何能免，销魂独我情何限。故国梦重归，觉来双泪垂。</p>
+          <p>高楼谁与上，长记秋晴望。往事已成空，还如一梦中。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第二编 -->
+    <section class="section" id="section-after">
+      <h2 class="section-title">第二编 亡国后词作</h2>
+
+      <div class="poem-card" id="poem-25">
+        <h3 class="poem-title">虞美人</h3>
+        <div class="poem-body">
+          <p>春花秋月何时了，往事知多少。小楼昨夜又东风，故国不堪回首月明中。</p>
+          <p>雕栏玉砌应犹在，只是朱颜改。问君能有几多愁，恰似一江春水向东流。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-26">
+        <h3 class="poem-title">虞美人</h3>
+        <div class="poem-body">
+          <p>风回小院庭芜绿，柳眼春相续。凭阑半日独无言，依旧竹声新月似当年。</p>
+          <p>笙歌未散尊罍在，池面冰初解。烛明香暗画堂深，满鬓青霜残雪思难任。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-27">
+        <h3 class="poem-title">浪淘沙令</h3>
+        <div class="poem-body">
+          <p>帘外雨潺潺，春意阑珊，罗衾不耐五更寒。梦里不知身是客，一晌贪欢。</p>
+          <p>独自莫凭栏，无限江山，别时容易见时难。流水落花春去也，天上人间。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-28">
+        <h3 class="poem-title">浪淘沙</h3>
+        <div class="poem-body">
+          <p>往事只堪哀，对景难排。秋风庭院藓侵阶。一任珠帘闲不卷，终日谁来。</p>
+          <p>金锁已沉埋，壮气蒿莱。晚凉天净月华开。想得玉楼瑶殿影，空照秦淮。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-29">
+        <h3 class="poem-title">相见欢</h3>
+        <div class="poem-body">
+          <p>无言独上西楼，月如钩，寂寞梧桐深院锁清秋。</p>
+          <p>剪不断，理还乱，是离愁。别是一般滋味在心头。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-30">
+        <h3 class="poem-title">相见欢</h3>
+        <div class="poem-body">
+          <p>林花谢了春红，太匆匆，无奈朝来寒雨晚来风。</p>
+          <p>胭脂泪，相留醉，几时重，自是人生长恨水长东。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-31">
+        <h3 class="poem-title">破阵子</h3>
+        <div class="poem-body">
+          <p>四十年来家国，三千里地山河。凤阁龙楼连霄汉，玉树琼枝作烟萝，几曾识干戈。</p>
+          <p>一旦归为臣虏，沈腰潘鬓消磨。最是仓皇辞庙日，教坊犹奏别离歌，垂泪对宫娥。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-32">
+        <h3 class="poem-title">望江南</h3>
+        <div class="poem-body">
+          <p>多少恨，昨夜梦魂中。还似旧时游上苑，车如流水马如龙，花月正春风。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-33">
+        <h3 class="poem-title">望江南</h3>
+        <div class="poem-body">
+          <p>多少泪，断脸复横颐。心事莫将和泪说，凤笙休向泪时吹，肠断更无疑。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-34">
+        <h3 class="poem-title">乌夜啼</h3>
+        <div class="poem-body">
+          <p>昨夜风兼雨，帘帏飒飒秋声。烛残漏断频欹枕，起坐不能平。</p>
+          <p>世事漫随流水，算来一梦浮生。醉乡路稳宜频到，此外不堪行。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-35">
+        <h3 class="poem-title">临江仙</h3>
+        <div class="poem-body">
+          <p>樱桃落尽春归去，蝶翻金粉双飞。子规啼月小楼西，玉钩罗幕，惆怅暮烟垂。</p>
+          <p>别巷寂寥人散后，望残烟草低迷。炉香闲袅凤凰儿，空持罗带，回首恨依依。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 附录 -->
+    <section class="section" id="section-appendix">
+      <h2 class="section-title">附录 归属存疑词作</h2>
+      <p class="appendix-note">以下数首词作，历代词集中有收录于李煜名下者，但作者归属尚有争议，附录于此以备参考。</p>
+
+      <div class="poem-card" id="poem-36">
+        <h3 class="poem-title">捣练子令</h3>
+        <div class="poem-body">
+          <p>云鬓乱，晚妆残，带恨眉儿远岫攒。斜托香腮春笋懒，为谁和泪倚阑干。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-37">
+        <h3 class="poem-title">三台令</h3>
+        <div class="poem-body">
+          <p>不寐倦长更，披衣出户行。月寒秋竹冷，风切夜窗声。</p>
+        </div>
+      </div>
+
+      <div class="poem-card" id="poem-38">
+        <h3 class="poem-title">采桑子</h3>
+        <div class="poem-body">
+          <p>辘轳金井梧桐晚，几树惊秋。昼雨新愁，百尺虾须在玉钩。</p>
+          <p>琼窗春断双蛾皱，回首边头。欲寄鳞游，九曲寒波不溯流。</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
+
+<script>
+  // Sidebar toggle for mobile
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  // Close sidebar when clicking a nav item on mobile
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('open');
+      }
+    });
+  });
+
+  // Back to top button visibility
+  window.addEventListener('scroll', () => {
+    const btn = document.getElementById('backTop');
+    if (window.scrollY > 400) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+  });
+
+  // Active nav item highlighting
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        document.querySelectorAll('.nav-item').forEach(item => {
+          item.classList.toggle('active', item.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px' });
+
+  document.querySelectorAll('.poem-card').forEach(card => observer.observe(card));
+</script>
+
+</body>
+</html>

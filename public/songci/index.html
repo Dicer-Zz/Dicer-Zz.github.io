@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人间词话品鉴集</title>
+<style>
+  :root {
+    --bg: #faf8f5;
+    --text: #2c2c2c;
+    --text-light: #6b6b6b;
+    --accent: #8b4513;
+    --accent-light: #c89660;
+    --border: #e8e0d8;
+    --card-bg: #ffffff;
+    --sidebar-bg: #f5f2ed;
+    --highlight: #fff8f0;
+    --tag-bg: #f0e8df;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.9;
+    min-height: 100vh;
+  }
+
+  .layout { display: flex; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 260px;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    padding: 2rem 0;
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 100;
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar-header {
+    padding: 0 1.5rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1rem;
+  }
+
+  .sidebar-header h2 {
+    font-size: 1.2rem;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .sidebar-header p {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    margin-top: 0.3rem;
+  }
+
+  .nav-section { padding: 0.5rem 1.5rem; }
+
+  .nav-section-title {
+    font-size: 0.72rem;
+    color: var(--accent-light);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.4rem;
+    margin-top: 0.8rem;
+    font-weight: 600;
+  }
+
+  .nav-item {
+    display: block;
+    padding: 0.45rem 0.8rem;
+    margin: 0.1rem 0;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .nav-item:hover { background: var(--highlight); color: var(--accent); }
+  .nav-item.active { background: var(--highlight); color: var(--accent); font-weight: 500; }
+
+  /* Main */
+  .main {
+    flex: 1;
+    margin-left: 260px;
+    padding: 3rem 4rem;
+    max-width: 920px;
+  }
+
+  /* Page Header */
+  .page-header {
+    text-align: center;
+    padding: 2rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+
+  .page-header h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+  }
+
+  .page-header .subtitle {
+    font-size: 0.92rem;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  /* Author Section */
+  .author-section {
+    margin-bottom: 4rem;
+    scroll-margin-top: 2rem;
+  }
+
+  .author-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .author-name {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.08em;
+  }
+
+  .author-dates {
+    font-size: 0.85rem;
+    color: var(--text-light);
+  }
+
+  .author-bio {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .download-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+    padding: 0.8rem 1.2rem;
+    background: var(--highlight);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+
+  .download-bar .label {
+    font-size: 0.82rem;
+    color: var(--text-light);
+  }
+
+  .download-bar .count {
+    font-size: 0.82rem;
+    color: var(--accent);
+    background: var(--tag-bg);
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+
+  .download-btn {
+    margin-left: auto;
+    padding: 0.4rem 1rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: inherit;
+    transition: opacity 0.2s;
+  }
+
+  .download-btn:hover { opacity: 0.85; }
+
+  /* Poem Cards */
+  .poems-grid {
+    display: grid;
+    gap: 1.2rem;
+  }
+
+  .poem-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.8rem 2.2rem;
+    transition: box-shadow 0.2s;
+  }
+
+  .poem-card:hover { box-shadow: 0 2px 12px rgba(139, 69, 19, 0.08); }
+
+  .poem-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    letter-spacing: 0.04em;
+  }
+
+  .poem-body {
+    font-size: 0.95rem;
+    line-height: 2.1;
+  }
+
+  .poem-body p { margin-bottom: 0.6rem; }
+  .poem-body p:last-child { margin-bottom: 0; }
+
+  .more-hint {
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-style: italic;
+  }
+
+  /* Mobile */
+  .menu-toggle {
+    display: none;
+    position: fixed;
+    top: 1rem; left: 1rem;
+    z-index: 200;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.8rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--accent);
+  }
+
+  .back-top {
+    position: fixed;
+    bottom: 2rem; right: 2rem;
+    width: 40px; height: 40px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .back-top.visible { opacity: 0.8; }
+  .back-top:hover { opacity: 1; }
+
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .menu-toggle { display: block; }
+    .main { margin-left: 0; padding: 2rem 1.5rem; padding-top: 4rem; }
+    .page-header h1 { font-size: 1.8rem; }
+    .poem-card { padding: 1.5rem; }
+    .author-header { flex-direction: column; gap: 0.3rem; }
+    .download-bar { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">&#9776;</button>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>人间词话品鉴集</h2>
+      <p>王国维所推崇与所批评的词人</p>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">所推崇</div>
+      <a class="nav-item" href="#liyu">李煜</a>
+      <a class="nav-item" href="#fengyansi">冯延巳</a>
+      <a class="nav-item" href="#ouyangxiu">欧阳修</a>
+      <a class="nav-item" href="#sushi">苏轼</a>
+      <a class="nav-item" href="#xinqiji">辛弃疾</a>
+      <a class="nav-item" href="#nalanxingde">纳兰性德</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">所批评</div>
+      <a class="nav-item" href="#zhoubangyan">周邦彦</a>
+      <a class="nav-item" href="#jiangkui">姜夔</a>
+      <a class="nav-item" href="#wuwenying">吴文英</a>
+      <a class="nav-item" href="#shidazu">史达祖</a>
+    </div>
+  </nav>
+
+  <main class="main">
+    <header class="page-header">
+      <h1>人间词话品鉴集</h1>
+      <p class="subtitle">王国维在《人间词话》中推崇与批评的十位词人。上编为其最推崇的六家，下编为其批评最力的四家。两相对照，可见王国维词学标准之全貌。各家代表作精选于此，完整词集可点击浏览。</p>
+    </header>
+
+    <!-- 李煜 -->
+    <section class="author-section" id="liyu">
+      <div class="author-header">
+        <h2 class="author-name">李煜</h2>
+        <span class="author-dates">937—978 · 五代南唐</span>
+      </div>
+      <p class="author-bio">南唐末代君主，字重光。以975年亡国为界，前期词绮丽柔美，后期以血泪书写故国之痛，将词从伶工之作提升为士大夫抒情之体。王国维评其"真所谓以血书者也"。</p>
+      <div class="download-bar">
+        <span class="label">完整词集</span>
+        <span class="count">38首</span>
+        <a class="download-btn" href="李煜词全集.html">浏览全集</a>
+      </div>
+      <div class="poems-grid">
+        <div class="poem-card">
+          <h3 class="poem-title">虞美人</h3>
+          <div class="poem-body">
+            <p>春花秋月何时了，往事知多少。小楼昨夜又东风，故国不堪回首月明中。</p>
+            <p>雕栏玉砌应犹在，只是朱颜改。问君能有几多愁，恰似一江春水向东流。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">浪淘沙令</h3>
+          <div class="poem-body">
+            <p>帘外雨潺潺，春意阑珊，罗衾不耐五更寒。梦里不知身是客，一晌贪欢。</p>
+            <p>独自莫凭栏，无限江山，别时容易见时难。流水落花春去也，天上人间。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">相见欢</h3>
+          <div class="poem-body">
+            <p>无言独上西楼，月如钩，寂寞梧桐深院锁清秋。</p>
+            <p>剪不断，理还乱，是离愁。别是一般滋味在心头。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">破阵子</h3>
+          <div class="poem-body">
+            <p>四十年来家国，三千里地山河。凤阁龙楼连霄汉，玉树琼枝作烟萝，几曾识干戈。</p>
+            <p>一旦归为臣虏，沈腰潘鬓消磨。最是仓皇辞庙日，教坊犹奏别离歌，垂泪对宫娥。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">相见欢</h3>
+          <div class="poem-body">
+            <p>林花谢了春红，太匆匆，无奈朝来寒雨晚来风。</p>
+            <p>胭脂泪，相留醉，几时重，自是人生长恨水长东。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 冯延巳 -->
+    <section class="author-section" id="fengyansi">
+      <div class="author-header">
+        <h2 class="author-name">冯延巳</h2>
+        <span class="author-dates">903—960 · 五代南唐</span>
+      </div>
+      <p class="author-bio">南唐宰相，字正中。其词善写闲情愁绪，开创了以阔大意象写幽微情感的手法，"日日花前常病酒，不辞镜里朱颜瘦"一类句子深沉蕴藉，直接影响了晏殊、欧阳修等北宋大家。</p>
+      <div class="download-bar">
+        <span class="label">完整词集</span>
+        <span class="count">94首</span>
+        <a class="download-btn" href="冯延巳词集.html">浏览全集</a>
+      </div>
+      <div class="poems-grid">
+        <div class="poem-card">
+          <h3 class="poem-title">鹊踏枝</h3>
+          <div class="poem-body">
+            <p>谁道闲情抛掷久，每到春来，惆怅还依旧。日日花前常病酒，不辞镜里朱颜瘦。</p>
+            <p>河畔青芜堤上柳，为问新愁，何事年年有。独立小桥风满袖，平林新月人归后。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">谒金门</h3>
+          <div class="poem-body">
+            <p>风乍起，吹皱一池春水。闲引鸳鸯香径里，手挼红杏蕊。</p>
+            <p>斗鸭阑干独倚，碧玉搔头斜坠。终日望君君不至，举头闻鹊喜。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">鹊踏枝</h3>
+          <div class="poem-body">
+            <p>梅落繁枝千万片，犹自多情，学雪随风转。昨夜笙歌容易散，酒醒添得愁无限。</p>
+            <p>楼上春山寒四面，过尽征鸿，暮景烟深浅。一晌凭栏人不见，鲛绡掩泪思量遍。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">南乡子</h3>
+          <div class="poem-body">
+            <p>细雨湿流光，芳草年年与恨长。烟锁凤楼无限事，茫茫，鸾镜鸳衾两断肠。</p>
+            <p>魂梦任悠扬，睡起杨花满绣床。薄幸不来门半掩，斜阳，负你残春泪几行。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">长命女</h3>
+          <div class="poem-body">
+            <p>春日宴，绿酒一杯歌一遍。再拜陈三愿：一愿郎君千岁，二愿妾身常健，三愿如同梁上燕，岁岁长相见。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 欧阳修 -->
+    <section class="author-section" id="ouyangxiu">
+      <div class="author-header">
+        <h2 class="author-name">欧阳修</h2>
+        <span class="author-dates">1007—1072 · 北宋</span>
+      </div>
+      <p class="author-bio">北宋文坛领袖，字永叔，号醉翁、六一居士。唐宋八大家之一。其词承冯延巳深婉之风，又增疏朗之气，善以清新笔调写离情别绪与自然风光，开宋词一代新风。</p>
+      <div class="download-bar">
+        <span class="label">完整词集</span>
+        <span class="count">91首</span>
+        <a class="download-btn" href="欧阳修词集.html">浏览全集</a>
+      </div>
+      <div class="poems-grid">
+        <div class="poem-card">
+          <h3 class="poem-title">蝶恋花</h3>
+          <div class="poem-body">
+            <p>庭院深深深几许，杨柳堆烟，帘幕无重数。玉勒雕鞍游冶处，楼高不见章台路。</p>
+            <p>雨横风狂三月暮，门掩黄昏，无计留春住。泪眼问花花不语，乱红飞过秋千去。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">生查子·元夕</h3>
+          <div class="poem-body">
+            <p>去年元夜时，花市灯如昼。月上柳梢头，人约黄昏后。</p>
+            <p>今年元夜时，月与灯依旧。不见去年人，泪湿春衫袖。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">玉楼春</h3>
+          <div class="poem-body">
+            <p>尊前拟把归期说，欲语春容先惨咽。人生自是有情痴，此恨不关风与月。</p>
+            <p>离歌且莫翻新阕，一曲能教肠寸结。直须看尽洛城花，始共春风容易别。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">采桑子</h3>
+          <div class="poem-body">
+            <p>群芳过后西湖好，狼藉残红，飞絮蒙蒙，垂柳阑干尽日风。</p>
+            <p>笙歌散尽游人去，始觉春空，垂下帘栊，双燕归来细雨中。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">踏莎行</h3>
+          <div class="poem-body">
+            <p>候馆梅残，溪桥柳细，草薰风暖摇征辔。离愁渐远渐无穷，迢迢不断如春水。</p>
+            <p>寸寸柔肠，盈盈粉泪，楼高莫近危阑倚。平芜尽处是春山，行人更在春山外。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 苏轼 -->
+    <section class="author-section" id="sushi">
+      <div class="author-header">
+        <h2 class="author-name">苏轼</h2>
+        <span class="author-dates">1037—1101 · 北宋</span>
+      </div>
+      <p class="author-bio">字子瞻，号东坡居士，北宋最伟大的文学家。以"一洗绮罗香泽之态"开豪放派先河，又能深婉细腻，无题材不可入词。其词境界开阔，人格磊落，兼具哲思与生活趣味。</p>
+      <div class="download-bar">
+        <span class="label">完整词集</span>
+        <span class="count">130首</span>
+        <a class="download-btn" href="苏轼词集.html">浏览全集</a>
+      </div>
+      <div class="poems-grid">
+        <div class="poem-card">
+          <h3 class="poem-title">念奴娇·赤壁怀古</h3>
+          <div class="poem-body">
+            <p>大江东去，浪淘尽，千古风流人物。故垒西边，人道是，三国周郎赤壁。乱石穿空，惊涛拍岸，卷起千堆雪。江山如画，一时多少豪杰。</p>
+            <p>遥想公瑾当年，小乔初嫁了，雄姿英发。羽扇纶巾，谈笑间，樯橹灰飞烟灭。故国神游，多情应笑我，早生华发。人生如梦，一尊还酹江月。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">水调歌头·丙辰中秋</h3>
+          <div class="poem-body">
+            <p>明月几时有，把酒问青天。不知天上宫阙，今夕是何年。我欲乘风归去，又恐琼楼玉宇，高处不胜寒。起舞弄清影，何似在人间。</p>
+            <p>转朱阁，低绮户，照无眠。不应有恨，何事长向别时圆。人有悲欢离合，月有阴晴圆缺，此事古难全。但愿人长久，千里共婵娟。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">江城子·乙卯正月二十日夜记梦</h3>
+          <div class="poem-body">
+            <p>十年生死两茫茫，不思量，自难忘。千里孤坟，无处话凄凉。纵使相逢应不识，尘满面，鬓如霜。</p>
+            <p>夜来幽梦忽还乡，小轩窗，正梳妆。相顾无言，惟有泪千行。料得年年肠断处，明月夜，短松冈。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">定风波</h3>
+          <div class="poem-body">
+            <p>莫听穿林打叶声，何妨吟啸且徐行。竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。</p>
+            <p>料峭春风吹酒醒，微冷，山头斜照却相迎。回首向来萧瑟处，归去，也无风雨也无晴。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">临江仙·夜饮东坡醒复醉</h3>
+          <div class="poem-body">
+            <p>夜饮东坡醒复醉，归来仿佛三更。家童鼻息已雷鸣。敲门都不应，倚杖听江声。</p>
+            <p>长恨此身非我有，何时忘却营营。夜阑风静縠纹平。小舟从此逝，江海寄余生。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 辛弃疾 -->
+    <section class="author-section" id="xinqiji">
+      <div class="author-header">
+        <h2 class="author-name">辛弃疾</h2>
+        <span class="author-dates">1140—1207 · 南宋</span>
+      </div>
+      <p class="author-bio">字幼安，号稼轩，南宋豪放派集大成者。少年时曾率众起义抗金，一生以收复中原为志。存词六百余首，为宋人之冠。其词气势磅礴而又能柔肠百转，用典精深，笔力雄健。</p>
+      <div class="download-bar">
+        <span class="label">完整词集</span>
+        <span class="count">124首</span>
+        <a class="download-btn" href="辛弃疾词集.html">浏览全集</a>
+      </div>
+      <div class="poems-grid">
+        <div class="poem-card">
+          <h3 class="poem-title">青玉案·元夕</h3>
+          <div class="poem-body">
+            <p>东风夜放花千树，更吹落、星如雨。宝马雕车香满路。凤箫声动，玉壶光转，一夜鱼龙舞。</p>
+            <p>蛾儿雪柳黄金缕，笑语盈盈暗香去。众里寻他千百度，蓦然回首，那人却在，灯火阑珊处。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">破阵子·为陈同甫赋壮词以寄之</h3>
+          <div class="poem-body">
+            <p>醉里挑灯看剑，梦回吹角连营。八百里分麾下炙，五十弦翻塞外声，沙场秋点兵。</p>
+            <p>马作的卢飞快，弓如霹雳弦惊。了却君王天下事，赢得生前身后名。可怜白发生！</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">永遇乐·京口北固亭怀古</h3>
+          <div class="poem-body">
+            <p>千古江山，英雄无觅，孙仲谋处。舞榭歌台，风流总被，雨打风吹去。斜阳草树，寻常巷陌，人道寄奴曾住。想当年，金戈铁马，气吞万里如虎。</p>
+            <p>元嘉草草，封狼居胥，赢得仓皇北顾。四十三年，望中犹记，烽火扬州路。可堪回首，佛狸祠下，一片神鸦社鼓。凭谁问，廉颇老矣，尚能饭否？</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">丑奴儿·书博山道中壁</h3>
+          <div class="poem-body">
+            <p>少年不识愁滋味，爱上层楼。爱上层楼，为赋新词强说愁。</p>
+            <p>而今识尽愁滋味，欲说还休。欲说还休，却道天凉好个秋。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">西江月·夜行黄沙道中</h3>
+          <div class="poem-body">
+            <p>明月别枝惊鹊，清风半夜鸣蝉。稻花香里说丰年，听取蛙声一片。</p>
+            <p>七八个星天外，两三点雨山前。旧时茅店社林边，路转溪桥忽见。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 纳兰性德 -->
+    <section class="author-section" id="nalanxingde">
+      <div class="author-header">
+        <h2 class="author-name">纳兰性德</h2>
+        <span class="author-dates">1655—1685 · 清</span>
+      </div>
+      <p class="author-bio">字容若，满洲正黄旗人，大学士明珠之子。年仅三十一岁病逝。其词哀婉真切，不事雕饰，尤以悼亡之作最为动人。王国维称其"北宋以来，一人而已"。</p>
+      <div class="download-bar">
+        <span class="label">完整词集</span>
+        <span class="count">151首</span>
+        <a class="download-btn" href="纳兰性德词集.html">浏览全集</a>
+      </div>
+      <div class="poems-grid">
+        <div class="poem-card">
+          <h3 class="poem-title">长相思</h3>
+          <div class="poem-body">
+            <p>山一程，水一程，身向榆关那畔行，夜深千帐灯。</p>
+            <p>风一更，雪一更，聒碎乡心梦不成，故园无此声。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">木兰花令·拟古决绝词</h3>
+          <div class="poem-body">
+            <p>人生若只如初见，何事秋风悲画扇。等闲变却故人心，却道故人心易变。</p>
+            <p>骊山语罢清宵半，泪雨霖铃终不怨。何如薄幸锦衣郎，比翼连枝当日愿。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">浣溪沙</h3>
+          <div class="poem-body">
+            <p>谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳。</p>
+            <p>被酒莫惊春睡重，赌书消得泼茶香，当时只道是寻常。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">画堂春</h3>
+          <div class="poem-body">
+            <p>一生一代一双人，争教两处销魂。相思相望不相亲，天为谁春。</p>
+            <p>浆向蓝桥易乞，药成碧海难奔。若容相访饮牛津，相对忘贫。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">金缕曲·赠梁汾</h3>
+          <div class="poem-body">
+            <p>德也狂生耳。偶然间、淄尘京国，乌衣门第。有酒惟浇赵州土，谁会成生此意。不信道、遂成知己。青眼高歌俱未老，向尊前、拭尽英雄泪。君不见，月如水。</p>
+            <p>共君此夜须沉醉。且由他、蛾眉谣诼，古今同忌。身世悠悠何足问，冷笑置之而已。寻思起、从头翻悔。一日心期千劫在，后身缘、恐结他生里。然诺重，君须记。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 分隔 - 所批评 -->
+    <section class="author-section" style="border-top: 2px solid var(--accent-light); padding-top: 3rem; margin-top: 2rem;">
+      <h2 style="font-size: 1.8rem; color: var(--accent); letter-spacing: 0.15em; text-align: center; margin-bottom: 0.8rem;">下编 · 所批评</h2>
+      <p style="text-align: center; color: var(--text-light); font-size: 0.9rem; max-width: 560px; margin: 0 auto;">王国维在《人间词话》中批评最力的四位词人。他们并非才华不足，而是被王国维认为过重形式、情感隔膜。附于此以见其词学标准的两面。</p>
+    </section>
+
+    <!-- 周邦彦 -->
+    <section class="author-section" id="zhoubangyan">
+      <div class="author-header">
+        <h2 class="author-name">周邦彦</h2>
+        <span class="author-dates">1056—1121 · 北宋</span>
+      </div>
+      <p class="author-bio">字美成，号清真居士。北宋格律派集大成者，精通音律，善创新调。王国维评其"创调之才多，创意之才少"——技术能力一流而情感表达略逊。然其对南宋姜、吴一派影响深远。</p>
+      <div class="download-bar">
+        <span class="label">完整词集</span>
+        <span class="count">81首</span>
+        <a class="download-btn" href="周邦彦词集.html">浏览全集</a>
+      </div>
+      <div class="poems-grid">
+        <div class="poem-card">
+          <h3 class="poem-title">苏幕遮</h3>
+          <div class="poem-body">
+            <p>燎沉香，消溽暑。鸟雀呼晴，侵晓窥檐语。叶上初阳干宿雨，水面清圆，一一风荷举。</p>
+            <p>故乡遥，何日去。家住吴门，久作长安旅。五月渔郎相忆否。小楫轻舟，梦入芙蓉浦。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">兰陵王·柳</h3>
+          <div class="poem-body">
+            <p>柳阴直，烟里丝丝弄碧。隋堤上、曾见几番，拂水飘绵送行色。登临望故国。谁识、京华倦客。长亭路，年去岁来，应折柔条过千尺。</p>
+            <p>闲寻旧踪迹。又酒趁哀弦，灯照离席。梨花榆火催寒食。愁一箭风快，半篙波暖，回头迢递便数驿，望人在天北。</p>
+            <p>凄恻。恨堆积。渐别浦萦回，津堠岑寂。斜阳冉冉春无极。念月榭携手，露桥闻笛。沉思前事，似梦里，泪暗滴。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">少年游</h3>
+          <div class="poem-body">
+            <p>并刀如水，吴盐胜雪，纤手破新橙。锦幄初温，兽烟不断，相对坐调笙。</p>
+            <p>低声问：向谁行宿？城上已三更。马滑霜浓，不如休去，直是少人行。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">蝶恋花·早行</h3>
+          <div class="poem-body">
+            <p>月皎惊乌栖不定，更漏将残，辘轳牵金井。唤起两眸清炯炯，泪花落枕红绵冷。</p>
+            <p>执手霜风吹鬓影，去意徊徨，别语愁难听。楼上阑干横斗柄，露寒人远鸡相应。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">六丑·蔷薇谢后作</h3>
+          <div class="poem-body">
+            <p>正单衣试酒，怅客里、光阴虚掷。愿春暂留，春归如过翼，一去无迹。为问花何在，夜来风雨，葬楚宫倾国。钗钿堕处遗香泽。乱点桃蹊，轻翻柳陌。多情为谁追惜。但蜂媒蝶使，时叩窗隔。</p>
+            <p>东园岑寂。渐蒙笼暗碧。静绕珍丛底，成叹息。长条故惹行客。似牵衣待话，别情无极。残英小、强簪巾帻。终不似一朵，钗头颤袅，向人欹侧。漂流处、莫趁潮汐。恐断红、尚有相思字，何由见得。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 姜夔 -->
+    <section class="author-section" id="jiangkui">
+      <div class="author-header">
+        <h2 class="author-name">姜夔</h2>
+        <span class="author-dates">1155—1221 · 南宋</span>
+      </div>
+      <p class="author-bio">字尧章，号白石道人。南宋雅词典范，精通音律，自度曲十七首。王国维评其"格韵高绝，惜不于意境上用力"，又谓"如雾里看花，终隔一层"。然其清空骚雅的词风别具一格，影响后世深远。</p>
+      <div class="download-bar">
+        <span class="label">完整词集</span>
+        <span class="count">62首</span>
+        <a class="download-btn" href="姜夔词集.html">浏览全集</a>
+      </div>
+      <div class="poems-grid">
+        <div class="poem-card">
+          <h3 class="poem-title">扬州慢·淮左名都</h3>
+          <div class="poem-body">
+            <p>淮左名都，竹西佳处，解鞍少驻初程。过春风十里，尽荠麦青青。自胡马窥江去后，废池乔木，犹厌言兵。渐黄昏，清角吹寒，都在空城。</p>
+            <p>杜郎俊赏，算而今、重到须惊。纵豆蔻词工，青楼梦好，难赋深情。二十四桥仍在，波心荡、冷月无声。念桥边红药，年年知为谁生。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">暗香·旧时月色</h3>
+          <div class="poem-body">
+            <p>旧时月色，算几番照我，梅边吹笛。唤起玉人，不管清寒与攀摘。何逊而今渐老，都忘却、春风词笔。但怪得、竹外疏花，香冷入瑶席。</p>
+            <p>江国。正寂寂。叹寄与路遥，夜雪初积。翠尊易泣。红萼无言耿相忆。长记曾携手处，千树压、西湖寒碧。又片片、吹尽也，几时见得。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">疏影·苔枝缀玉</h3>
+          <div class="poem-body">
+            <p>苔枝缀玉，有翠禽小小，枝上同宿。客里相逢，篱角黄昏，无言自倚修竹。昭君不惯胡沙远，但暗忆、江南江北。想佩环、月夜归来，化作此花幽独。</p>
+            <p>犹记深宫旧事，那人正睡里，飞近蛾绿。莫似春风，不管盈盈，早与安排金屋。还教一片随波去，又却怨、玉龙哀曲。等恁时、重觅幽香，已入小窗横幅。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">踏莎行·自沔东来</h3>
+          <div class="poem-body">
+            <p>燕燕轻盈，莺莺娇软，分明又向华胥见。夜长争得薄情知，春初早被相思染。</p>
+            <p>别后书辞，别时针线，离魂暗逐郎行远。淮南皓月冷千山，冥冥归去无人管。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">点绛唇·丁未冬过吴松作</h3>
+          <div class="poem-body">
+            <p>燕雁无心，太湖西畔随云去。数峰清苦。商略黄昏雨。</p>
+            <p>第四桥边，拟共天随住。今何许。凭阑怀古。残柳参差舞。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 吴文英 -->
+    <section class="author-section" id="wuwenying">
+      <div class="author-header">
+        <h2 class="author-name">吴文英</h2>
+        <span class="author-dates">约1200—1260 · 南宋</span>
+      </div>
+      <p class="author-bio">字君特，号梦窗。南宋后期词坛巨擘，其词密丽深婉，用典繁复，善以时空跳接和意象跳跃构筑梦幻境界。王国维斥之为"七宝楼台，眩人眼目，碎拆下来不成片段"，然清末四大家推之极高。</p>
+      <div class="download-bar">
+        <span class="label">完整词集</span>
+        <span class="count">62首</span>
+        <a class="download-btn" href="吴文英词集.html">浏览全集</a>
+      </div>
+      <div class="poems-grid">
+        <div class="poem-card">
+          <h3 class="poem-title">风入松·听风听雨过清明</h3>
+          <div class="poem-body">
+            <p>听风听雨过清明。愁草瘗花铭。楼前绿暗分携路，一丝柳、一寸柔情。料峭春寒中酒，交加晓梦啼莺。</p>
+            <p>西园日日扫林亭。依旧赏新晴。黄蜂频扑秋千索，有当时、纤手香凝。惆怅双鸳不到，幽阶一夜苔生。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">唐多令·惜别</h3>
+          <div class="poem-body">
+            <p>何处合成愁。离人心上秋。纵芭蕉、不雨也飕飕。都道晚凉天气好，有明月、怕登楼。</p>
+            <p>年事梦中休。花空烟水流。燕辞归、客尚淹留。垂柳不萦裙带住。漫长是、系行舟。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">浣溪沙·门隔花深梦旧游</h3>
+          <div class="poem-body">
+            <p>门隔花深梦旧游。夕阳无语燕归愁。玉纤香动小帘钩。</p>
+            <p>落絮无声春堕泪，行云有影月含羞。东风临夜冷于秋。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">祝英台近·除夜立春</h3>
+          <div class="poem-body">
+            <p>剪红情，裁绿意，花信上钗股。残日东风，不放岁华去。有人添烛西窗，不眠侵晓，笑声转、新年莺语。</p>
+            <p>旧尊俎。玉纤曾擘黄柑，柔香系幽素。归梦湖边，还迷镜中路。可怜千点吴霜，寒销不尽，又相对、落梅如雨。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">高阳台·丰乐楼分韵得如字</h3>
+          <div class="poem-body">
+            <p>修竹凝妆，垂杨驻马，凭阑浅画成图。山色谁题，楼前有雁斜书。东风紧送斜阳下，弄旧寒、晚酒醒余。自消凝，能几花前，顿老相如。</p>
+            <p>伤春不在高楼上，在灯前欹枕，雨外熏炉。怕舣游船，临流可奈清臞。飞红若到西湖底，搅翠澜、总是愁鱼。莫重来，吹尽香绵，泪满平芜。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 史达祖 -->
+    <section class="author-section" id="shidazu">
+      <div class="author-header">
+        <h2 class="author-name">史达祖</h2>
+        <span class="author-dates">约1163—1220后 · 南宋</span>
+      </div>
+      <p class="author-bio">字邦卿，号梅溪。南宋咏物词大家，尤以《双双燕·咏燕》最为传世。其咏物之工，能于形似之外求神似。王国维将其与吴文英归为一类批评，然其"柳昏花暝"等句仍被历代激赏。</p>
+      <div class="download-bar">
+        <span class="label">完整词集</span>
+        <span class="count">62首</span>
+        <a class="download-btn" href="史达祖词集.html">浏览全集</a>
+      </div>
+      <div class="poems-grid">
+        <div class="poem-card">
+          <h3 class="poem-title">双双燕·咏燕</h3>
+          <div class="poem-body">
+            <p>过春社了，度帘幕中间，去年尘冷。差池欲住，试入旧巢相并。还相雕梁藻井，又软语商量不定。飘然快拂花梢，翠尾分开红影。</p>
+            <p>芳径。芹泥雨润。爱贴地争飞，竞夸轻俊。红楼归晚，看足柳昏花暝。应自栖香正稳，便忘了、天涯芳信。愁损翠黛双蛾，日日画阑独凭。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">绮罗香·咏春雨</h3>
+          <div class="poem-body">
+            <p>做冷欺花，将烟困柳，千里偷催春暮。尽日冥迷，愁里欲飞还住。惊粉重、蝶宿西园，喜泥润、燕归南浦。最妨他、佳约风流，钿车不到杜陵路。</p>
+            <p>沉沉江上望极，还被春潮晚急，难寻官渡。隐约遥峰，和泪谢娘眉妩。临断岸、新绿生时，是落红、带愁流处。记当日、门掩梨花，翦灯深夜语。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">东风第一枝·咏春雪</h3>
+          <div class="poem-body">
+            <p>巧沁兰心，偷粘草甲，东风欲障新暖。谩凝碧瓦难留，信知暮寒较浅。行天入镜，做弄出、轻松纤软。料故园、不卷重帘，误了乍来双燕。</p>
+            <p>青未了、柳回白眼。红欲断、杏开素面。旧游忆着山阴，后盟遂妨上苑。寒炉重暖，便放慢、春衫针线。恐凤靴、挑菜归来，万一灞桥相见。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">秋霁·江水苍苍</h3>
+          <div class="poem-body">
+            <p>江水苍苍，望倦柳愁荷，共感秋色。废阁先凉，古帘空暮，雁程最嫌风力。故园信息。爱渠入眼南山碧。念上国。谁是、脍鲈江汉未归客。</p>
+            <p>还又岁晚，瘦骨临风，夜闻秋声，吹动岑寂。露蛩悲、青灯冷屋，翻书愁上鬓毛白。年少俊游浑断得，但可怜处、无奈苒苒魂惊，采香南浦，剪梅烟驿。</p>
+          </div>
+        </div>
+        <div class="poem-card">
+          <h3 class="poem-title">三姝媚·烟光摇缥瓦</h3>
+          <div class="poem-body">
+            <p>烟光摇缥瓦，望晴檐多风，柳花如洒。锦瑟横床，想泪痕尘影，凤弦常下。倦出犀帷，频梦见、王孙骄马。讳道相思，偷理绡裙，自惊腰衩。</p>
+            <p>惆怅南楼遥夜。记翠箔张灯，枕肩歌罢。又入铜驼，遍旧家门巷，首询声价。可惜东风，将恨与、闲花俱谢。记取崔徽模样，归来暗写。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
+
+<script>
+  // Back to top
+  window.addEventListener('scroll', () => {
+    document.getElementById('backTop').classList.toggle('visible', window.scrollY > 400);
+  });
+
+  // Active nav
+  const sections = document.querySelectorAll('.author-section');
+  const navItems = document.querySelectorAll('.nav-item');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navItems.forEach(item => {
+          item.classList.toggle('active', item.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px' });
+  sections.forEach(s => observer.observe(s));
+
+  // Mobile sidebar close on nav click
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>
